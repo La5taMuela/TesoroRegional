@@ -1,0 +1,289 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "question": "¿En qué año ocurrió el gran terremoto que destruyó Chillán?",
+      "options": ["1935", "1939", "1942", "1945"],
+      "correctAnswerIndex": 1,
+      "category": "Historia",
+      "difficulty": "Medio",
+      "explanation": "El terremoto de Chillán ocurrió el 24 de enero de 1939, con una magnitud de 8.3, siendo uno de los más destructivos en la historia de Chile con aproximadamente 30,000 víctimas."
+    },
+    {
+      "id": "q2",
+      "question": "¿Cuál es el producto gastronómico más famoso de San Carlos?",
+      "options": ["Empanadas", "Longaniza", "Sopaipillas", "Cazuela"],
+      "correctAnswerIndex": 1,
+      "category": "Gastronomía",
+      "difficulty": "Fácil",
+      "explanation": "La longaniza de San Carlos es reconocida como Patrimonio Alimentario de Chile por su elaboración artesanal y sabor único."
+    },
+    {
+      "id": "q3",
+      "question": "¿Cómo se llama la cerámica tradicional negra de la región?",
+      "options": ["Cerámica de Pomaire", "Cerámica de Quinchamalí", "Cerámica de Talagante", "Cerámica de Melipilla"],
+      "correctAnswerIndex": 1,
+      "category": "Artesanía",
+      "difficulty": "Medio",
+      "explanation": "La cerámica de Quinchamalí es Patrimonio Cultural Inmaterial de Chile, conocida por su color negro logrado mediante una técnica ancestral de quema sin oxígeno."
+    },
+    {
+      "id": "q4",
+      "question": "¿Cuál es la capital de la región de Ñuble?",
+      "options": ["San Carlos", "Chillán", "Bulnes", "Yungay"],
+      "correctAnswerIndex": 1,
+      "category": "Geografía",
+      "difficulty": "Fácil",
+      "explanation": "Chillán fue designada capital regional cuando Ñuble se convirtió en región el 6 de septiembre de 2018."
+    },
+    {
+      "id": "q5",
+      "question": "¿Qué famoso muralista mexicano pintó en Chillán?",
+      "options": ["Diego Rivera", "José Clemente Orozco", "David Alfaro Siqueiros", "Rufino Tamayo"],
+      "correctAnswerIndex": 2,
+      "category": "Arte",
+      "difficulty": "Difícil",
+      "explanation": "David Alfaro Siqueiros pintó en 1941 el mural 'Muerte al Invasor' en la Escuela México de Chillán, como agradecimiento por la ayuda chilena a México tras terremotos."
+    },
+    {
+      "id": "q6",
+      "question": "¿En qué año se creó oficialmente la región de Ñuble?",
+      "options": ["2016", "2017", "2018", "2019"],
+      "correctAnswerIndex": 2,
+      "category": "Historia",
+      "difficulty": "Medio",
+      "explanation": "La región de Ñuble fue creada por Ley 21.033 el 5 de septiembre de 2018, separándose de la región del Biobío."
+    },
+    {
+      "id": "q7",
+      "question": "¿Cuál es el nombre del volcán más famoso de la región?",
+      "options": ["Volcán Chillán", "Volcán Nevados de Chillán", "Volcán Antuco", "Volcán Copahue"],
+      "correctAnswerIndex": 1,
+      "category": "Geografía",
+      "difficulty": "Medio",
+      "explanation": "Los Nevados de Chillán son un complejo volcánico activo que incluye centros de esquí y termas, ubicado a 80 km al este de Chillán."
+    },
+    {
+      "id": "q8",
+      "question": "¿Qué tradición culinaria es típica de las fiestas patrias en Ñuble?",
+      "options": ["Asado al palo", "Curanto", "Empanadas de pino", "Cordero al palo"],
+      "correctAnswerIndex": 2,
+      "category": "Tradiciones",
+      "difficulty": "Fácil",
+      "explanation": "Las empanadas de pino (rellenas de carne, cebolla, huevo y aceitunas) son esenciales en las Fiestas Patrias chilenas, especialmente en Ñuble."
+    },
+    {
+      "id": "q9",
+      "question": "¿Cuál es el río más importante que atraviesa la región de Ñuble?",
+      "options": ["Río Maule", "Río Ñuble", "Río Itata", "Río Biobío"],
+      "correctAnswerIndex": 1,
+      "category": "Geografía",
+      "difficulty": "Fácil",
+      "explanation": "El río Ñuble, con 150 km de longitud, es vital para la agricultura regional y da nombre a la región."
+    },
+    {
+      "id": "q10",
+      "question": "¿Qué escritor chileno nació en Parral, provincia de Linares?",
+      "options": ["Pablo Neruda", "Gabriela Mistral", "Vicente Huidobro", "Nicanor Parra"],
+      "correctAnswerIndex": 0,
+      "category": "Literatura",
+      "difficulty": "Medio",
+      "explanation": "Pablo Neruda (1904-1973), Premio Nobel de Literatura 1971, nació en Parral (actual región del Maule), pero pasó parte de su infancia en Temuco."
+    },
+    {
+      "id": "q11",
+      "question": "¿Cuál es la principal actividad económica de la región de Ñuble?",
+      "options": ["Minería", "Agricultura", "Pesca", "Turismo"],
+      "correctAnswerIndex": 1,
+      "category": "Economía",
+      "difficulty": "Fácil",
+      "explanation": "Ñuble produce el 20% del trigo nacional y es líder en cultivos como arroz, maíz y legumbres, siendo la agricultura su principal actividad."
+    },
+    {
+      "id": "q12",
+      "question": "¿Qué universidad tiene su sede principal en Chillán?",
+      "options": [
+        "Universidad de Chile",
+        "Universidad del Bío-Bío",
+        "Universidad de Concepción",
+        "Universidad Católica"
+      ],
+      "correctAnswerIndex": 1,
+      "category": "Educación",
+      "difficulty": "Medio",
+      "explanation": "La Universidad del Bío-Bío (UBB) tiene campus en Chillán desde 1988, siendo la principal institución de educación superior de la región."
+    },
+    {
+      "id": "q13",
+      "question": "¿Cómo se llama la feria tradicional de Chillán?",
+      "options": ["Feria de Chillán", "Mercado Central", "Feria Pinto", "Plaza de Armas"],
+      "correctAnswerIndex": 2,
+      "category": "Tradiciones",
+      "difficulty": "Fácil",
+      "explanation": "La Feria Pinto, fundada en 1865, es el principal mercado de abastos de Chillán, famosa por sus productos agrícolas y artesanales."
+    },
+    {
+      "id": "q14",
+      "question": "¿Qué deporte de invierno se practica en los Nevados de Chillán?",
+      "options": ["Patinaje", "Hockey", "Esquí", "Curling"],
+      "correctAnswerIndex": 2,
+      "category": "Deportes",
+      "difficulty": "Fácil",
+      "explanation": "El centro de esquí Nevados de Chillán ofrece 34 pistas con 12,5 km esquiables, siendo el más grande del centro-sur de Chile."
+    },
+    {
+      "id": "q15",
+      "question": "¿Cuál es el nombre del hospital regional de Chillán?",
+      "options": [
+        "Hospital Las Higueras",
+        "Hospital Herminda Martín",
+        "Hospital San Juan de Dios",
+        "Hospital Regional"
+      ],
+      "correctAnswerIndex": 1,
+      "category": "Salud",
+      "difficulty": "Medio",
+      "explanation": "El Hospital Clínico Herminda Martín es el principal centro de salud de Ñuble, con especialidades de alta complejidad."
+    },
+    {
+      "id": "q16",
+      "question": "¿Qué tipo de música tradicional es característica de la región?",
+      "options": ["Cueca", "Tonada", "Vals", "Polka"],
+      "correctAnswerIndex": 1,
+      "category": "Música",
+      "difficulty": "Medio",
+      "explanation": "La tonada, derivada del canto español, es característica de la zona central de Chile, con exponentes como Los Hermanos Campos."
+    },
+    {
+      "id": "q17",
+      "question": "¿Cuál es la distancia aproximada entre Chillán y Santiago?",
+      "options": ["300 km", "400 km", "500 km", "600 km"],
+      "correctAnswerIndex": 1,
+      "category": "Geografía",
+      "difficulty": "Medio",
+      "explanation": "Chillán se ubica a 400 km al sur de Santiago por la Ruta 5 Sur, con un tiempo de viaje aproximado de 4 horas en auto."
+    },
+    {
+      "id": "q18",
+      "question": "¿Qué cultivo es más característico de la región de Ñuble?",
+      "options": ["Trigo", "Maíz", "Arroz", "Avena"],
+      "correctAnswerIndex": 0,
+      "category": "Agricultura",
+      "difficulty": "Fácil",
+      "explanation": "Ñuble produce el 20% del trigo nacional, siendo el cultivo más importante, seguido de arroz y legumbres."
+    },
+    {
+      "id": "q19",
+      "question": "¿Cómo se llama el estadio de fútbol de Chillán?",
+      "options": ["Estadio Municipal", "Estadio Nelson Oyarzún", "Estadio Fiscal", "Estadio Regional"],
+      "correctAnswerIndex": 1,
+      "category": "Deportes",
+      "difficulty": "Difícil",
+      "explanation": "El Estadio Municipal Nelson Oyarzún Arenas, con capacidad para 12,000 espectadores, es sede del club Ñublense."
+    },
+    {
+      "id": "q20",
+      "question": "¿Qué festividad religiosa es más importante en la región?",
+      "options": ["Semana Santa", "Navidad", "Fiesta de San Bartolomé", "Corpus Christi"],
+      "correctAnswerIndex": 2,
+      "category": "Religión",
+      "difficulty": "Medio",
+      "explanation": "La Fiesta de San Bartolomé (24 de agosto) es la celebración patronal de Chillán desde 1845, con procesiones y eventos culturales."
+    },
+    {
+      "id": "q21",
+      "question": "¿Cuál es el nombre del aeropuerto de Chillán?",
+      "options": [
+        "Aeropuerto Chillán",
+        "Aeropuerto Bernardo O'Higgins",
+        "Aeropuerto General Freire",
+        "Aeropuerto Ñuble"
+      ],
+      "correctAnswerIndex": 2,
+      "category": "Transporte",
+      "difficulty": "Difícil",
+      "explanation": "El Aeropuerto General Bernardo O'Higgins (antes Aeropuerto de Chillán) recibe vuelos nacionales y está ubicado en la comuna de Chillán Viejo."
+    },
+    {
+      "id": "q22",
+      "question": "¿Qué tipo de clima predomina en la región de Ñuble?",
+      "options": ["Mediterráneo", "Templado lluvioso", "Semiárido", "Oceánico"],
+      "correctAnswerIndex": 0,
+      "category": "Clima",
+      "difficulty": "Medio",
+      "explanation": "Ñuble tiene clima mediterráneo con estación seca prolongada (6-7 meses), con precipitaciones concentradas en invierno (1,000-1,500 mm anuales)."
+    },
+    {
+      "id": "q23",
+      "question": "¿Cuál es la comuna más poblada de la región de Ñuble?",
+      "options": ["San Carlos", "Chillán", "Bulnes", "Yungay"],
+      "correctAnswerIndex": 1,
+      "category": "Demografía",
+      "difficulty": "Fácil",
+      "explanation": "Chillán concentra el 30% de la población regional (184,739 habitantes según censo 2017), siendo el centro urbano más importante."
+    },
+    {
+      "id": "q24",
+      "question": "¿Qué producto artesanal es típico de Quinchamalí?",
+      "options": ["Textiles", "Cerámica negra", "Cestería", "Tallado en madera"],
+      "correctAnswerIndex": 1,
+      "category": "Artesanía",
+      "difficulty": "Fácil",
+      "explanation": "La alfarería de Quinchamalí (comuna de Chillán Viejo) es Patrimonio Cultural Inmaterial desde 2015, con técnicas ancestrales mapuches."
+    },
+    {
+      "id": "q25",
+      "question": "¿Cuántas comunas tiene la región de Ñuble?",
+      "options": ["19", "21", "23", "25"],
+      "correctAnswerIndex": 1,
+      "category": "Geografía",
+      "difficulty": "Difícil",
+      "explanation": "Ñuble tiene 21 comunas agrupadas en 3 provincias: Diguillín (9), Punilla (5) e Itata (7)."
+    },
+    {
+      "id": "q26",
+      "question": "¿Qué termas son famosas en la región de Ñuble?",
+      "options": ["Termas de Chillán", "Termas de Puyehue", "Termas de Cauquenes", "Termas del Flaco"],
+      "correctAnswerIndex": 0,
+      "category": "Turismo",
+      "difficulty": "Fácil",
+      "explanation": "Las Termas de Chillán, a 1,650 msnm, son el principal complejo termal de la región, con aguas que alcanzan los 62°C."
+    },
+    {
+      "id": "q27",
+      "question": "¿Cuál es el nombre del mercado tradicional de Chillán?",
+      "options": ["Mercado Central", "Feria Pinto", "Mercado Municipal", "Plaza de Armas"],
+      "correctAnswerIndex": 1,
+      "category": "Comercio",
+      "difficulty": "Medio",
+      "explanation": "La Feria Pinto, ubicada junto a la Plaza de Armas, es el principal centro comercial tradicional de Chillán desde el siglo XIX."
+    },
+    {
+      "id": "q28",
+      "question": "¿Qué equipo de fútbol representa a Chillán?",
+      "options": ["Ñublense", "Chillán FC", "Deportes Chillán", "Club Chillán"],
+      "correctAnswerIndex": 0,
+      "category": "Deportes",
+      "difficulty": "Medio",
+      "explanation": "Ñublense (fundado en 1916) es el club profesional de Chillán que participa en la Primera División del fútbol chileno."
+    },
+    {
+      "id": "q29",
+      "question": "¿Cuál es la principal vía de acceso a Chillán desde Santiago?",
+      "options": ["Ruta 5 Norte", "Ruta 5 Sur", "Ruta 68", "Ruta 78"],
+      "correctAnswerIndex": 1,
+      "category": "Transporte",
+      "difficulty": "Fácil",
+      "explanation": "La Ruta 5 Sur (Carretera Panamericana) conecta Santiago con Chillán en un recorrido de aproximadamente 400 km."
+    },
+    {
+      "id": "q30",
+      "question": "¿Qué significa la palabra 'Ñuble' en mapudungun?",
+      "options": ["Río grande", "Tierra fértil", "Lugar de descanso", "Agua que corre"],
+      "correctAnswerIndex": 2,
+      "category": "Etimología",
+      "difficulty": "Difícil",
+      "explanation": "Ñuble proviene del mapudungun 'ñuble', que significa 'lugar donde se descansa', referido a las características geográficas del valle."
+    }
+  ]
+}

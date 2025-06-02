@@ -1,0 +1,128 @@
+{
+  "recommendations": [
+    {
+      "id": "rec_1",
+      "title": "Explore Chillán's Historic Center",
+      "city": "Chillán",
+      "description": "Visit the main historical points of downtown Chillán",
+      "points": [
+        {
+          "name": "Plaza de Armas",
+          "description": "Heart of the city, rebuilt after the 1939 earthquake",
+          "isCompleted": false
+        },
+        {
+          "name": "San Bartolomé Cathedral",
+          "description": "Symbol of Chillán's reconstruction",
+          "isCompleted": false
+        },
+        {
+          "name": "Chillán Market",
+          "description": "Traditional gastronomic and artisanal center",
+          "isCompleted": false
+        },
+        {
+          "name": "Siqueiros Mural",
+          "description": "Work by famous Mexican muralist David Alfaro Siqueiros",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Chillán Explorer Badge",
+      "difficulty": "Easy",
+      "estimatedTime": "2-3 hours"
+    },
+    {
+      "id": "rec_2",
+      "title": "San Carlos Gastronomic Route",
+      "city": "San Carlos",
+      "description": "Discover the traditional flavors of San Carlos",
+      "points": [
+        {
+          "name": "Traditional Sausage Factory",
+          "description": "Learn about the artisanal process of San Carlos longaniza",
+          "isCompleted": false
+        },
+        {
+          "name": "Local Market",
+          "description": "Taste local and artisanal products",
+          "isCompleted": false
+        },
+        {
+          "name": "San Carlos Square",
+          "description": "Nerve center of the city",
+          "isCompleted": false
+        },
+        {
+          "name": "Longaniza Museum",
+          "description": "Learn about the history of this emblematic sausage",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Ñuble Gastronomer Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "rec_3",
+      "title": "Natural Heritage of Ñuble",
+      "city": "Ñuble Region",
+      "description": "Explore the natural attractions of the region",
+      "points": [
+        {
+          "name": "Chillán Hot Springs",
+          "description": "Relax in natural thermal waters",
+          "isCompleted": false
+        },
+        {
+          "name": "Chillán Snow-capped Mountains",
+          "description": "Enjoy the panoramic view of the mountain range",
+          "isCompleted": false
+        },
+        {
+          "name": "Salto del Laja",
+          "description": "Admire this impressive natural waterfall",
+          "isCompleted": false
+        },
+        {
+          "name": "Las Trancas Valley",
+          "description": "Explore this beautiful mountain valley",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Natural Explorer Badge",
+      "difficulty": "Hard",
+      "estimatedTime": "1-2 days"
+    },
+    {
+      "id": "rec_4",
+      "title": "Crafts and Traditions",
+      "city": "Ñuble Region",
+      "description": "Learn about the artisanal traditions of Ñuble",
+      "points": [
+        {
+          "name": "Quinchamalí Pottery Workshop",
+          "description": "Observe the creation of the famous black pottery",
+          "isCompleted": false
+        },
+        {
+          "name": "Chillán Artisan Fair",
+          "description": "Discover local artisanal products",
+          "isCompleted": false
+        },
+        {
+          "name": "House of Culture",
+          "description": "Learn about the cultural expressions of the region",
+          "isCompleted": false
+        },
+        {
+          "name": "Traditional Weaving Workshop",
+          "description": "Learn about ancestral textiles",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Traditions Guardian Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "4-5 hours"
+    }
+  ]
+}

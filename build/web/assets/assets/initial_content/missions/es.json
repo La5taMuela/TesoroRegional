@@ -1,0 +1,544 @@
+{
+  "missions": [
+    {
+      "id": "1",
+      "title": "Descubre el Corazón de Chillán",
+      "city": "Chillán",
+      "description": "Explora los lugares más emblemáticos del centro histórico de Chillán",
+      "points": [
+        {
+          "name": "Plaza de Armas",
+          "description": "El corazón de la ciudad, completamente reconstruida después del terremoto de 1939",
+          "isCompleted": false
+        },
+        {
+          "name": "Catedral de San Bartolomé",
+          "description": "Majestuosa catedral moderna, símbolo de la reconstrucción de Chillán",
+          "isCompleted": false
+        },
+        {
+          "name": "Mercado de Chillán",
+          "description": "Vibrante centro gastronómico donde convergen sabores y tradiciones locales",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Explorador del Centro",
+      "difficulty": "Fácil",
+      "estimatedTime": "2-3 horas"
+    },
+    {
+      "id": "2",
+      "title": "Ruta de los Sabores de San Carlos",
+      "city": "San Carlos",
+      "description": "Sumérgete en la tradición gastronómica más auténtica de San Carlos",
+      "points": [
+        {
+          "name": "Fábrica Artesanal de Longanizas",
+          "description": "Conoce el proceso tradicional de elaboración de la famosa longaniza sancarlina",
+          "isCompleted": false
+        },
+        {
+          "name": "Mercado Municipal",
+          "description": "Degusta productos locales frescos y especialidades regionales",
+          "isCompleted": false
+        },
+        {
+          "name": "Plaza Principal de San Carlos",
+          "description": "Centro neurálgico de la ciudad con rica historia local",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Gastrólogo Regional",
+      "difficulty": "Medio",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "3",
+      "title": "Tesoros Naturales de Ñuble",
+      "city": "Región de Ñuble",
+      "description": "Descubre la impresionante belleza natural de la región de Ñuble",
+      "points": [
+        {
+          "name": "Termas de Chillán",
+          "description": "Relájate en las aguas termales naturales rodeado de montañas",
+          "isCompleted": false
+        },
+        {
+          "name": "Nevados de Chillán",
+          "description": "Disfruta de vistas panorámicas espectaculares de la cordillera",
+          "isCompleted": false
+        },
+        {
+          "name": "Valle Las Trancas",
+          "description": "Explora este hermoso valle cordillerano lleno de vida silvestre",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Guardián Natural",
+      "difficulty": "Difícil",
+      "estimatedTime": "1-2 días"
+    },
+    {
+      "id": "4",
+      "title": "Artesanías y Tradiciones Ancestrales",
+      "city": "Quinchamalí",
+      "description": "Conoce las tradiciones artesanales que han perdurado por generaciones",
+      "points": [
+        {
+          "name": "Taller de Cerámica Negra",
+          "description": "Observa la creación de la famosa cerámica negra de Quinchamalí",
+          "isCompleted": false
+        },
+        {
+          "name": "Casa del Artesano",
+          "description": "Descubre técnicas ancestrales de trabajo en greda",
+          "isCompleted": false
+        },
+        {
+          "name": "Museo de la Cerámica",
+          "description": "Aprende sobre la historia y evolución de esta tradición",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Guardián de Tradiciones",
+      "difficulty": "Medio",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "5",
+      "title": "Ruta del Vino en Ñuble",
+      "city": "Valle del Itata",
+      "description": "Explora la tradición vitivinícola más antigua de Chile",
+      "points": [
+        {
+          "name": "Viña Patrimonial",
+          "description": "Visita viñedos con cepas centenarias de País y Moscatel",
+          "isCompleted": false
+        },
+        {
+          "name": "Bodega Tradicional",
+          "description": "Conoce métodos ancestrales de vinificación en tinajas de greda",
+          "isCompleted": false
+        },
+        {
+          "name": "Cata de Vinos Patrimoniales",
+          "description": "Degusta vinos únicos con denominación de origen",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Sommelier del Itata",
+      "difficulty": "Medio",
+      "estimatedTime": "4-5 horas"
+    },
+    {
+      "id": "6",
+      "title": "Senderos de la Historia",
+      "city": "Yungay",
+      "description": "Recorre los lugares que marcaron la historia de la región",
+      "points": [
+        {
+          "name": "Museo de la Batalla de Yungay",
+          "description": "Conoce la historia de la victoria chilena en la Guerra del Pacífico",
+          "isCompleted": false
+        },
+        {
+          "name": "Monumento a los Héroes",
+          "description": "Rinde homenaje a los caídos en la histórica batalla",
+          "isCompleted": false
+        },
+        {
+          "name": "Campo de Batalla",
+          "description": "Camina por el lugar donde se libró la decisiva batalla",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Historiador Regional",
+      "difficulty": "Fácil",
+      "estimatedTime": "2-3 horas"
+    },
+    {
+      "id": "7",
+      "title": "Aventura en el Salto del Laja",
+      "city": "Salto del Laja",
+      "description": "Experimenta la majestuosidad de una de las cascadas más impresionantes de Chile",
+      "points": [
+        {
+          "name": "Mirador Principal",
+          "description": "Contempla la cascada desde el punto de vista más espectacular",
+          "isCompleted": false
+        },
+        {
+          "name": "Sendero Ribereño",
+          "description": "Camina junto al río Laja y descubre su ecosistema",
+          "isCompleted": false
+        },
+        {
+          "name": "Zona de Picnic",
+          "description": "Disfruta de un almuerzo al aire libre con vista a la cascada",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Explorador de Cascadas",
+      "difficulty": "Medio",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "8",
+      "title": "Cultura Mapuche en Ñuble",
+      "city": "Pemuco",
+      "description": "Descubre la rica herencia cultural mapuche en la región",
+      "points": [
+        {
+          "name": "Ruka Tradicional",
+          "description": "Visita una casa mapuche tradicional y conoce su arquitectura",
+          "isCompleted": false
+        },
+        {
+          "name": "Ceremonia del Nguillatún",
+          "description": "Aprende sobre las ceremonias sagradas mapuches",
+          "isCompleted": false
+        },
+        {
+          "name": "Taller de Platería",
+          "description": "Observa la creación de joyas tradicionales mapuches",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Respeto Cultural",
+      "difficulty": "Medio",
+      "estimatedTime": "4-5 horas"
+    },
+    {
+      "id": "9",
+      "title": "Bosques Nativos de Ñuble",
+      "city": "Reserva Nacional Ñuble",
+      "description": "Explora la biodiversidad única de los bosques nativos de la región",
+      "points": [
+        {
+          "name": "Sendero del Roble",
+          "description": "Camina entre robles centenarios y observa la fauna nativa",
+          "isCompleted": false
+        },
+        {
+          "name": "Mirador del Cóndor",
+          "description": "Busca cóndores y otras aves rapaces en su hábitat natural",
+          "isCompleted": false
+        },
+        {
+          "name": "Laguna Escondida",
+          "description": "Descubre esta laguna pristina rodeada de bosque nativo",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Protector del Bosque",
+      "difficulty": "Difícil",
+      "estimatedTime": "5-6 horas"
+    },
+    {
+      "id": "10",
+      "title": "Festivales y Tradiciones de Ñuble",
+      "city": "Región de Ñuble",
+      "description": "Participa en las celebraciones tradicionales que mantienen viva la cultura local",
+      "points": [
+        {
+          "name": "Festival de la Longaniza",
+          "description": "Únete a la celebración gastronómica más importante de San Carlos",
+          "isCompleted": false
+        },
+        {
+          "name": "Fiesta de la Vendimia",
+          "description": "Participa en la tradicional celebración de la cosecha de uvas",
+          "isCompleted": false
+        },
+        {
+          "name": "Rodeo Chileno",
+          "description": "Presencia el deporte nacional en su forma más auténtica",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Embajador Cultural",
+      "difficulty": "Fácil",
+      "estimatedTime": "Variable según festival"
+    },
+    {
+      "id": "11",
+      "title": "Explorando Bulnes",
+      "city": "Bulnes",
+      "description": "Descubre los encantos de esta histórica ciudad ferroviaria",
+      "points": [
+        {
+          "name": "Estación de Ferrocarril",
+          "description": "Visita la histórica estación que conectó Ñuble con el mundo",
+          "isCompleted": false
+        },
+        {
+          "name": "Museo Ferroviario",
+          "description": "Conoce la historia del ferrocarril en la región",
+          "isCompleted": false
+        },
+        {
+          "name": "Plaza de Bulnes",
+          "description": "Relájate en el centro de esta acogedora ciudad",
+          "isCompleted": false
+        },
+        {
+          "name": "Casa de la Cultura",
+          "description": "Descubre las expresiones artísticas locales",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Explorador Ferroviario",
+      "difficulty": "Fácil",
+      "estimatedTime": "2-3 horas"
+    },
+    {
+      "id": "12",
+      "title": "Aventura en Coihueco",
+      "city": "Coihueco",
+      "description": "Explora la naturaleza y tradiciones de Coihueco",
+      "points": [
+        {
+          "name": "Río Ñuble",
+          "description": "Disfruta de actividades acuáticas en el río principal de la región",
+          "isCompleted": false
+        },
+        {
+          "name": "Puente Colgante",
+          "description": "Cruza el histórico puente que une las dos orillas",
+          "isCompleted": false
+        },
+        {
+          "name": "Feria Campesina",
+          "description": "Conoce productos agrícolas locales y tradiciones rurales",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Aventurero Rural",
+      "difficulty": "Medio",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "13",
+      "title": "Patrimonio de Quirihue",
+      "city": "Quirihue",
+      "description": "Descubre la rica historia y arquitectura de Quirihue",
+      "points": [
+        {
+          "name": "Iglesia San Sebastián",
+          "description": "Admira esta hermosa iglesia colonial",
+          "isCompleted": false
+        },
+        {
+          "name": "Casa Patronal Histórica",
+          "description": "Visita una casa patronal del siglo XIX",
+          "isCompleted": false
+        },
+        {
+          "name": "Mirador del Valle",
+          "description": "Contempla el valle desde las alturas de Quirihue",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Guardián Patrimonial",
+      "difficulty": "Medio",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "14",
+      "title": "Naturaleza en Pinto",
+      "city": "Pinto",
+      "description": "Explora los paisajes naturales únicos de Pinto",
+      "points": [
+        {
+          "name": "Laguna de Pinto",
+          "description": "Observa aves migratorias en este humedal natural",
+          "isCompleted": false
+        },
+        {
+          "name": "Sendero Ecológico",
+          "description": "Camina por senderos que muestran la flora nativa",
+          "isCompleted": false
+        },
+        {
+          "name": "Centro de Interpretación",
+          "description": "Aprende sobre la biodiversidad local",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Naturalista",
+      "difficulty": "Medio",
+      "estimatedTime": "4-5 horas"
+    },
+    {
+      "id": "15",
+      "title": "Tradiciones de Ñiquén",
+      "city": "Ñiquén",
+      "description": "Conoce las tradiciones rurales más auténticas de Ñiquén",
+      "points": [
+        {
+          "name": "Molino de Agua",
+          "description": "Visita un molino tradicional aún en funcionamiento",
+          "isCompleted": false
+        },
+        {
+          "name": "Taller de Tejidos",
+          "description": "Observa la creación de tejidos tradicionales en telar",
+          "isCompleted": false
+        },
+        {
+          "name": "Huerto Orgánico",
+          "description": "Conoce técnicas de agricultura sustentable",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Tradición Rural",
+      "difficulty": "Fácil",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "16",
+      "title": "Aventura en Portezuelo",
+      "city": "Portezuelo",
+      "description": "Descubre los atractivos naturales y culturales de Portezuelo",
+      "points": [
+        {
+          "name": "Cerro La Virgen",
+          "description": "Sube al cerro y disfruta de vistas panorámicas",
+          "isCompleted": false
+        },
+        {
+          "name": "Iglesia del Pueblo",
+          "description": "Visita la iglesia central de Portezuelo",
+          "isCompleted": false
+        },
+        {
+          "name": "Feria Artesanal",
+          "description": "Compra productos locales hechos a mano",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Explorador de Cerros",
+      "difficulty": "Medio",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "17",
+      "title": "Historia de Cobquecura",
+      "city": "Cobquecura",
+      "description": "Explora la costa y la historia de Cobquecura",
+      "points": [
+        {
+          "name": "Iglesia de Piedra",
+          "description": "Admira esta única construcción de piedra",
+          "isCompleted": false
+        },
+        {
+          "name": "Playa de Cobquecura",
+          "description": "Relájate en las hermosas playas costeras",
+          "isCompleted": false
+        },
+        {
+          "name": "Faro Histórico",
+          "description": "Visita el faro que guía a los navegantes",
+          "isCompleted": false
+        },
+        {
+          "name": "Caleta de Pescadores",
+          "description": "Conoce la vida de los pescadores locales",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Explorador Costero",
+      "difficulty": "Medio",
+      "estimatedTime": "4-5 horas"
+    },
+    {
+      "id": "18",
+      "title": "Ruta del Secano en Trehuaco",
+      "city": "Trehuaco",
+      "description": "Descubre la agricultura de secano y las tradiciones de Trehuaco",
+      "points": [
+        {
+          "name": "Viñedos de Secano",
+          "description": "Conoce la viticultura tradicional sin riego",
+          "isCompleted": false
+        },
+        {
+          "name": "Casa de Adobe",
+          "description": "Visita construcciones tradicionales de adobe",
+          "isCompleted": false
+        },
+        {
+          "name": "Taller de Chicha",
+          "description": "Aprende sobre la elaboración de chicha tradicional",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Maestro del Secano",
+      "difficulty": "Medio",
+      "estimatedTime": "4-5 horas"
+    },
+    {
+      "id": "19",
+      "title": "Patrimonio de Ninhue",
+      "city": "Ninhue",
+      "description": "Explora el patrimonio histórico y natural de Ninhue",
+      "points": [
+        {
+          "name": "Iglesia Colonial",
+          "description": "Admira la arquitectura colonial de la iglesia principal",
+          "isCompleted": false
+        },
+        {
+          "name": "Museo Local",
+          "description": "Conoce la historia local en el museo del pueblo",
+          "isCompleted": false
+        },
+        {
+          "name": "Bosque Nativo",
+          "description": "Camina por senderos en el bosque nativo cercano",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Guardián del Patrimonio",
+      "difficulty": "Fácil",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "20",
+      "title": "Gran Ruta de Ñuble",
+      "city": "Región de Ñuble",
+      "description": "Completa el recorrido más completo por toda la región de Ñuble",
+      "points": [
+        {
+          "name": "Capital Regional",
+          "description": "Visita Chillán, la capital de la región",
+          "isCompleted": false
+        },
+        {
+          "name": "Costa de Ñuble",
+          "description": "Explora las comunas costeras de la región",
+          "isCompleted": false
+        },
+        {
+          "name": "Valle Central",
+          "description": "Recorre las comunas del valle central",
+          "isCompleted": false
+        },
+        {
+          "name": "Precordillera",
+          "description": "Aventúrate en las comunas precordilleranas",
+          "isCompleted": false
+        },
+        {
+          "name": "Tradiciones Locales",
+          "description": "Participa en al menos 3 festivales o tradiciones locales",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Maestro Explorador de Ñuble",
+      "difficulty": "Difícil",
+      "estimatedTime": "1-2 semanas"
+    }
+  ]
+}

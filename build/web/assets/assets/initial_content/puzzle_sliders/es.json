@@ -1,0 +1,154 @@
+{
+  "puzzleSliders": [
+    {
+      "id": "plaza-chillan",
+      "title": {
+        "es": "Plaza de Armas de Chillán",
+        "en": "Chillán Main Square"
+      },
+      "description": {
+        "es": "La Plaza de Armas de Chillán es el corazón de la ciudad. Rodeada de edificios históricos y con su característica fuente central.",
+        "en": "Chillán's Main Square is the heart of the city. Surrounded by historic buildings and featuring its characteristic central fountain."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/plaza-de-armas-chillan.jpg",
+      "difficulty": 3,
+      "category": "lugares",
+      "isActive": true
+    },
+    {
+      "id": "catedral-chillan",
+      "title": {
+        "es": "Catedral de San Bartolomé",
+        "en": "San Bartolomé Cathedral"
+      },
+      "description": {
+        "es": "La Catedral de San Bartolomé es un símbolo de la resiliencia de Chillán. Construida después del terremoto de 1939, su arquitectura moderna la hace única en Chile.",
+        "en": "San Bartolomé Cathedral is a symbol of Chillán's resilience. Built after the 1939 earthquake, its modern architecture makes it unique in Chile."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/catedral-chillan.jpg",
+      "difficulty": 3,
+      "category": "arquitectura",
+      "isActive": true
+    },
+    {
+      "id": "nevados-chillan",
+      "title": {
+        "es": "Nevados de Chillán",
+        "en": "Chillán Snowy Mountains"
+      },
+      "description": {
+        "es": "Los Nevados de Chillán son un complejo volcánico y centro de esquí ubicado en la cordillera de los Andes. Un paraíso para los amantes de los deportes de invierno.",
+        "en": "Chillán's Snowy Mountains are a volcanic complex and ski resort located in the Andes mountain range. A paradise for winter sports enthusiasts."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/nevados-chillan.jpg",
+      "difficulty": 4,
+      "category": "naturaleza",
+      "isActive": true
+    },
+    {
+      "id": "mercado-chillan",
+      "title": {
+        "es": "Mercado de Chillán",
+        "en": "Chillán Market"
+      },
+      "description": {
+        "es": "El Mercado de Chillán es famoso por su gastronomía y artesanía local. Un lugar imperdible para conocer la cultura y tradiciones de la región.",
+        "en": "Chillán Market is famous for its local gastronomy and crafts. A must-visit place to experience the culture and traditions of the region."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/mercado-chillan.jpg",
+      "difficulty": 3,
+      "category": "gastronomía",
+      "isActive": true
+    },
+    {
+      "id": "termas-chillan",
+      "title": {
+        "es": "Termas de Chillán",
+        "en": "Chillán Hot Springs"
+      },
+      "description": {
+        "es": "Las Termas de Chillán son conocidas por sus aguas termales con propiedades medicinales. Un lugar perfecto para relajarse y disfrutar de la naturaleza.",
+        "en": "Chillán Hot Springs are known for their thermal waters with medicinal properties. A perfect place to relax and enjoy nature."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/termas-chillan.jpg",
+      "difficulty": 3,
+      "category": "naturaleza",
+      "isActive": true
+    },
+    {
+      "id": "vinedos-itata",
+      "title": {
+        "es": "Viñedos del Valle del Itata",
+        "en": "Itata Valley Vineyards"
+      },
+      "description": {
+        "es": "Los viñedos del Valle del Itata son uno de los más antiguos de Chile. Sus vinos artesanales y cepas ancestrales son reconocidos internacionalmente.",
+        "en": "Itata Valley Vineyards are among the oldest in Chile. Their artisanal wines and ancestral grape varieties are internationally recognized."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/vinedos-itata.jpg",
+      "difficulty": 4,
+      "category": "gastronomía",
+      "isActive": true
+    },
+    {
+      "id": "ceramica-quinchamali",
+      "title": {
+        "es": "Cerámica de Quinchamalí",
+        "en": "Quinchamalí Pottery"
+      },
+      "description": {
+        "es": "La cerámica negra de Quinchamalí es una tradición artesanal única de la región de Ñuble. Sus piezas decorativas y utilitarias son reconocidas como patrimonio cultural.",
+        "en": "Quinchamalí's black pottery is a unique craft tradition from the Ñuble region. Its decorative and utilitarian pieces are recognized as cultural heritage."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/ceramica-quinchamali.jpg",
+      "difficulty": 3,
+      "category": "artesanía",
+      "isActive": true
+    },
+    {
+      "id": "museo-nuble",
+      "title": {
+        "es": "Museo de Ñuble",
+        "en": "Ñuble Museum"
+      },
+      "description": {
+        "es": "El Museo de Ñuble alberga importantes colecciones arqueológicas e históricas que narran la historia de la región desde tiempos precolombinos hasta la actualidad.",
+        "en": "The Ñuble Museum houses important archaeological and historical collections that tell the history of the region from pre-Columbian times to the present."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/museo-nuble.jpg",
+      "difficulty": 3,
+      "category": "historia",
+      "isActive": true
+    },
+    {
+      "id": "casa-gonzalez",
+      "title": {
+        "es": "Casa de González Videla",
+        "en": "González Videla House"
+      },
+      "description": {
+        "es": "La Casa de González Videla es un importante sitio histórico donde nació el ex presidente de Chile. Hoy funciona como museo y centro cultural.",
+        "en": "González Videla House is an important historical site where the former president of Chile was born. Today it functions as a museum and cultural center."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/casa-gonzalez.jpg",
+      "difficulty": 3,
+      "category": "historia",
+      "isActive": true
+    },
+    {
+      "id": "parque-ohiggins",
+      "title": {
+        "es": "Parque Monumental Bernardo O'Higgins",
+        "en": "Bernardo O'Higgins Monumental Park"
+      },
+      "description": {
+        "es": "El Parque O'Higgins es un espacio verde emblemático de Chillán, dedicado al prócer de la independencia chilena que nació en estas tierras.",
+        "en": "O'Higgins Park is an emblematic green space in Chillán, dedicated to the hero of Chilean independence who was born in these lands."
+      },
+      "imageUrl": "https://www.chillancity.cl/wp-content/uploads/2019/01/parque-ohiggins.jpg",
+      "difficulty": 4,
+      "category": "lugares",
+      "isActive": true
+    }
+  ]
+}

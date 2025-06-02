@@ -1,0 +1,544 @@
+{
+  "missions": [
+    {
+      "id": "1",
+      "title": "Discover the Heart of Chillán",
+      "city": "Chillán",
+      "description": "Explore the most emblematic places in Chillán's historic center",
+      "points": [
+        {
+          "name": "Plaza de Armas",
+          "description": "The heart of the city, completely rebuilt after the 1939 earthquake",
+          "isCompleted": false
+        },
+        {
+          "name": "San Bartolomé Cathedral",
+          "description": "Majestic modern cathedral, symbol of Chillán's reconstruction",
+          "isCompleted": false
+        },
+        {
+          "name": "Chillán Market",
+          "description": "Vibrant gastronomic center where local flavors and traditions converge",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Downtown Explorer Badge",
+      "difficulty": "Easy",
+      "estimatedTime": "2-3 hours"
+    },
+    {
+      "id": "2",
+      "title": "San Carlos Flavors Route",
+      "city": "San Carlos",
+      "description": "Immerse yourself in the most authentic gastronomic tradition of San Carlos",
+      "points": [
+        {
+          "name": "Artisanal Sausage Factory",
+          "description": "Learn about the traditional process of making the famous San Carlos longaniza",
+          "isCompleted": false
+        },
+        {
+          "name": "Municipal Market",
+          "description": "Taste fresh local products and regional specialties",
+          "isCompleted": false
+        },
+        {
+          "name": "San Carlos Main Square",
+          "description": "Nerve center of the city with rich local history",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Regional Gastronomer Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "3",
+      "title": "Natural Treasures of Ñuble",
+      "city": "Ñuble Region",
+      "description": "Discover the impressive natural beauty of the Ñuble region",
+      "points": [
+        {
+          "name": "Chillán Hot Springs",
+          "description": "Relax in natural thermal waters surrounded by mountains",
+          "isCompleted": false
+        },
+        {
+          "name": "Chillán Snow-capped Mountains",
+          "description": "Enjoy spectacular panoramic views of the mountain range",
+          "isCompleted": false
+        },
+        {
+          "name": "Las Trancas Valley",
+          "description": "Explore this beautiful mountain valley full of wildlife",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Natural Guardian Badge",
+      "difficulty": "Hard",
+      "estimatedTime": "1-2 days"
+    },
+    {
+      "id": "4",
+      "title": "Ancestral Crafts and Traditions",
+      "city": "Quinchamalí",
+      "description": "Learn about artisanal traditions that have endured for generations",
+      "points": [
+        {
+          "name": "Black Pottery Workshop",
+          "description": "Observe the creation of the famous Quinchamalí black pottery",
+          "isCompleted": false
+        },
+        {
+          "name": "Artisan's House",
+          "description": "Discover ancestral clay working techniques",
+          "isCompleted": false
+        },
+        {
+          "name": "Pottery Museum",
+          "description": "Learn about the history and evolution of this tradition",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Traditions Guardian Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "5",
+      "title": "Wine Route in Ñuble",
+      "city": "Itata Valley",
+      "description": "Explore Chile's oldest winemaking tradition",
+      "points": [
+        {
+          "name": "Heritage Vineyard",
+          "description": "Visit vineyards with centennial País and Moscatel vines",
+          "isCompleted": false
+        },
+        {
+          "name": "Traditional Winery",
+          "description": "Learn ancestral winemaking methods in clay vessels",
+          "isCompleted": false
+        },
+        {
+          "name": "Heritage Wine Tasting",
+          "description": "Taste unique wines with denomination of origin",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Itata Sommelier Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "4-5 hours"
+    },
+    {
+      "id": "6",
+      "title": "History Trails",
+      "city": "Yungay",
+      "description": "Walk through the places that marked the region's history",
+      "points": [
+        {
+          "name": "Battle of Yungay Museum",
+          "description": "Learn about the Chilean victory in the Pacific War",
+          "isCompleted": false
+        },
+        {
+          "name": "Heroes Monument",
+          "description": "Pay tribute to those who fell in the historic battle",
+          "isCompleted": false
+        },
+        {
+          "name": "Battlefield",
+          "description": "Walk through the place where the decisive battle was fought",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Regional Historian Badge",
+      "difficulty": "Easy",
+      "estimatedTime": "2-3 hours"
+    },
+    {
+      "id": "7",
+      "title": "Adventure at Salto del Laja",
+      "city": "Salto del Laja",
+      "description": "Experience the majesty of one of Chile's most impressive waterfalls",
+      "points": [
+        {
+          "name": "Main Viewpoint",
+          "description": "Contemplate the waterfall from the most spectacular viewpoint",
+          "isCompleted": false
+        },
+        {
+          "name": "Riverside Trail",
+          "description": "Walk along the Laja River and discover its ecosystem",
+          "isCompleted": false
+        },
+        {
+          "name": "Picnic Area",
+          "description": "Enjoy an outdoor lunch with a view of the waterfall",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Waterfall Explorer Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "8",
+      "title": "Mapuche Culture in Ñuble",
+      "city": "Pemuco",
+      "description": "Discover the rich Mapuche cultural heritage in the region",
+      "points": [
+        {
+          "name": "Traditional Ruka",
+          "description": "Visit a traditional Mapuche house and learn about its architecture",
+          "isCompleted": false
+        },
+        {
+          "name": "Nguillatún Ceremony",
+          "description": "Learn about sacred Mapuche ceremonies",
+          "isCompleted": false
+        },
+        {
+          "name": "Silverwork Workshop",
+          "description": "Observe the creation of traditional Mapuche jewelry",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Cultural Respect Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "4-5 hours"
+    },
+    {
+      "id": "9",
+      "title": "Native Forests of Ñuble",
+      "city": "Ñuble National Reserve",
+      "description": "Explore the unique biodiversity of the region's native forests",
+      "points": [
+        {
+          "name": "Oak Trail",
+          "description": "Walk among centennial oaks and observe native fauna",
+          "isCompleted": false
+        },
+        {
+          "name": "Condor Viewpoint",
+          "description": "Look for condors and other birds of prey in their natural habitat",
+          "isCompleted": false
+        },
+        {
+          "name": "Hidden Lagoon",
+          "description": "Discover this pristine lagoon surrounded by native forest",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Forest Protector Badge",
+      "difficulty": "Hard",
+      "estimatedTime": "5-6 hours"
+    },
+    {
+      "id": "10",
+      "title": "Festivals and Traditions of Ñuble",
+      "city": "Ñuble Region",
+      "description": "Participate in traditional celebrations that keep local culture alive",
+      "points": [
+        {
+          "name": "Longaniza Festival",
+          "description": "Join the most important gastronomic celebration in San Carlos",
+          "isCompleted": false
+        },
+        {
+          "name": "Harvest Festival",
+          "description": "Participate in the traditional grape harvest celebration",
+          "isCompleted": false
+        },
+        {
+          "name": "Chilean Rodeo",
+          "description": "Witness the national sport in its most authentic form",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Cultural Ambassador Badge",
+      "difficulty": "Easy",
+      "estimatedTime": "Variable depending on festival"
+    },
+    {
+      "id": "11",
+      "title": "Exploring Bulnes",
+      "city": "Bulnes",
+      "description": "Discover the charms of this historic railway city",
+      "points": [
+        {
+          "name": "Railway Station",
+          "description": "Visit the historic station that connected Ñuble with the world",
+          "isCompleted": false
+        },
+        {
+          "name": "Railway Museum",
+          "description": "Learn about the history of railways in the region",
+          "isCompleted": false
+        },
+        {
+          "name": "Bulnes Square",
+          "description": "Relax in the center of this welcoming city",
+          "isCompleted": false
+        },
+        {
+          "name": "Cultural Center",
+          "description": "Discover local artistic expressions",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Railway Explorer Badge",
+      "difficulty": "Easy",
+      "estimatedTime": "2-3 hours"
+    },
+    {
+      "id": "12",
+      "title": "Adventure in Coihueco",
+      "city": "Coihueco",
+      "description": "Explore the nature and traditions of Coihueco",
+      "points": [
+        {
+          "name": "Ñuble River",
+          "description": "Enjoy water activities on the region's main river",
+          "isCompleted": false
+        },
+        {
+          "name": "Suspension Bridge",
+          "description": "Cross the historic bridge that connects both shores",
+          "isCompleted": false
+        },
+        {
+          "name": "Country Fair",
+          "description": "Learn about local agricultural products and rural traditions",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Rural Adventurer Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "13",
+      "title": "Heritage of Quirihue",
+      "city": "Quirihue",
+      "description": "Discover the rich history and architecture of Quirihue",
+      "points": [
+        {
+          "name": "San Sebastián Church",
+          "description": "Admire this beautiful colonial church",
+          "isCompleted": false
+        },
+        {
+          "name": "Historic Manor House",
+          "description": "Visit a 19th-century manor house",
+          "isCompleted": false
+        },
+        {
+          "name": "Valley Viewpoint",
+          "description": "Contemplate the valley from the heights of Quirihue",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Heritage Guardian Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "14",
+      "title": "Nature in Pinto",
+      "city": "Pinto",
+      "description": "Explore the unique natural landscapes of Pinto",
+      "points": [
+        {
+          "name": "Pinto Lagoon",
+          "description": "Observe migratory birds in this natural wetland",
+          "isCompleted": false
+        },
+        {
+          "name": "Ecological Trail",
+          "description": "Walk trails that showcase native flora",
+          "isCompleted": false
+        },
+        {
+          "name": "Interpretation Center",
+          "description": "Learn about local biodiversity",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Naturalist Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "4-5 hours"
+    },
+    {
+      "id": "15",
+      "title": "Traditions of Ñiquén",
+      "city": "Ñiquén",
+      "description": "Learn about the most authentic rural traditions of Ñiquén",
+      "points": [
+        {
+          "name": "Water Mill",
+          "description": "Visit a traditional mill still in operation",
+          "isCompleted": false
+        },
+        {
+          "name": "Weaving Workshop",
+          "description": "Observe the creation of traditional loom textiles",
+          "isCompleted": false
+        },
+        {
+          "name": "Organic Garden",
+          "description": "Learn about sustainable agriculture techniques",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Rural Tradition Badge",
+      "difficulty": "Easy",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "16",
+      "title": "Adventure in Portezuelo",
+      "city": "Portezuelo",
+      "description": "Discover the natural and cultural attractions of Portezuelo",
+      "points": [
+        {
+          "name": "La Virgen Hill",
+          "description": "Climb the hill and enjoy panoramic views",
+          "isCompleted": false
+        },
+        {
+          "name": "Village Church",
+          "description": "Visit the central church of Portezuelo",
+          "isCompleted": false
+        },
+        {
+          "name": "Craft Fair",
+          "description": "Buy handmade local products",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Hill Explorer Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "17",
+      "title": "History of Cobquecura",
+      "city": "Cobquecura",
+      "description": "Explore the coast and history of Cobquecura",
+      "points": [
+        {
+          "name": "Stone Church",
+          "description": "Admire this unique stone construction",
+          "isCompleted": false
+        },
+        {
+          "name": "Cobquecura Beach",
+          "description": "Relax on the beautiful coastal beaches",
+          "isCompleted": false
+        },
+        {
+          "name": "Historic Lighthouse",
+          "description": "Visit the lighthouse that guides navigators",
+          "isCompleted": false
+        },
+        {
+          "name": "Fishermen's Cove",
+          "description": "Learn about the life of local fishermen",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Coastal Explorer Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "4-5 hours"
+    },
+    {
+      "id": "18",
+      "title": "Dryland Route in Trehuaco",
+      "city": "Trehuaco",
+      "description": "Discover dryland agriculture and traditions of Trehuaco",
+      "points": [
+        {
+          "name": "Dryland Vineyards",
+          "description": "Learn about traditional viticulture without irrigation",
+          "isCompleted": false
+        },
+        {
+          "name": "Adobe House",
+          "description": "Visit traditional adobe constructions",
+          "isCompleted": false
+        },
+        {
+          "name": "Chicha Workshop",
+          "description": "Learn about traditional chicha making",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Dryland Master Badge",
+      "difficulty": "Medium",
+      "estimatedTime": "4-5 hours"
+    },
+    {
+      "id": "19",
+      "title": "Heritage of Ninhue",
+      "city": "Ninhue",
+      "description": "Explore the historical and natural heritage of Ninhue",
+      "points": [
+        {
+          "name": "Colonial Church",
+          "description": "Admire the colonial architecture of the main church",
+          "isCompleted": false
+        },
+        {
+          "name": "Local Museum",
+          "description": "Learn about local history in the village museum",
+          "isCompleted": false
+        },
+        {
+          "name": "Native Forest",
+          "description": "Walk trails in the nearby native forest",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Heritage Guardian Badge",
+      "difficulty": "Easy",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": "20",
+      "title": "Grand Route of Ñuble",
+      "city": "Ñuble Region",
+      "description": "Complete the most comprehensive tour of the entire Ñuble region",
+      "points": [
+        {
+          "name": "Regional Capital",
+          "description": "Visit Chillán, the capital of the region",
+          "isCompleted": false
+        },
+        {
+          "name": "Ñuble Coast",
+          "description": "Explore the coastal communes of the region",
+          "isCompleted": false
+        },
+        {
+          "name": "Central Valley",
+          "description": "Tour the central valley communes",
+          "isCompleted": false
+        },
+        {
+          "name": "Foothills",
+          "description": "Adventure into the foothill communes",
+          "isCompleted": false
+        },
+        {
+          "name": "Local Traditions",
+          "description": "Participate in at least 3 festivals or local traditions",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Master Explorer of Ñuble Badge",
+      "difficulty": "Hard",
+      "estimatedTime": "1-2 weeks"
+    }
+  ]
+}
