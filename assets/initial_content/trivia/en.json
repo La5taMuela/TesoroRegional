@@ -1,0 +1,274 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "question": "In what year did the great earthquake that destroyed Chillán occur?",
+      "options": ["1935", "1939", "1942", "1945"],
+      "correctAnswerIndex": 1,
+      "category": "History",
+      "difficulty": "Medium",
+      "explanation": "The Chillán earthquake occurred on January 24, 1939, with a magnitude of 8.3, being one of the most destructive in Chilean history with approximately 30,000 victims."
+    },
+    {
+      "id": "q2",
+      "question": "What is the most famous gastronomic product of San Carlos?",
+      "options": ["Empanadas", "Longaniza", "Sopaipillas", "Cazuela"],
+      "correctAnswerIndex": 1,
+      "category": "Gastronomy",
+      "difficulty": "Easy",
+      "explanation": "San Carlos longaniza is recognized as Chilean Food Heritage for its artisanal production and unique flavor."
+    },
+    {
+      "id": "q3",
+      "question": "What is the traditional black pottery of the region called?",
+      "options": ["Pomaire Pottery", "Quinchamalí Pottery", "Talagante Pottery", "Melipilla Pottery"],
+      "correctAnswerIndex": 1,
+      "category": "Crafts",
+      "difficulty": "Medium",
+      "explanation": "Quinchamalí pottery is an Intangible Cultural Heritage of Chile, known for its black color achieved through an ancestral oxygen-free firing technique."
+    },
+    {
+      "id": "q4",
+      "question": "What is the capital of the Ñuble region?",
+      "options": ["San Carlos", "Chillán", "Bulnes", "Yungay"],
+      "correctAnswerIndex": 1,
+      "category": "Geography",
+      "difficulty": "Easy",
+      "explanation": "Chillán was designated regional capital when Ñuble became a region on September 6, 2018."
+    },
+    {
+      "id": "q5",
+      "question": "Which famous Mexican muralist painted in Chillán?",
+      "options": ["Diego Rivera", "José Clemente Orozco", "David Alfaro Siqueiros", "Rufino Tamayo"],
+      "correctAnswerIndex": 2,
+      "category": "Art",
+      "difficulty": "Hard",
+      "explanation": "David Alfaro Siqueiros painted the mural 'Death to the Invader' at the Mexico School in Chillán in 1941, as gratitude for Chilean help to Mexico after earthquakes."
+    },
+    {
+      "id": "q6",
+      "question": "In what year was the Ñuble region officially created?",
+      "options": ["2016", "2017", "2018", "2019"],
+      "correctAnswerIndex": 2,
+      "category": "History",
+      "difficulty": "Medium",
+      "explanation": "The Ñuble region was created by Law 21.033 on September 5, 2018, separating from the Biobío region."
+    },
+    {
+      "id": "q7",
+      "question": "What is the name of the most famous volcano in the region?",
+      "options": ["Chillán Volcano", "Nevados de Chillán Volcano", "Antuco Volcano", "Copahue Volcano"],
+      "correctAnswerIndex": 1,
+      "category": "Geography",
+      "difficulty": "Medium",
+      "explanation": "Nevados de Chillán is an active volcanic complex that includes ski centers and hot springs, located 80 km east of Chillán."
+    },
+    {
+      "id": "q8",
+      "question": "What culinary tradition is typical of patriotic holidays in Ñuble?",
+      "options": ["Barbecue", "Curanto", "Pine empanadas", "Lamb roast"],
+      "correctAnswerIndex": 2,
+      "category": "Traditions",
+      "difficulty": "Easy",
+      "explanation": "Pine empanadas (filled with meat, onions, egg, and olives) are essential in Chilean National Holidays, especially in Ñuble."
+    },
+    {
+      "id": "q9",
+      "question": "What is the most important river that crosses the Ñuble region?",
+      "options": ["Maule River", "Ñuble River", "Itata River", "Biobío River"],
+      "correctAnswerIndex": 1,
+      "category": "Geography",
+      "difficulty": "Easy",
+      "explanation": "The Ñuble River, with a length of 150 km, is vital for regional agriculture and gives the region its name."
+    },
+    {
+      "id": "q10",
+      "question": "Which Chilean writer was born in Parral, Linares province?",
+      "options": ["Pablo Neruda", "Gabriela Mistral", "Vicente Huidobro", "Nicanor Parra"],
+      "correctAnswerIndex": 0,
+      "category": "Literature",
+      "difficulty": "Medium",
+      "explanation": "Pablo Neruda (1904-1973), Nobel Prize in Literature 1971, was born in Parral (now Maule region) but spent part of his childhood in Temuco."
+    },
+    {
+      "id": "q11",
+      "question": "What is the main economic activity of the Ñuble region?",
+      "options": ["Mining", "Agriculture", "Fishing", "Tourism"],
+      "correctAnswerIndex": 1,
+      "category": "Economy",
+      "difficulty": "Easy",
+      "explanation": "Ñuble produces 20% of Chile's wheat and is a leader in crops like rice, corn and legumes, making agriculture its main activity."
+    },
+    {
+      "id": "q12",
+      "question": "Which university has its main campus in Chillán?",
+      "options": ["University of Chile", "University of Bío-Bío", "University of Concepción", "Catholic University"],
+      "correctAnswerIndex": 1,
+      "category": "Education",
+      "difficulty": "Medium",
+      "explanation": "The University of Bío-Bío (UBB) has had a campus in Chillán since 1988, being the region's main higher education institution."
+    },
+    {
+      "id": "q13",
+      "question": "What is the traditional fair of Chillán called?",
+      "options": ["Chillán Fair", "Central Market", "Pinto Fair", "Main Square"],
+      "correctAnswerIndex": 2,
+      "category": "Traditions",
+      "difficulty": "Easy",
+      "explanation": "Pinto Fair, founded in 1865, is Chillán's main supply market, famous for its agricultural and craft products."
+    },
+    {
+      "id": "q14",
+      "question": "What winter sport is practiced at Nevados de Chillán?",
+      "options": ["Ice skating", "Hockey", "Skiing", "Curling"],
+      "correctAnswerIndex": 2,
+      "category": "Sports",
+      "difficulty": "Easy",
+      "explanation": "Nevados de Chillán ski resort offers 34 slopes with 12.5 skiable km, being the largest in central-southern Chile."
+    },
+    {
+      "id": "q15",
+      "question": "What is the name of the regional hospital in Chillán?",
+      "options": ["Las Higueras Hospital", "Herminda Martín Hospital", "San Juan de Dios Hospital", "Regional Hospital"],
+      "correctAnswerIndex": 1,
+      "category": "Health",
+      "difficulty": "Medium",
+      "explanation": "Herminda Martín Clinical Hospital is the main health center in Ñuble, with high-complexity specialties."
+    },
+    {
+      "id": "q16",
+      "question": "What type of traditional music is characteristic of the region?",
+      "options": ["Cueca", "Tonada", "Waltz", "Polka"],
+      "correctAnswerIndex": 1,
+      "category": "Music",
+      "difficulty": "Medium",
+      "explanation": "Tonada, derived from Spanish singing, is characteristic of central Chile, with exponents like Los Hermanos Campos."
+    },
+    {
+      "id": "q17",
+      "question": "What is the approximate distance between Chillán and Santiago?",
+      "options": ["300 km", "400 km", "500 km", "600 km"],
+      "correctAnswerIndex": 1,
+      "category": "Geography",
+      "difficulty": "Medium",
+      "explanation": "Chillán is located 400 km south of Santiago via Route 5 South, with an approximate travel time of 4 hours by car."
+    },
+    {
+      "id": "q18",
+      "question": "What crop is most characteristic of the Ñuble region?",
+      "options": ["Wheat", "Corn", "Rice", "Oats"],
+      "correctAnswerIndex": 0,
+      "category": "Agriculture",
+      "difficulty": "Easy",
+      "explanation": "Ñuble produces 20% of Chile's wheat, being the most important crop, followed by rice and legumes."
+    },
+    {
+      "id": "q19",
+      "question": "What is the name of Chillán's football stadium?",
+      "options": ["Municipal Stadium", "Nelson Oyarzún Stadium", "Fiscal Stadium", "Regional Stadium"],
+      "correctAnswerIndex": 1,
+      "category": "Sports",
+      "difficulty": "Hard",
+      "explanation": "Nelson Oyarzún Arenas Municipal Stadium, with capacity for 12,000 spectators, is home to the Ñublense club."
+    },
+    {
+      "id": "q20",
+      "question": "What religious festival is most important in the region?",
+      "options": ["Holy Week", "Christmas", "Feast of Saint Bartholomew", "Corpus Christi"],
+      "correctAnswerIndex": 2,
+      "category": "Religion",
+      "difficulty": "Medium",
+      "explanation": "The Feast of Saint Bartholomew (August 24) has been Chillán's patronal celebration since 1845, with processions and cultural events."
+    },
+    {
+      "id": "q21",
+      "question": "What is the name of Chillán's airport?",
+      "options": ["Chillán Airport", "Bernardo O'Higgins Airport", "General Freire Airport", "Ñuble Airport"],
+      "correctAnswerIndex": 2,
+      "category": "Transportation",
+      "difficulty": "Hard",
+      "explanation": "General Bernardo O'Higgins Airport (formerly Chillán Airport) receives domestic flights and is located in Chillán Viejo commune."
+    },
+    {
+      "id": "q22",
+      "question": "What type of climate predominates in the Ñuble region?",
+      "options": ["Mediterranean", "Temperate rainy", "Semi-arid", "Oceanic"],
+      "correctAnswerIndex": 0,
+      "category": "Climate",
+      "difficulty": "Medium",
+      "explanation": "Ñuble has a Mediterranean climate with a prolonged dry season (6-7 months), with rainfall concentrated in winter (1,000-1,500 mm annually)."
+    },
+    {
+      "id": "q23",
+      "question": "What is the most populated commune in the Ñuble region?",
+      "options": ["San Carlos", "Chillán", "Bulnes", "Yungay"],
+      "correctAnswerIndex": 1,
+      "category": "Demographics",
+      "difficulty": "Easy",
+      "explanation": "Chillán concentrates 30% of the regional population (184,739 inhabitants according to 2017 census), being the most important urban center."
+    },
+    {
+      "id": "q24",
+      "question": "What artisanal product is typical of Quinchamalí?",
+      "options": ["Textiles", "Black pottery", "Basketry", "Wood carving"],
+      "correctAnswerIndex": 1,
+      "category": "Crafts",
+      "difficulty": "Easy",
+      "explanation": "Quinchamalí pottery (Chillán Viejo commune) is Intangible Cultural Heritage since 2015, with ancestral Mapuche techniques."
+    },
+    {
+      "id": "q25",
+      "question": "How many communes does the Ñuble region have?",
+      "options": ["19", "21", "23", "25"],
+      "correctAnswerIndex": 1,
+      "category": "Geography",
+      "difficulty": "Hard",
+      "explanation": "Ñuble has 21 communes grouped into 3 provinces: Diguillín (9), Punilla (5) and Itata (7)."
+    },
+    {
+      "id": "q26",
+      "question": "What hot springs are famous in the Ñuble region?",
+      "options": ["Chillán Hot Springs", "Puyehue Hot Springs", "Cauquenes Hot Springs", "El Flaco Hot Springs"],
+      "correctAnswerIndex": 0,
+      "category": "Tourism",
+      "difficulty": "Easy",
+      "explanation": "Chillán Hot Springs, at 1,650 meters above sea level, are the region's main thermal complex, with waters reaching 62°C."
+    },
+    {
+      "id": "q27",
+      "question": "What is the name of Chillán's traditional market?",
+      "options": ["Central Market", "Pinto Fair", "Municipal Market", "Main Square"],
+      "correctAnswerIndex": 1,
+      "category": "Commerce",
+      "difficulty": "Medium",
+      "explanation": "Pinto Fair, located next to the Main Square, has been Chillán's main traditional commercial center since the 19th century."
+    },
+    {
+      "id": "q28",
+      "question": "What football team represents Chillán?",
+      "options": ["Ñublense", "Chillán FC", "Deportes Chillán", "Club Chillán"],
+      "correctAnswerIndex": 0,
+      "category": "Sports",
+      "difficulty": "Medium",
+      "explanation": "Ñublense (founded in 1916) is Chillán's professional club that participates in Chilean First Division football."
+    },
+    {
+      "id": "q29",
+      "question": "What is the main access route to Chillán from Santiago?",
+      "options": ["Route 5 North", "Route 5 South", "Route 68", "Route 78"],
+      "correctAnswerIndex": 1,
+      "category": "Transportation",
+      "difficulty": "Easy",
+      "explanation": "Route 5 South (Pan-American Highway) connects Santiago with Chillán in a journey of approximately 400 km."
+    },
+    {
+      "id": "q30",
+      "question": "What does the word 'Ñuble' mean in Mapudungun?",
+      "options": ["Big river", "Fertile land", "Resting place", "Running water"],
+      "correctAnswerIndex": 2,
+      "category": "Etymology",
+      "difficulty": "Hard",
+      "explanation": "Ñuble comes from Mapudungun 'ñuble', meaning 'place where one rests', referring to the geographical characteristics of the valley."
+    }
+  ]
+}

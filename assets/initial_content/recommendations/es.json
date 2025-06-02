@@ -1,0 +1,128 @@
+{
+  "recommendations": [
+    {
+      "id": "rec_1",
+      "title": "Explora el Centro Histórico de Chillán",
+      "city": "Chillán",
+      "description": "Visita los principales puntos históricos del centro de Chillán",
+      "points": [
+        {
+          "name": "Plaza de Armas",
+          "description": "Corazón de la ciudad, reconstruida tras el terremoto de 1939",
+          "isCompleted": false
+        },
+        {
+          "name": "Catedral de San Bartolomé",
+          "description": "Símbolo de la reconstrucción de Chillán",
+          "isCompleted": false
+        },
+        {
+          "name": "Mercado de Chillán",
+          "description": "Centro gastronómico y artesanal tradicional",
+          "isCompleted": false
+        },
+        {
+          "name": "Mural de Siqueiros",
+          "description": "Obra del famoso muralista mexicano David Alfaro Siqueiros",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Explorador de Chillán",
+      "difficulty": "Fácil",
+      "estimatedTime": "2-3 horas"
+    },
+    {
+      "id": "rec_2",
+      "title": "Ruta Gastronómica de San Carlos",
+      "city": "San Carlos",
+      "description": "Descubre los sabores tradicionales de San Carlos",
+      "points": [
+        {
+          "name": "Fábrica de Longanizas Tradicional",
+          "description": "Conoce el proceso artesanal de la longaniza sancarlina",
+          "isCompleted": false
+        },
+        {
+          "name": "Mercado Local",
+          "description": "Degusta productos locales y artesanales",
+          "isCompleted": false
+        },
+        {
+          "name": "Plaza de San Carlos",
+          "description": "Centro neurálgico de la ciudad",
+          "isCompleted": false
+        },
+        {
+          "name": "Museo de la Longaniza",
+          "description": "Aprende sobre la historia de este emblemático embutido",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Gastrólogo de Ñuble",
+      "difficulty": "Medio",
+      "estimatedTime": "3-4 horas"
+    },
+    {
+      "id": "rec_3",
+      "title": "Patrimonio Natural de Ñuble",
+      "city": "Región de Ñuble",
+      "description": "Explora los atractivos naturales de la región",
+      "points": [
+        {
+          "name": "Termas de Chillán",
+          "description": "Relájate en las aguas termales naturales",
+          "isCompleted": false
+        },
+        {
+          "name": "Nevados de Chillán",
+          "description": "Disfruta de la vista panorámica de la cordillera",
+          "isCompleted": false
+        },
+        {
+          "name": "Salto del Laja",
+          "description": "Admira esta impresionante cascada natural",
+          "isCompleted": false
+        },
+        {
+          "name": "Valle Las Trancas",
+          "description": "Explora este hermoso valle cordillerano",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Explorador Natural",
+      "difficulty": "Difícil",
+      "estimatedTime": "1-2 días"
+    },
+    {
+      "id": "rec_4",
+      "title": "Artesanía y Tradiciones",
+      "city": "Región de Ñuble",
+      "description": "Conoce las tradiciones artesanales de Ñuble",
+      "points": [
+        {
+          "name": "Taller de Cerámica de Quinchamalí",
+          "description": "Observa la creación de la famosa cerámica negra",
+          "isCompleted": false
+        },
+        {
+          "name": "Feria Artesanal de Chillán",
+          "description": "Descubre productos artesanales locales",
+          "isCompleted": false
+        },
+        {
+          "name": "Casa de la Cultura",
+          "description": "Conoce las expresiones culturales de la región",
+          "isCompleted": false
+        },
+        {
+          "name": "Taller de Tejidos Tradicionales",
+          "description": "Aprende sobre los tejidos ancestrales",
+          "isCompleted": false
+        }
+      ],
+      "reward": "Insignia de Guardián de Tradiciones",
+      "difficulty": "Medio",
+      "estimatedTime": "4-5 horas"
+    }
+  ]
+}

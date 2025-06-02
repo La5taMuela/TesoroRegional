@@ -1,0 +1,89 @@
+name: tesoro_regional
+description: "App de descubrimiento cultural para Ñuble (Chile) usando la metáfora de rompecabezas"
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # Core dependencies
+  cupertino_icons: ^1.0.2
+  flutter_riverpod: ^2.3.6
+  go_router: ^10.1.2
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  uuid: ^3.0.7
+
+  # Database
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Storage
+  shared_preferences: ^2.2.0
+
+  # Network
+  dio: ^5.3.2
+  connectivity_plus: ^4.0.2
+
+  # UI
+  flutter_svg: ^2.0.7
+
+  # Camera and QR
+  mobile_scanner: ^3.5.6
+  permission_handler: ^11.0.1
+  qr_flutter: ^4.1.0
+
+  # File handling
+  gal: ^2.1.4
+  path_provider: ^2.1.1
+
+  # Logging
+  logger: ^2.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.2
+  flutter_launcher_icons: ^0.13.1
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.7
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icon/
+    - assets/icons/
+    - assets/i18n/
+    - assets/initial_content/missions/
+    - assets/initial_content/stories/
+    - assets/initial_content/recommendations/
+    - assets/initial_content/trivia/
+    - assets/initial_content/puzzle_sliders/
+
+    - assets/images/puzzle_slider/Catedral de San Bartolomé.jpg
+    - assets/images/puzzle_slider/Mercado de Chillán.jpg
+    - assets/images/puzzle_slider/Nevados de Chillán.jpg
+    - assets/images/puzzle_slider/Plaza de Armas de Chillán.jpg
+    - assets/images/puzzle_slider/Termas de Chillán.jpg
+    - assets/images/puzzle_slider/Viñedos del Valle del Itata.jpg
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon_app.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/icon/icon_app.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
