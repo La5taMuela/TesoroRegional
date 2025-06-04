@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tesoro_regional/features/minigames/domain/entities/trivia_question.dart';
-import 'package:tesoro_regional/features/minigames/data/datasources/minigames_data_source.dart';
+import 'package:tesoro_regional/core/services/content/trivia_service.dart';
 import 'package:tesoro_regional/core/services/i18n/app_localizations.dart';
 
 class TriviaPage extends StatefulWidget {
@@ -12,8 +12,9 @@ class TriviaPage extends StatefulWidget {
 }
 
 class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
-  final MinigamesDataSource _dataSource = MinigamesDataSourceImpl();
+  final TriviaService _triviaService = TriviaService();
 
+  List<TriviaQuestion> _allQuestions = [];
   List<TriviaQuestion> _questions = [];
   int _currentQuestionIndex = 0;
   int _score = 0;
@@ -22,6 +23,7 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
   int? _selectedAnswerIndex;
   bool _showExplanation = false;
   DateTime? _startTime;
+  String? _selectedDifficulty;
 
   late AnimationController _progressController;
   late AnimationController _cardController;
@@ -48,7 +50,7 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_isLoading && _questions.isEmpty) {
+    if (_isLoading && _allQuestions.isEmpty) {
       _loadQuestions();
     }
   }
@@ -65,15 +67,13 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
       final l10n = AppLocalizations.of(context);
       final languageCode = l10n?.locale.languageCode ?? 'es';
 
-      final questionsDto = await _dataSource.getTriviaQuestions(languageCode: languageCode);
+      final questionsDto = await _triviaService.loadTriviaQuestions(languageCode);
+
       if (mounted) {
         setState(() {
-          _questions = questionsDto.map((dto) => dto.toDomain()).toList();
-          _questions.shuffle(); // Mezclar preguntas
+          _allQuestions = questionsDto.map((dto) => dto.toDomain()).toList();
           _isLoading = false;
         });
-        _cardController.forward();
-        _updateProgress();
       }
     } catch (e) {
       if (mounted) {
@@ -96,6 +96,30 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
     }
   }
 
+  void _startGameWithSelectedDifficulty(String difficulty) {
+    setState(() {
+      _questions = _allQuestions
+          .where((q) => q.difficulty.toLowerCase() == difficulty.toLowerCase())
+          .toList();
+
+      if (_questions.isEmpty) {
+        _showErrorMessage('No hay preguntas para la dificultad seleccionada');
+        return;
+      }
+
+      _questions.shuffle();
+      _selectedDifficulty = difficulty;
+      _currentQuestionIndex = 0;
+      _score = 0;
+      _hasAnswered = false;
+      _selectedAnswerIndex = null;
+      _showExplanation = false;
+      _startTime = DateTime.now();
+    });
+    _cardController.forward();
+    _updateProgress();
+  }
+
   void _updateProgress() {
     final progress = (_currentQuestionIndex + 1) / _questions.length;
     _progressController.animateTo(progress);
@@ -113,7 +137,6 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
       }
     });
 
-    // Mostrar explicación después de un breve delay
     Future.delayed(const Duration(milliseconds: 1000), () {
       if (mounted) {
         setState(() {
@@ -140,11 +163,7 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
     }
   }
 
-  void _showResults() async {
-    // Guardar el puntaje
-    final timeTaken = Duration(seconds: DateTime.now().difference(_startTime ?? DateTime.now()).inSeconds);
-    await _dataSource.saveGameScore('trivia', _score, _questions.length, timeTaken);
-
+  void _showResults() {
     if (mounted) {
       showDialog(
         context: context,
@@ -161,18 +180,9 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
 
   void _restartTrivia() {
     setState(() {
-      _currentQuestionIndex = 0;
-      _score = 0;
-      _hasAnswered = false;
-      _selectedAnswerIndex = null;
-      _showExplanation = false;
-      _questions.shuffle();
+      _selectedDifficulty = null;
     });
-
     _progressController.reset();
-    _cardController.reset();
-    _cardController.forward();
-    _updateProgress();
   }
 
   @override
@@ -185,42 +195,26 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
           title: Text(l10n?.triviaGame ?? 'Trivia Cultural'),
           backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go('/'),
+          ),
         ),
-        body: Center(
+        body: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 16),
-              Text(l10n?.loadingQuestions ?? 'Cargando preguntas...'),
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Cargando preguntas...'),
             ],
           ),
         ),
       );
     }
 
-    if (_questions.isEmpty) {
+    if (_allQuestions.isEmpty) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(l10n?.triviaGame ?? 'Trivia Cultural'),
-          backgroundColor: Theme.of(context).primaryColor,
-          foregroundColor: Colors.white,
-        ),
-        body: Center(
-          child: Text(l10n?.noQuestionsLoaded ?? 'No se pudieron cargar las preguntas'),
-        ),
-      );
-    }
-
-    final currentQuestion = _questions[_currentQuestionIndex];
-
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (didPop) return;
-        context.go('/');
-      },
-      child: Scaffold(
         appBar: AppBar(
           title: Text(l10n?.triviaGame ?? 'Trivia Cultural'),
           backgroundColor: Theme.of(context).primaryColor,
@@ -229,7 +223,48 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.go('/'),
           ),
-          bottom: PreferredSize(
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                l10n?.noQuestionsLoaded ?? 'No se pudieron cargar las preguntas',
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => _loadQuestions(),
+                child: Text(l10n?.retry ?? 'Reintentar'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+        context.go('/minigames');
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n?.triviaGame ?? 'Trivia Cultural'),
+          backgroundColor: Theme.of(context).primaryColor,
+          foregroundColor: Colors.white,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go('/minigames'),
+          ),
+          bottom: _selectedDifficulty != null ? PreferredSize(
             preferredSize: const Size.fromHeight(8),
             child: AnimatedBuilder(
               animation: _progressController,
@@ -241,89 +276,344 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
                 );
               },
             ),
-          ),
+          ) : null,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
+        body: _selectedDifficulty == null
+            ? _DifficultySelectionScreen(
+          allQuestions: _allQuestions,
+          onDifficultySelected: _startGameWithSelectedDifficulty,
+        )
+            : _GameScreen(
+          questions: _questions,
+          currentQuestionIndex: _currentQuestionIndex,
+          score: _score,
+          selectedAnswerIndex: _selectedAnswerIndex,
+          hasAnswered: _hasAnswered,
+          showExplanation: _showExplanation,
+          onAnswerSelected: _selectAnswer,
+          onNextQuestion: _nextQuestion,
+          cardAnimation: _cardAnimation,
+        ),
+      ),
+    );
+  }
+}
+
+class _DifficultySelectionScreen extends StatelessWidget {
+  final List<TriviaQuestion> allQuestions;
+  final Function(String) onDifficultySelected;
+
+  const _DifficultySelectionScreen({
+    required this.allQuestions,
+    required this.onDifficultySelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final isLargeScreen = MediaQuery.of(context).size.width > 800;
+
+    // Count questions by difficulty
+    final easyCount = allQuestions.where((q) => q.difficulty.toLowerCase() == 'fácil' || q.difficulty.toLowerCase() == 'easy').length;
+    final mediumCount = allQuestions.where((q) => q.difficulty.toLowerCase() == 'medio' || q.difficulty.toLowerCase() == 'medium').length;
+    final hardCount = allQuestions.where((q) => q.difficulty.toLowerCase() == 'difícil' || q.difficulty.toLowerCase() == 'hard').length;
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(isLargeScreen ? 32 : 16),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Question counter and score
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Text(
+                l10n?.selectDifficulty ?? 'Selecciona la dificultad',
+                style: TextStyle(
+                  fontSize: isLargeScreen ? 32 : 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: isLargeScreen ? 16 : 12),
+              Text(
+                l10n?.selectDifficultyDescription ??
+                    'Elige el nivel de dificultad de las preguntas sobre la cultura de Ñuble.',
+                style: TextStyle(
+                  fontSize: isLargeScreen ? 18 : 16,
+                  color: Colors.grey[600],
+                ),
+              ),
+              SizedBox(height: isLargeScreen ? 40 : 32),
+
+              Column(
                 children: [
-                  Text(
-                    '${l10n?.question ?? 'Pregunta'} ${_currentQuestionIndex + 1} ${l10n?.ofText ?? 'de'} ${_questions.length}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  _DifficultyOption(
+                    difficulty: 'Fácil',
+                    name: l10n?.easy ?? 'Fácil',
+                    description: l10n?.easyDescription ?? 'Preguntas básicas sobre Ñuble',
+                    questionCount: easyCount,
+                    color: Colors.green,
+                    icon: Icons.sentiment_satisfied,
+                    onTap: () => onDifficultySelected('Fácil'),
+                    isLargeScreen: isLargeScreen,
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text(
-                      '${l10n?.points ?? 'Puntos'}: $_score',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  SizedBox(height: isLargeScreen ? 20 : 16),
+                  _DifficultyOption(
+                    difficulty: 'Medio',
+                    name: l10n?.medium ?? 'Medio',
+                    description: l10n?.mediumDescription ?? 'Preguntas intermedias sobre Ñuble',
+                    questionCount: mediumCount,
+                    color: Colors.orange,
+                    icon: Icons.sentiment_neutral,
+                    onTap: () => onDifficultySelected('Medio'),
+                    isLargeScreen: isLargeScreen,
+                  ),
+                  SizedBox(height: isLargeScreen ? 20 : 16),
+                  _DifficultyOption(
+                    difficulty: 'Difícil',
+                    name: l10n?.hard ?? 'Difícil',
+                    description: l10n?.hardDescription ?? 'Preguntas desafiantes sobre Ñuble',
+                    questionCount: hardCount,
+                    color: Colors.red,
+                    icon: Icons.sentiment_very_dissatisfied,
+                    onTap: () => onDifficultySelected('Difícil'),
+                    isLargeScreen: isLargeScreen,
                   ),
                 ],
               ),
-
-              const SizedBox(height: 24),
-
-              // Question card
-              Expanded(
-                child: AnimatedBuilder(
-                  animation: _cardAnimation,
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _cardAnimation.value,
-                      child: Opacity(
-                        opacity: _cardAnimation.value,
-                        child: _QuestionCard(
-                          question: currentQuestion,
-                          selectedAnswerIndex: _selectedAnswerIndex,
-                          hasAnswered: _hasAnswered,
-                          showExplanation: _showExplanation,
-                          onAnswerSelected: _selectAnswer,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              // Next button
-              if (_hasAnswered && _showExplanation)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _nextQuestion,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text(
-                        _currentQuestionIndex < _questions.length - 1
-                            ? (l10n?.nextQuestion ?? 'Siguiente Pregunta')
-                            : (l10n?.viewResults ?? 'Ver Resultados'),
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DifficultyOption extends StatelessWidget {
+  final String difficulty;
+  final String name;
+  final String description;
+  final int questionCount;
+  final Color color;
+  final IconData icon;
+  final VoidCallback onTap;
+  final bool isLargeScreen;
+
+  const _DifficultyOption({
+    required this.difficulty,
+    required this.name,
+    required this.description,
+    required this.questionCount,
+    required this.color,
+    required this.icon,
+    required this.onTap,
+    this.isLargeScreen = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: color.withOpacity(0.3),
+            width: 2,
+          ),
+        ),
+        padding: EdgeInsets.all(isLargeScreen ? 24 : 20),
+        child: Row(
+          children: [
+            Container(
+              width: isLargeScreen ? 60 : 50,
+              height: isLargeScreen ? 60 : 50,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: isLargeScreen ? 30 : 24,
+              ),
+            ),
+            SizedBox(width: isLargeScreen ? 20 : 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: isLargeScreen ? 22 : 18,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                  ),
+                  SizedBox(height: isLargeScreen ? 8 : 4),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: isLargeScreen ? 16 : 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  SizedBox(height: isLargeScreen ? 8 : 4),
+                  Text(
+                    '$questionCount preguntas disponibles',
+                    style: TextStyle(
+                      fontSize: isLargeScreen ? 14 : 12,
+                      color: color,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: color,
+              size: isLargeScreen ? 24 : 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GameScreen extends StatelessWidget {
+  final List<TriviaQuestion> questions;
+  final int currentQuestionIndex;
+  final int score;
+  final int? selectedAnswerIndex;
+  final bool hasAnswered;
+  final bool showExplanation;
+  final Function(int) onAnswerSelected;
+  final VoidCallback onNextQuestion;
+  final Animation<double> cardAnimation;
+
+  const _GameScreen({
+    required this.questions,
+    required this.currentQuestionIndex,
+    required this.score,
+    required this.selectedAnswerIndex,
+    required this.hasAnswered,
+    required this.showExplanation,
+    required this.onAnswerSelected,
+    required this.onNextQuestion,
+    required this.cardAnimation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final currentQuestion = questions[currentQuestionIndex];
+    final isLargeScreen = MediaQuery.of(context).size.width > 800;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = isLargeScreen ? 800.0 : double.infinity;
+
+        return Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: Padding(
+              padding: EdgeInsets.all(isLargeScreen ? 24 : 16),
+              child: Column(
+                children: [
+                  // Question counter and score
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${l10n?.question ?? 'Pregunta'} ${currentQuestionIndex + 1} ${l10n?.ofText ?? 'de'} ${questions.length}',
+                        style: TextStyle(
+                          fontSize: isLargeScreen ? 18 : 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isLargeScreen ? 16 : 12,
+                          vertical: isLargeScreen ? 8 : 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          '${l10n?.points ?? 'Puntos'}: $score',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: isLargeScreen ? 16 : 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: isLargeScreen ? 32 : 24),
+
+                  // Question card
+                  Expanded(
+                    child: AnimatedBuilder(
+                      animation: cardAnimation,
+                      builder: (context, child) {
+                        return Transform.scale(
+                          scale: cardAnimation.value,
+                          child: Opacity(
+                            opacity: cardAnimation.value,
+                            child: _QuestionCard(
+                              question: currentQuestion,
+                              selectedAnswerIndex: selectedAnswerIndex,
+                              hasAnswered: hasAnswered,
+                              showExplanation: showExplanation,
+                              onAnswerSelected: onAnswerSelected,
+                              isLargeScreen: isLargeScreen,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Next button
+                  if (hasAnswered && showExplanation)
+                    Padding(
+                      padding: EdgeInsets.only(top: isLargeScreen ? 20 : 16),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: onNextQuestion,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                              vertical: isLargeScreen ? 20 : 16,
+                            ),
+                          ),
+                          child: Text(
+                            currentQuestionIndex < questions.length - 1
+                                ? (l10n?.nextQuestion ?? 'Siguiente Pregunta')
+                                : (l10n?.viewResults ?? 'Ver Resultados'),
+                            style: TextStyle(
+                              fontSize: isLargeScreen ? 18 : 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -334,6 +624,7 @@ class _QuestionCard extends StatelessWidget {
   final bool hasAnswered;
   final bool showExplanation;
   final Function(int) onAnswerSelected;
+  final bool isLargeScreen;
 
   const _QuestionCard({
     required this.question,
@@ -341,6 +632,7 @@ class _QuestionCard extends StatelessWidget {
     required this.hasAnswered,
     required this.showExplanation,
     required this.onAnswerSelected,
+    this.isLargeScreen = false,
   });
 
   @override
@@ -353,39 +645,65 @@ class _QuestionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isLargeScreen ? 24 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Category badge
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                question.category,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
+            // Category and difficulty badges
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isLargeScreen ? 16 : 12,
+                    vertical: isLargeScreen ? 8 : 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    question.category,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: isLargeScreen ? 14 : 12,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isLargeScreen ? 16 : 12,
+                    vertical: isLargeScreen ? 8 : 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _getDifficultyColor(question.difficulty).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Text(
+                    question.difficulty,
+                    style: TextStyle(
+                      color: _getDifficultyColor(question.difficulty),
+                      fontWeight: FontWeight.bold,
+                      fontSize: isLargeScreen ? 14 : 12,
+                    ),
+                  ),
+                ),
+              ],
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: isLargeScreen ? 20 : 16),
 
             // Question
             Text(
               question.question,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: isLargeScreen ? 22 : 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: isLargeScreen ? 28 : 24),
 
             // Options
             Expanded(
@@ -399,6 +717,7 @@ class _QuestionCard extends StatelessWidget {
                     isCorrect: index == question.correctAnswerIndex,
                     hasAnswered: hasAnswered,
                     onTap: () => onAnswerSelected(index),
+                    isLargeScreen: isLargeScreen,
                   );
                 },
               ),
@@ -406,9 +725,9 @@ class _QuestionCard extends StatelessWidget {
 
             // Explanation
             if (showExplanation) ...[
-              const SizedBox(height: 16),
+              SizedBox(height: isLargeScreen ? 20 : 16),
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(isLargeScreen ? 20 : 16),
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -419,21 +738,26 @@ class _QuestionCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.lightbulb, color: Colors.blue, size: 20),
-                        const SizedBox(width: 8),
+                        Icon(
+                          Icons.lightbulb,
+                          color: Colors.blue,
+                          size: isLargeScreen ? 24 : 20,
+                        ),
+                        SizedBox(width: isLargeScreen ? 10 : 8),
                         Text(
                           l10n?.explanation ?? 'Explicación',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.blue,
+                            fontSize: isLargeScreen ? 18 : 16,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: isLargeScreen ? 12 : 8),
                     Text(
                       question.explanation,
-                      style: const TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: isLargeScreen ? 16 : 14),
                     ),
                   ],
                 ),
@@ -444,6 +768,22 @@ class _QuestionCard extends StatelessWidget {
       ),
     );
   }
+
+  Color _getDifficultyColor(String difficulty) {
+    switch (difficulty.toLowerCase()) {
+      case 'fácil':
+      case 'easy':
+        return Colors.green;
+      case 'medio':
+      case 'medium':
+        return Colors.orange;
+      case 'difícil':
+      case 'hard':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
 }
 
 class _OptionTile extends StatelessWidget {
@@ -453,6 +793,7 @@ class _OptionTile extends StatelessWidget {
   final bool isCorrect;
   final bool hasAnswered;
   final VoidCallback onTap;
+  final bool isLargeScreen;
 
   const _OptionTile({
     required this.option,
@@ -461,6 +802,7 @@ class _OptionTile extends StatelessWidget {
     required this.isCorrect,
     required this.hasAnswered,
     required this.onTap,
+    this.isLargeScreen = false,
   });
 
   @override
@@ -485,12 +827,12 @@ class _OptionTile extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: isLargeScreen ? 16 : 12),
       child: InkWell(
         onTap: hasAnswered ? null : onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(isLargeScreen ? 20 : 16),
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(12),
@@ -502,8 +844,8 @@ class _OptionTile extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 24,
-                height: 24,
+                width: isLargeScreen ? 28 : 24,
+                height: isLargeScreen ? 28 : 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isSelected || (hasAnswered && isCorrect)
@@ -518,23 +860,24 @@ class _OptionTile extends StatelessWidget {
                           ? Colors.white
                           : Colors.grey[600],
                       fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                      fontSize: isLargeScreen ? 14 : 12,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: isLargeScreen ? 20 : 16),
               Expanded(
                 child: Text(
                   option,
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: isLargeScreen ? 18 : 16),
                 ),
               ),
               if (icon != null) ...[
-                const SizedBox(width: 8),
+                SizedBox(width: isLargeScreen ? 12 : 8),
                 Icon(
                   icon,
                   color: isCorrect ? Colors.green : Colors.red,
+                  size: isLargeScreen ? 24 : 20,
                 ),
               ],
             ],
@@ -622,7 +965,7 @@ class _ResultsDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            context.go('/');
+            context.go('/minigames');
           },
           child: Text(l10n?.exit ?? 'Salir'),
         ),

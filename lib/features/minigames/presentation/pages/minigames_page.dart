@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tesoro_regional/core/services/i18n/app_localizations.dart';
+import 'package:tesoro_regional/features/minigames/presentation/widgets/minigame_card.dart';
 
 class MinigamesPage extends StatelessWidget {
   const MinigamesPage({super.key});
@@ -63,14 +64,7 @@ class MinigamesPage extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).primaryColor,
-            Theme.of(context).primaryColor.withAlpha(204),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: const Color(0xFF8B4513), // Café color
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -113,83 +107,93 @@ class MinigamesPage extends StatelessWidget {
         description: l10n.triviaDescription,
         icon: Icons.quiz,
         color: Colors.blue,
-        onTap: () => _navigateToTrivia(context),
+        onTap: () => context.go('/trivia'),
       ),
       GameItem(
         title: l10n.memoryGame,
         description: l10n.memoryDescription,
         icon: Icons.memory,
         color: Colors.green,
-        onTap: () => _navigateToMemoryGame(context),
+        onTap: () => context.go('/memory-game'),
       ),
       GameItem(
         title: l10n.puzzleSlider,
         description: l10n.puzzleDescription,
         icon: Icons.extension,
         color: Colors.orange,
-        onTap: () => _navigateToPuzzleSlider(context),
+        onTap: () => context.go('/puzzle-slider'),
       ),
       GameItem(
         title: l10n.comingSoon,
-        description: l10n.moreGamesInDevelopment,
-        icon: Icons.construction,
-        color: Colors.grey,
-        onTap: () => _showComingSoon(context, l10n),
+        description: l10n.workingOnMoreGames,
+        icon: Icons.games,
+        color: const Color(0xFF8B4513),
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(l10n.comingSoon),
+              content: Text(l10n.workingOnMoreGames),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l10n.understood),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 0.9,
-      ),
-      itemCount: games.length,
-      itemBuilder: (context, index) {
-        final game = games[index];
-        return _GameCard(game: game);
-      },
-    );
-  }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int crossAxisCount;
+        double maxWidth;
+        double childAspectRatio;
 
-  void _navigateToTrivia(BuildContext context) {
-    context.go('/trivia');
-  }
+        if (constraints.maxWidth > 1200) {
+          crossAxisCount = 4;
+          maxWidth = 1200;
+          childAspectRatio = 1.0;
+        } else if (constraints.maxWidth > 800) {
+          crossAxisCount = 3;
+          maxWidth = 800;
+          childAspectRatio = 0.9;
+        } else if (constraints.maxWidth > 600) {
+          crossAxisCount = 2;
+          maxWidth = double.infinity;
+          childAspectRatio = 0.8;
+        } else {
+          crossAxisCount = 2;
+          maxWidth = double.infinity;
+          childAspectRatio = 0.7;
+        }
 
-  void _navigateToMemoryGame(BuildContext context) {
-    context.go('/memory-game');
-  }
-
-  void _navigateToPuzzleSlider(BuildContext context) {
-    context.go('/puzzle-slider');
-  }
-
-  void _showComingSoon(BuildContext context, AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.comingSoon),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.construction, size: 48, color: Colors.orange),
-            const SizedBox(height: 16),
-            Text(
-              l10n.workingOnMoreGames,
-              textAlign: TextAlign.center,
+        return Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: maxWidth),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: childAspectRatio,
+              ),
+              itemCount: games.length,
+              itemBuilder: (context, index) {
+                final game = games[index];
+                return MinigameCard(
+                  game: game,
+                  isLargeScreen: constraints.maxWidth > 600,
+                );
+              },
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.understood),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -201,93 +205,11 @@ class GameItem {
   final Color color;
   final VoidCallback onTap;
 
-  const GameItem({
+  GameItem({
     required this.title,
     required this.description,
     required this.icon,
     required this.color,
     required this.onTap,
   });
-}
-
-class _GameCard extends StatelessWidget {
-  final GameItem game;
-
-  const _GameCard({required this.game});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        onTap: game.onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.white,
-                game.color.withOpacity(0.05),
-              ],
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: game.color.withAlpha(30),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: game.color.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  game.icon,
-                  size: 32,
-                  color: game.color,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                game.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 8),
-              Expanded(
-                child: Text(
-                  game.description,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

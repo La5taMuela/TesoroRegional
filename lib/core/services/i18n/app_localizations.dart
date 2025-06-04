@@ -98,6 +98,15 @@ class AppLocalizations {
   // Memory Game
   String gameCompletedInMoves(int moves) => translate('game_completed_in_moves').replaceAll('{moves}', moves.toString());
   String gameTime(String time) => translate('game_time').replaceAll('{time}', time);
+  String get selectCategory => translate('select_category');
+
+  // Memory Game Categories
+  String get category_history => translate('category_history');
+  String get category_gastronomy => translate('category_gastronomy');
+  String get category_nature => translate('category_nature');
+  String get category_architecture => translate('category_architecture');
+  String get category_crafts => translate('category_crafts');
+  String get category_tourism => translate('category_tourism');
 
   // Settings
   String get settingsSubtitle => translate('settings_subtitle');
@@ -182,7 +191,7 @@ class AppLocalizations {
   String get medium => translate('medium');
   String get hard => translate('hard');
   String get loadingTrivia => translate('loading_trivia');
-  String get noTriviaAvailable => translate('no_trivia_available');
+  String get noTriviaAvailable => translate('no_triviaAvailable');
   String get triviaStats => translate('trivia_stats');
 
   // QR Scanner
@@ -223,6 +232,12 @@ class AppLocalizations {
   String get scanQRInstructions => translate('scan_qr_instructions');
   String get noPiecesInCategory => translate('no_pieces_in_category');
 
+  // Trivia specific
+  String get selectDifficulty => translate('select_difficulty');
+  String get selectDifficultyDescription => translate('select_difficulty_description');
+  String get easyDescription => translate('easy_description');
+  String get mediumDescription => translate('medium_description');
+  String get hardDescription => translate('hard_description');
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

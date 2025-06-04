@@ -527,6 +527,22 @@ class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
     }
   }
 
+  String _getLocalizedTitle(int index) {
+    final l10n = AppLocalizations.of(context);
+    final languageCode = l10n?.locale.languageCode ?? 'es';
+    return _puzzleImages[index][languageCode]?['title'] ?? _puzzleImages[index]['es']!['title']!;
+  }
+
+  String _getLocalizedDescription(int index) {
+    final l10n = AppLocalizations.of(context);
+    final languageCode = l10n?.locale.languageCode ?? 'es';
+    return _puzzleImages[index][languageCode]?['description'] ?? _puzzleImages[index]['es']!['description']!;
+  }
+
+  String _getImagePath(int index) {
+    return _puzzleImages[index]['path'] as String;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -587,167 +603,194 @@ class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
     final l10n = AppLocalizations.of(context);
 
     return SafeArea(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Text(
-                  l10n?.availablePuzzles ?? 'Rompecabezas Disponibles',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${l10n?.progress ?? 'Progreso'}: ${_completedPuzzles.length}/${_puzzleImages.length} ${l10n?.completed ?? 'completados'}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                LinearProgressIndicator(
-                  value: _completedPuzzles.length / _puzzleImages.length,
-                  backgroundColor: Colors.grey[300],
-                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.8,
-              ),
-              itemCount: _puzzleImages.length,
-              itemBuilder: (context, index) {
-                final isCompleted = _completedPuzzles.contains(index);
-                return GestureDetector(
-                  onTap: () => _selectPuzzle(index),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isLargeScreen = constraints.maxWidth > 800;
+          final maxWidth = isLargeScreen ? 900.0 : double.infinity;
+
+          // Más columnas para hacer las cards más pequeñas
+          int crossAxisCount;
+          if (constraints.maxWidth > 1200) {
+            crossAxisCount = 5; // Aumentado de 4 a 5
+          } else if (constraints.maxWidth > 800) {
+            crossAxisCount = 4; // Aumentado de 3 a 4
+          } else if (constraints.maxWidth > 600) {
+            crossAxisCount = 3; // Aumentado de 2 a 3
+          } else {
+            crossAxisCount = 2;
+          }
+
+          return Center(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(isLargeScreen ? 20 : 16),
+                    child: Column(
+                      children: [
+                        Text(
+                          l10n?.availablePuzzles ?? 'Rompecabezas Disponibles',
+                          style: TextStyle(
+                            fontSize: isLargeScreen ? 24 : 22,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        SizedBox(height: isLargeScreen ? 8 : 6),
+                        Text(
+                          '${l10n?.progress ?? 'Progreso'}: ${_completedPuzzles.length}/${_puzzleImages.length} ${l10n?.completed ?? 'completados'}',
+                          style: TextStyle(
+                            fontSize: isLargeScreen ? 16 : 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        SizedBox(height: isLargeScreen ? 16 : 12),
+                        LinearProgressIndicator(
+                          value: _completedPuzzles.length / _puzzleImages.length,
+                          backgroundColor: Colors.grey[300],
+                          valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
                         ),
                       ],
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Stack(
-                        children: [
-                          // Imagen de fondo
-                          Positioned.fill(
-                            child: _cachedImages.containsKey(_getImagePath(index))
-                                ? _cachedImages[_getImagePath(index)]!
-                                : Image.asset(
-                              _getImagePath(index),
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  color: Colors.grey[300],
-                                  child: const Icon(Icons.error, size: 50),
-                                );
-                              },
-                            ),
-                          ),
-                          // Overlay con información
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.transparent,
-                                    Colors.black.withOpacity(0.7),
-                                  ],
+                  ),
+                  Expanded(
+                    child: GridView.builder(
+                      padding: EdgeInsets.all(isLargeScreen ? 20 : 16),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: isLargeScreen ? 16 : 12,
+                        mainAxisSpacing: isLargeScreen ? 16 : 12,
+                        childAspectRatio: 0.75, // Reducido para hacer las cards más compactas
+                      ),
+                      itemCount: _puzzleImages.length,
+                      itemBuilder: (context, index) {
+                        final isCompleted = _completedPuzzles.contains(index);
+                        return GestureDetector(
+                          onTap: () => _selectPuzzle(index),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
                                 ),
-                              ),
+                              ],
                             ),
-                          ),
-                          // Estado completado
-                          if (isCompleted)
-                            Positioned(
-                              top: 8,
-                              right: 8,
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: const Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          // Información del puzzle
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Stack(
                                 children: [
-                                  Text(
-                                    _getLocalizedTitle(index),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                                  // Imagen de fondo
+                                  Positioned.fill(
+                                    child: _cachedImages.containsKey(_getImagePath(index))
+                                        ? _cachedImages[_getImagePath(index)]!
+                                        : Image.asset(
+                                      _getImagePath(index),
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Container(
+                                          color: Colors.grey[300],
+                                          child: const Icon(Icons.error, size: 40),
+                                        );
+                                      },
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    _getLocalizedDescription(index),
-                                    style: const TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 12,
+                                  // Overlay con información
+                                  Positioned.fill(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.black.withOpacity(0.7),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: isCompleted ? Colors.green : Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.circular(12),
+                                  // Estado completado
+                                  if (isCompleted)
+                                    Positioned(
+                                      top: 6,
+                                      right: 6,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.3),
+                                              blurRadius: 3,
+                                              offset: const Offset(0, 1),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                          size: isLargeScreen ? 16 : 14,
+                                        ),
+                                      ),
                                     ),
-                                    child: Text(
-                                      isCompleted
-                                          ? (l10n?.completed ?? 'Completado')
-                                          : (l10n?.playNow ?? 'Jugar'),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
+                                  // Información del puzzle
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.all(isLargeScreen ? 10 : 8),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            _getLocalizedTitle(index),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: isLargeScreen ? 12 : 11,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(height: isLargeScreen ? 4 : 2),
+                                          Text(
+                                            _getLocalizedDescription(index),
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: isLargeScreen ? 10 : 9,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(height: isLargeScreen ? 6 : 4),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: isLargeScreen ? 8 : 6,
+                                                vertical: isLargeScreen ? 4 : 3
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: isCompleted ? Colors.green : Theme.of(context).primaryColor,
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              isCompleted
+                                                  ? (l10n?.completed ?? 'Completado')
+                                                  : (l10n?.playNow ?? 'Jugar'),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: isLargeScreen ? 10 : 9,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -755,15 +798,15 @@ class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
-                );
-              },
+                ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -772,183 +815,202 @@ class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
     final l10n = AppLocalizations.of(context);
 
     return SafeArea(
-      child: Column(
-        children: [
-          // Game info
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _getLocalizedTitle(_currentImageIndex),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(width: 8),
-                    if (_completedPuzzles.contains(_currentImageIndex))
-                      const Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 20,
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _getLocalizedDescription(_currentImageIndex),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _StatCard(
-                      icon: Icons.timer,
-                      label: l10n?.time ?? 'Tiempo',
-                      value: StreamBuilder(
-                        stream: Stream.periodic(const Duration(seconds: 1)),
-                        builder: (context, snapshot) {
-                          return Text(_formatTime(_stopwatch.elapsed.inSeconds));
-                        },
-                      ),
-                    ),
-                    _StatCard(
-                      icon: Icons.touch_app,
-                      label: l10n?.moves ?? 'Movimientos',
-                      value: Text('$_moves'),
-                    ),
-                    _StatCard(
-                      icon: Icons.image,
-                      label: l10n?.progress ?? 'Progreso',
-                      value: Text('${_completedPuzzles.length}/${_puzzleImages.length}'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isLargeScreen = constraints.maxWidth > 800;
+          final maxWidth = isLargeScreen ? 700.0 : double.infinity;
 
-          // Preview de la imagen completa (clickeable)
-          GestureDetector(
-            onTap: _showImageModal,
+          return Center(
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Colors.grey[300]!,
-                  width: 1,
-                ),
-              ),
-              child: Row(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: Column(
                 children: [
+                  // Game info - más compacto
                   Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: _cachedImages.containsKey(_getImagePath(_currentImageIndex))
-                          ? _cachedImages[_getImagePath(_currentImageIndex)]!
-                          : Image.asset(
-                        _getImagePath(_currentImageIndex),
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.error, size: 30),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
+                    padding: EdgeInsets.all(isLargeScreen ? 16 : 12),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              l10n?.viewCompleteImage ?? 'Ver imagen completa',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                            Flexible(
+                              child: Text(
+                                _getLocalizedTitle(_currentImageIndex),
+                                style: TextStyle(
+                                  fontSize: isLargeScreen ? 18 : 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Icon(
-                              Icons.zoom_in,
-                              size: 16,
-                              color: Theme.of(context).primaryColor,
+                            SizedBox(width: isLargeScreen ? 8 : 6),
+                            if (_completedPuzzles.contains(_currentImageIndex))
+                              Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                size: isLargeScreen ? 20 : 18,
+                              ),
+                          ],
+                        ),
+                        SizedBox(height: isLargeScreen ? 4 : 2),
+                        Text(
+                          _getLocalizedDescription(_currentImageIndex),
+                          style: TextStyle(
+                            fontSize: isLargeScreen ? 14 : 12,
+                            color: Colors.grey[600],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: isLargeScreen ? 12 : 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _StatCard(
+                              icon: Icons.timer,
+                              label: l10n?.time ?? 'Tiempo',
+                              value: StreamBuilder(
+                                stream: Stream.periodic(const Duration(seconds: 1)),
+                                builder: (context, snapshot) {
+                                  return Text(_formatTime(_stopwatch.elapsed.inSeconds));
+                                },
+                              ),
+                              isLargeScreen: isLargeScreen,
+                            ),
+                            _StatCard(
+                              icon: Icons.touch_app,
+                              label: l10n?.moves ?? 'Movimientos',
+                              value: Text('$_moves'),
+                              isLargeScreen: isLargeScreen,
+                            ),
+                            _StatCard(
+                              icon: Icons.image,
+                              label: l10n?.progress ?? 'Progreso',
+                              value: Text('${_completedPuzzles.length}/${_puzzleImages.length}'),
+                              isLargeScreen: isLargeScreen,
                             ),
                           ],
                         ),
-                        if (_isCompleted)
-                          Text(
-                            l10n?.puzzleCompleted ?? '¡Completado!',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                  ),
+
+                  // Preview de la imagen completa (más pequeño)
+                  GestureDetector(
+                    onTap: _showImageModal,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: isLargeScreen ? 16 : 12),
+                      padding: EdgeInsets.all(isLargeScreen ? 8 : 6),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: Colors.grey[300]!,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: isLargeScreen ? 50 : 40,
+                            height: isLargeScreen ? 50 : 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: _cachedImages.containsKey(_getImagePath(_currentImageIndex))
+                                  ? _cachedImages[_getImagePath(_currentImageIndex)]!
+                                  : Image.asset(
+                                _getImagePath(_currentImageIndex),
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey[300],
+                                    child: const Icon(Icons.error, size: 20),
+                                  );
+                                },
+                              ),
                             ),
                           ),
-                      ],
+                          SizedBox(width: isLargeScreen ? 10 : 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      l10n?.viewCompleteImage ?? 'Ver imagen completa',
+                                      style: TextStyle(
+                                        fontSize: isLargeScreen ? 12 : 11,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    SizedBox(width: isLargeScreen ? 6 : 4),
+                                    Icon(
+                                      Icons.zoom_in,
+                                      size: isLargeScreen ? 14 : 12,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ],
+                                ),
+                                if (_isCompleted)
+                                  Text(
+                                    l10n?.puzzleCompleted ?? '¡Completado!',
+                                    style: TextStyle(
+                                      fontSize: isLargeScreen ? 10 : 9,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Puzzle grid o imagen completa - MÁS GRANDE
+                  Expanded(
+                    child: Center(
+                      child: _isCompleted
+                          ? _buildCompletedImage(isLargeScreen)
+                          : _buildPuzzleGrid(isLargeScreen),
+                    ),
+                  ),
+
+                  // Instructions - más compacto
+                  Padding(
+                    padding: EdgeInsets.all(isLargeScreen ? 12 : 8),
+                    child: Text(
+                      _isCompleted
+                          ? (l10n?.puzzleCompletedInstructions ?? '¡Puzzle completado! Puedes ver otros puzzles o reiniciar este.')
+                          : (l10n?.puzzleInstructions ?? 'Toca las piezas adyacentes al espacio vacío para moverlas.\nOrdena las piezas para completar la imagen.'),
+                      style: TextStyle(
+                        fontSize: isLargeScreen ? 12 : 11,
+                        color: _isCompleted ? Colors.green : null,
+                        fontWeight: _isCompleted ? FontWeight.bold : null,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Puzzle grid o imagen completa
-          Expanded(
-            child: Center(
-              child: _isCompleted
-                  ? _buildCompletedImage()
-                  : _buildPuzzleGrid(),
-            ),
-          ),
-
-          // Instructions
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              _isCompleted
-                  ? (l10n?.puzzleCompletedInstructions ?? '¡Puzzle completado! Puedes ver otros puzzles o reiniciar este.')
-                  : (l10n?.puzzleInstructions ?? 'Toca las piezas adyacentes al espacio vacío para moverlas.\nOrdena las piezas para completar la imagen.'),
-              style: TextStyle(
-                fontSize: 14,
-                color: _isCompleted ? Colors.green : null,
-                fontWeight: _isCompleted ? FontWeight.bold : null,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildCompletedImage() {
+  Widget _buildCompletedImage(bool isLargeScreen) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: EdgeInsets.all(isLargeScreen ? 16 : 12),
+      constraints: BoxConstraints(
+        maxWidth: isLargeScreen ? 500 : 350, // Aumentado significativamente
+        maxHeight: isLargeScreen ? 500 : 350,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -980,11 +1042,15 @@ class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
     );
   }
 
-  Widget _buildPuzzleGrid() {
+  Widget _buildPuzzleGrid(bool isLargeScreen) {
     return AspectRatio(
       aspectRatio: 1.0,
       child: Container(
-        margin: const EdgeInsets.all(16),
+        margin: EdgeInsets.all(isLargeScreen ? 16 : 12),
+        constraints: BoxConstraints(
+          maxWidth: isLargeScreen ? 500 : 350, // Aumentado significativamente
+          maxHeight: isLargeScreen ? 500 : 350,
+        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
@@ -1000,7 +1066,7 @@ class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final totalSize = constraints.maxWidth;
-              final spacing = 2.0;
+              final spacing = isLargeScreen ? 3.0 : 2.0;
               final tileSize = (totalSize - (spacing * (_gridSize - 1))) / _gridSize;
 
               return GridView.builder(
@@ -1124,66 +1190,56 @@ class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
     ];
     return colors[number % colors.length];
   }
-
-  String _getLocalizedTitle(int index) {
-    final l10n = AppLocalizations.of(context);
-    final languageCode = l10n?.locale.languageCode ?? 'es';
-    return _puzzleImages[index][languageCode]?['title'] ?? _puzzleImages[index]['es']!['title']!;
-  }
-
-  String _getLocalizedDescription(int index) {
-    final l10n = AppLocalizations.of(context);
-    final languageCode = l10n?.locale.languageCode ?? 'es';
-    return _puzzleImages[index][languageCode]?['description'] ?? _puzzleImages[index]['es']!['description']!;
-  }
-
-  String _getImagePath(int index) {
-    return _puzzleImages[index]['path'] as String;
-  }
 }
 
 class _StatCard extends StatelessWidget {
   final IconData icon;
   final String label;
   final Widget value;
+  final bool isLargeScreen;
 
   const _StatCard({
     required this.icon,
     required this.label,
     required this.value,
+    this.isLargeScreen = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(isLargeScreen ? 10 : 8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Theme.of(context).primaryColor),
-          const SizedBox(height: 4),
+          Icon(
+            icon,
+            color: Theme.of(context).primaryColor,
+            size: isLargeScreen ? 18 : 16,
+          ),
+          SizedBox(height: isLargeScreen ? 4 : 2),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
+            style: TextStyle(
+              fontSize: isLargeScreen ? 10 : 9,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 2),
+          SizedBox(height: isLargeScreen ? 2 : 1),
           DefaultTextStyle(
             style: TextStyle(
-              fontSize: 14,
+              fontSize: isLargeScreen ? 12 : 11,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onSurface,
             ),
