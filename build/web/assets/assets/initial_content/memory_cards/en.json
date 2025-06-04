@@ -1,0 +1,238 @@
+{
+  "categories": [
+    {
+      "id": "history",
+      "name": "History and Heritage",
+      "description": "Discover the most important historical sites and monuments of the region",
+      "icon": "history_edu",
+      "color": "purple",
+      "cards": [
+        {
+          "id": "san_francisco_church",
+          "title": "San Francisco Church",
+          "description": "The San Francisco Church is one of the oldest and most representative temples in the Ñuble region. Built in the 18th century, it represents Spanish colonial architecture and has witnessed important historical events. Its adobe facade and altars carved in native wood reflect the fusion between European and local traditions, making it an invaluable architectural heritage that tells the story of religious and cultural development in the region."
+        },
+        {
+          "id": "colonial_house",
+          "title": "Colonial House",
+          "description": "This 19th-century colonial house is an exceptional example of residential architecture of the era. Built with local materials such as adobe, oak wood, and clay tiles, it represents the lifestyle of wealthy families in the region. Its wide corridors, interior courtyards, and rooms with high ceilings show the architectural adaptation to the Mediterranean climate of central Chile, preserving construction techniques and spatial organization typical of the colonial period."
+        },
+        {
+          "id": "main_square",
+          "title": "Main Square",
+          "description": "The historical and social heart of the city, the Main Square has been the center of community life since colonial foundation. Surrounded by historic buildings, churches, and traditional commerce, this public space has witnessed patriotic celebrations, popular markets, and cultural events. Its centennial trees and ornamental fountains create a unique atmosphere that connects the past with the present of the community, serving as a meeting point for generations."
+        },
+        {
+          "id": "regional_museum",
+          "title": "Regional Museum",
+          "description": "The Regional Museum of Ñuble houses a valuable collection that narrates local history from indigenous peoples to the present day. Its halls exhibit archaeological artifacts, objects from colonial daily life, historical photographs, and documents that testify to the social and cultural evolution of the region. It is a fundamental space for understanding the identity and cultural heritage of Ñuble, preserving collective memory for future generations."
+        },
+        {
+          "id": "municipal_theater",
+          "title": "Municipal Theater",
+          "description": "Built in the early 20th century, the Municipal Theater is a cultural emblem of the region. Its neoclassical architecture and exceptional acoustics make it the main stage for artistic presentations, theatrical works, concerts, and cultural events. It has been renovated respecting its original design, maintaining decorative elements such as moldings, frescoes, and the traditional distribution of boxes and stalls that characterize theaters of the era."
+        },
+        {
+          "id": "historic_cemetery",
+          "title": "Historic Cemetery",
+          "description": "This heritage cemetery, established in the 19th century, is an open-air museum that reflects the social history of the region. Its mausoleums, funerary sculptures, and tombstones carved in marble and local stone tell the stories of prominent families, immigrants, and illustrious characters. The centennial cypresses and funerary architecture from different eras create a solemn and culturally significant atmosphere that preserves historical memory."
+        }
+      ]
+    },
+    {
+      "id": "gastronomy",
+      "name": "Local Gastronomy",
+      "description": "Learn about typical dishes and culinary traditions of the area",
+      "icon": "restaurant",
+      "color": "orange",
+      "cards": [
+        {
+          "id": "meat_empanadas",
+          "title": "Meat Empanadas",
+          "description": "Meat empanadas are the most emblematic dish of Chilean gastronomy and in Ñuble they have special characteristics. Prepared with homemade dough and filled with minced beef, onion, hard-boiled egg, olives, and raisins, they are baked until achieving a golden and crispy texture. The family tradition of preparing empanadas is transmitted from generation to generation, being especially popular during patriotic celebrations and family gatherings, representing the essence of Chilean culinary identity."
+        },
+        {
+          "id": "lamb_stew",
+          "title": "Lamb Stew",
+          "description": "Lamb stew is a traditional dish that reflects the livestock influence of the Ñuble region. Prepared with tender lamb meat, potatoes, pumpkin, corn, green beans, and seasoned with merkén and local herbs, this hearty soup is perfect for cold days. Its slow preparation allows flavors to integrate completely, creating a nutritious and comforting dish that represents traditional countryside cuisine and the connection with local agricultural products."
+        },
+        {
+          "id": "sopaipillas",
+          "title": "Sopaipillas",
+          "description": "Sopaipillas are a classic of Chilean popular gastronomy, especially appreciated in Ñuble during rainy winter days. Made with pumpkin dough, flour, and lard, they are fried until obtaining a golden and fluffy texture. They are traditionally served with spicy pebre or chancaca (piloncillo honey), creating a perfect contrast between salty and sweet. They are the ideal accompaniment for afternoon tea, representing comfort food that brings families together."
+        },
+        {
+          "id": "grape_chicha",
+          "title": "Grape Chicha",
+          "description": "Grape chicha is a traditional fermented beverage that forms an important part of Ñuble's wine culture. Made during harvest season with fresh grapes from local varieties, its natural fermentation process gives it a unique and refreshing flavor. This ancestral drink, consumed since pre-Columbian times, is especially enjoyed during harvest celebrations and traditional festivals, representing the connection with the land and agricultural traditions that define regional identity."
+        },
+        {
+          "id": "corn_pie",
+          "title": "Corn Pie",
+          "description": "Corn pie is an emblematic dish of Chilean cuisine that in Ñuble is prepared with special dedication during the tender corn season. It consists of layers of pino (meat with onion), chicken, hard-boiled eggs, and olives, covered with a creamy paste of ground corn sweetened with sugar and baked until golden. This dish represents the fusion of indigenous and Spanish ingredients, being a symbol of national culinary identity and family tradition."
+        },
+        {
+          "id": "mote_huesillo",
+          "title": "Mote with Huesillo",
+          "description": "Mote with huesillo is a refreshing traditional drink perfect for the hot summers of Ñuble. Prepared with dried peaches (huesillos) cooked in water with sugar and cinnamon, served with cooked wheat mote, this drink represents popular culinary creativity. Its sweet flavor and unique texture make it the most popular street drink during patriotic festivals and outdoor events, being a fundamental part of Chilean gastronomic heritage and summer traditions."
+        }
+      ]
+    },
+    {
+      "id": "nature",
+      "name": "Nature and Landscapes",
+      "description": "Explore the beautiful natural landscapes and protected areas",
+      "icon": "nature",
+      "color": "green",
+      "cards": [
+        {
+          "id": "santa_lucia_hill",
+          "title": "Santa Lucía Hill",
+          "description": "Santa Lucía Hill is a natural promontory that offers exceptional panoramic views of the Ñuble region. Covered with native vegetation such as quillayes, boldos, and espinos, this hill is home to various bird species like thrushes, diucas, and cachuditos. Its natural trails allow contemplative walks while observing local flora and fauna. During spring, it is covered with wildflowers creating a natural spectacle of unique colors and aromas that attracts nature lovers and photographers."
+        },
+        {
+          "id": "mapocho_river",
+          "title": "Mapocho River",
+          "description": "The Mapocho River crosses the region creating a riparian ecosystem fundamental for local biodiversity. Its crystal-clear waters harbor native species such as trout and catfish, while its banks are populated with weeping willows, poplars, and cattails. This watercourse has been historically important for local agriculture, providing irrigation for traditional crops. Its banks are ideal for aquatic bird watching and sustainable ecotourism activities that connect visitors with nature."
+        },
+        {
+          "id": "forest_park",
+          "title": "Forest Park",
+          "description": "The Forest Park of Ñuble is a green lung that conserves native and exotic tree species in perfect harmony. With more than 50 different species including oaks, coigües, peumos, and centennial eucalyptus, this park offers interpretive trails and family picnic areas. Its green spaces are ideal for recreational activities, environmental education, and nature contemplation. During autumn, the changing colors of foliage create an impressive visual spectacle that attracts visitors throughout the season."
+        },
+        {
+          "id": "andes_mountains",
+          "title": "Andes Mountains",
+          "description": "The majestic Andes Mountains form the natural backdrop of the Ñuble region, with snow-capped peaks that exceed 3,000 meters in height. This mountain formation harbors unique ecosystems from araucaria forests to high Andean meadows. Its glaciers and eternal snows feed the rivers that irrigate the valleys, while its slopes offer habitat for species such as condors, pumas, and guanacos. It is an ideal destination for mountaineering, trekking, and adventure tourism."
+        },
+        {
+          "id": "central_valley",
+          "title": "Central Valley",
+          "description": "The Central Valley of Ñuble is an extensive fertile plain characterized by volcanic origin soils ideal for agriculture. This undulating landscape is dotted with vineyards, cereal fields, fruit orchards, and livestock meadows that create a picturesque rural mosaic. Its gentle hills and extensive plains offer panoramic views towards the mountain range, while its rural roads invite bicycle tours and contemplative walks among traditional crops and historic manor houses."
+        },
+        {
+          "id": "native_forest",
+          "title": "Native Forest",
+          "description": "The native forests of Ñuble preserve the original vegetation of central Chile, with endemic species such as quillay, litre, boldo, and maitén. These ecosystems harbor rich biodiversity including culpeo foxes, pudús, various bird species, and a great variety of pollinating insects. Interpretive trails allow learning about the ecological importance of these forests, their role in water conservation, and their value as wildlife refuge in an increasingly anthropized landscape."
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "name": "Architecture",
+      "description": "Admire the different architectural styles of the region",
+      "icon": "architecture",
+      "color": "blue",
+      "cards": [
+        {
+          "id": "la_moneda_palace",
+          "title": "La Moneda Palace",
+          "description": "Although located in Santiago, La Moneda Palace represents the neoclassical architectural style that influenced many public constructions in Ñuble. Its symmetrical design, Doric columns, and harmonious proportions served as a model for government buildings and manor houses in the region. The influence of this style can be observed in local constructions that adopted elements such as triangular pediments, pilasters, and the spatial distribution characteristic of 19th-century Chilean institutional architecture."
+        },
+        {
+          "id": "metropolitan_cathedral",
+          "title": "Metropolitan Cathedral",
+          "description": "The Metropolitan Cathedral represents the religious architectural style that was replicated in smaller churches of Ñuble. Its neoclassical architecture with baroque elements, twin bell towers, and carved stone facade influenced the design of rural temples in the region. Construction techniques, the use of local materials such as adobe and wood, and the adaptation of European style to the Mediterranean climate are reflected in numerous parish churches that maintain this religious architectural tradition."
+        },
+        {
+          "id": "art_deco_building",
+          "title": "Art Deco Building",
+          "description": "The Art Deco buildings of the early 20th century in Ñuble represent the architectural modernization of the region. Characterized by geometric lines, stylized ornamentation, use of reinforced concrete, and large windows, these buildings reflect the influence of international architectural currents. Their facades with decorative motifs, monumental staircases, and the integration of functional and aesthetic elements show the transition towards modern architecture in the regional context."
+        },
+        {
+          "id": "manor_house",
+          "title": "Manor House",
+          "description": "The manor houses of Ñuble are exceptional examples of 19th-century Chilean rural architecture. Built with thick adobe walls, colonial tile roofs, and wide perimeter corridors, these residences reflect architectural adaptation to climate and rural life. Their interior courtyards, reception halls with high ceilings, warehouses, and worker dependencies show the social and economic organization of traditional haciendas, being invaluable architectural and cultural heritage."
+        },
+        {
+          "id": "central_station",
+          "title": "Central Station",
+          "description": "The railway architecture of Ñuble, represented by 19th and 20th-century train stations, shows the influence of industrial development in the region. These constructions combine functionality and aesthetics with steel, brick, and wood structures, gabled roofs, and wide covered platforms. Their design reflects the importance of railways in regional economic development, connecting rural areas with urban centers and facilitating the transport of agricultural products and passengers."
+        },
+        {
+          "id": "central_market",
+          "title": "Central Market",
+          "description": "The central markets of Ñuble represent traditional commercial architecture with wrought iron structures, zinc roofs, and wide covered spaces that facilitate natural ventilation. These buildings, inspired by 19th-century European markets, combine commercial functionality with architectural value. Their central aisles, symmetrically organized stalls, and the integration of decorative elements in wrought iron create unique spaces that are centers of commercial and community social activity."
+        }
+      ]
+    },
+    {
+      "id": "crafts",
+      "name": "Crafts and Art",
+      "description": "Learn about local artisan traditions and artistic expressions",
+      "icon": "palette",
+      "color": "pink",
+      "cards": [
+        {
+          "id": "pomaire_pottery",
+          "title": "Pomaire Pottery",
+          "description": "Pomaire pottery, although originating from the Metropolitan Region, has significantly influenced traditional pottery in Ñuble. Local artisans have adopted similar techniques to create utilitarian and decorative pieces using local clays. This tradition includes the elaboration of jugs, pots, plates, and ornamental figures fired in clay ovens. The artisanal process, which includes hand modeling, natural drying, and controlled firing, preserves ancestral techniques transmitted from generation to generation."
+        },
+        {
+          "id": "mapuche_textiles",
+          "title": "Mapuche Textiles",
+          "description": "Mapuche textiles represent one of the most important artistic expressions in the Ñuble region, where indigenous communities keep ancestral traditions alive. Traditional looms produce ponchos, blankets, sashes, and ceremonial clothing with geometric designs that narrate stories and sacred symbologies. The use of natural wools dyed with local plants such as maqui, michay, and relbún, along with spinning and weaving techniques transmitted orally, create unique pieces of great cultural and artistic value."
+        },
+        {
+          "id": "wood_carving",
+          "title": "Wood Carving",
+          "description": "Wood carving is a deeply rooted artisanal tradition in Ñuble, taking advantage of the abundance of native species such as oak, raulí, and coigüe. Local artisans create from domestic utensils to decorative sculptures, using traditional techniques of carving, sanding, and finishing with natural oils. This craftsmanship includes the elaboration of wooden spoons, trays, religious figures, and decorative architectural elements that reflect manual skill and deep knowledge of each type of wood's properties."
+        },
+        {
+          "id": "mural_painting",
+          "title": "Mural Painting",
+          "description": "Mural painting in Ñuble has evolved from colonial decorations in churches to contemporary expressions of urban art. Historical murals in temples and manor houses show fresco and tempera techniques with natural pigments, while modern works address social, cultural, and environmental themes. This form of public art democratizes access to artistic expressions, beautifies urban and rural spaces, and serves as a visual communication medium that strengthens community identity."
+        },
+        {
+          "id": "goldsmithing",
+          "title": "Goldsmithing",
+          "description": "Goldsmithing in Ñuble combines traditional Mapuche techniques with Spanish colonial influences, creating unique jewelry and decorative objects. Artisans work mainly with silver, copper, and bronze, elaborating trapelacuchas (Mapuche pectorals), earrings, bracelets, and ceremonial objects. Techniques include hammering, embossing, filigree, and welding, creating pieces that incorporate ancestral symbols and contemporary designs. This artisanal tradition keeps the connection with original cultures alive while adapting to current tastes and needs."
+        },
+        {
+          "id": "basketry",
+          "title": "Basketry",
+          "description": "Traditional basketry in Ñuble uses local plant fibers such as wicker, cattail, coirón, and chupón fibers to create baskets, hats, mats, and decorative objects. This ancestral craft requires deep knowledge about seasonal collection of materials, preparation and drying techniques, and various weaving methods such as spiral, interlacing, and sewing. Artisans keep pre-Columbian techniques alive by adapting them to contemporary uses, creating functional and aesthetically valuable products that represent sustainability and respect for natural resources."
+        }
+      ]
+    },
+    {
+      "id": "traditions",
+      "name": "Traditions and Festivals",
+      "description": "Participate in cultural celebrations and traditions",
+      "icon": "tour",
+      "color": "teal",
+      "cards": [
+        {
+          "id": "independence_day",
+          "title": "Independence Day",
+          "description": "Independence Day in Ñuble is celebrated with special fervor during September, combining religious, gastronomic, and folkloric traditions. Ramadas and fondas fill with families enjoying empanadas, barbecues, chicha, and new wine, while cuecas and traditional tonadas play. Creole games such as rayuela, palo ensebado, and Chilean-style races recreate countryside traditions. These celebrations strengthen national and regional identity, transmitting cultural values to new generations in a festive and community atmosphere."
+        },
+        {
+          "id": "national_cueca",
+          "title": "National Cueca",
+          "description": "The cueca, Chile's national dance, has outstanding exponents in Ñuble who keep this folkloric tradition alive. This courtship dance represents the gallantry between rooster and hen, with elegant movements, handkerchiefs in the air, and characteristic zapateo. Local folkloric groups preserve regional variants of cueca, including cueca larga, cueca brava, and cueca chora. During patriotic celebrations and cultural festivals, cueca becomes an expression of national identity and regional pride."
+        },
+        {
+          "id": "chilean_rodeo",
+          "title": "Chilean Rodeo",
+          "description": "Chilean rodeo is the national sport that in Ñuble has deep roots in regional livestock tradition. Practiced in traditional medialunas, it consists of two riders (collera) corralling a steer against the cojinillos, demonstrating equestrian skill and teamwork. Huasos wear traditional attire with manta, silver spurs, and felt hats, riding specially trained creole horses. This tradition preserves ancestral livestock work techniques and strengthens the countryside cultural identity of the region."
+        },
+        {
+          "id": "harvest_festival",
+          "title": "Harvest Festival",
+          "description": "The Harvest Festival in Ñuble celebrates the grape harvest and regional wine tradition during March and April. Family and commercial vineyards open their doors for visitors to participate in traditional collection, grape stomping, and new wine tasting. These celebrations include folkloric music, typical foods, blessing of fruits, and educational activities about enology. The harvest connects communities with natural cycles, agricultural traditions, and the wine heritage that characterizes regional productive identity."
+        },
+        {
+          "id": "we_tripantu",
+          "title": "We Tripantu",
+          "description": "We Tripantu or Mapuche New Year is celebrated during the winter solstice (June 21) in indigenous communities of Ñuble, marking nature's rebirth and the beginning of a new vital cycle. This ancestral ceremony includes purification rituals with running water, prayers to ancestors, sharing traditional foods such as muday and sopaipillas, and ceremonial dances around the sacred fire. The celebration strengthens Mapuche identity, transmits ancestral knowledge, and maintains spiritual connection with nature and cosmic cycles."
+        },
+        {
+          "id": "esquinazo",
+          "title": "Esquinazo",
+          "description": "The esquinazo marks the official beginning of Independence Day celebrations in Ñuble, being a tradition that brings the entire community together around music, dance, and typical gastronomy. This nighttime celebration includes folkloric group presentations, cueca competitions, traditional dish tasting, and the traditional burning of the doll that symbolizes the end of winter. The esquinazo strengthens community bonds, preserves cultural traditions, and creates a festive atmosphere that anticipates patriotic celebrations, being an authentic expression of regional Chileanness."
+        }
+      ]
+    }
+  ]
+}

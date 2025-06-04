@@ -1,0 +1,238 @@
+{
+  "categories": [
+    {
+      "id": "historia",
+      "name": "Historia y Patrimonio",
+      "description": "Descubre los sitios históricos y monumentos más importantes de la región",
+      "icon": "history_edu",
+      "color": "purple",
+      "cards": [
+        {
+          "id": "iglesia_san_francisco",
+          "title": "Iglesia San Francisco",
+          "description": "La Iglesia San Francisco es uno de los templos más antiguos y representativos de la región de Ñuble. Construida en el siglo XVIII, representa la arquitectura colonial española y ha sido testigo de importantes eventos históricos. Su fachada de adobe y sus altares tallados en madera nativa reflejan la fusión entre las tradiciones europeas y locales, convirtiéndola en un patrimonio arquitectónico invaluable."
+        },
+        {
+          "id": "casa_colonial",
+          "title": "Casa Colonial",
+          "description": "Esta casa colonial del siglo XIX es un ejemplo excepcional de la arquitectura residencial de la época. Construida con materiales locales como adobe, madera de roble y tejas de arcilla, representa el estilo de vida de las familias acomodadas de la región. Sus amplios corredores, patios interiores y habitaciones con altos techos muestran la adaptación arquitectónica al clima mediterráneo de la zona central de Chile."
+        },
+        {
+          "id": "plaza_armas",
+          "title": "Plaza de Armas",
+          "description": "El corazón histórico y social de la ciudad, la Plaza de Armas ha sido el centro de la vida comunitaria desde la fundación colonial. Rodeada de edificios históricos, iglesias y comercios tradicionales, este espacio público ha sido testigo de celebraciones patrias, mercados populares y eventos culturales. Sus árboles centenarios y fuentes ornamentales crean un ambiente único que conecta el pasado con el presente de la comunidad."
+        },
+        {
+          "id": "museo_regional",
+          "title": "Museo Regional",
+          "description": "El Museo Regional de Ñuble alberga una valiosa colección que narra la historia local desde los pueblos originarios hasta la actualidad. Sus salas exhiben artefactos arqueológicos, objetos de la vida cotidiana colonial, fotografías históricas y documentos que testimonian la evolución social y cultural de la región. Es un espacio fundamental para comprender la identidad y el patrimonio cultural de Ñuble."
+        },
+        {
+          "id": "teatro_municipal",
+          "title": "Teatro Municipal",
+          "description": "Construido a principios del siglo XX, el Teatro Municipal es un emblema cultural de la región. Su arquitectura neoclásica y su acústica excepcional lo convierten en el principal escenario para presentaciones artísticas, obras teatrales, conciertos y eventos culturales. Ha sido renovado respetando su diseño original, manteniendo elementos decorativos como molduras, frescos y la tradicional distribución de palcos y platea que caracterizan los teatros de la época."
+        },
+        {
+          "id": "cementerio_historico",
+          "title": "Cementerio Histórico",
+          "description": "Este cementerio patrimonial, establecido en el siglo XIX, es un museo al aire libre que refleja la historia social de la región. Sus mausoleos, esculturas funerarias y lápidas talladas en mármol y piedra local narran las historias de familias prominentes, inmigrantes y personajes ilustres. Los cipreses centenarios y la arquitectura funeraria de diferentes épocas crean un ambiente solemne y culturalmente significativo."
+        }
+      ]
+    },
+    {
+      "id": "gastronomia",
+      "name": "Gastronomía Local",
+      "description": "Conoce los platos típicos y tradiciones culinarias de la zona",
+      "icon": "restaurant",
+      "color": "orange",
+      "cards": [
+        {
+          "id": "empanadas_pino",
+          "title": "Empanadas de Pino",
+          "description": "Las empanadas de pino son el plato más emblemático de la gastronomía chilena y en Ñuble tienen características especiales. Preparadas con masa casera y rellenas con carne de vacuno picada, cebolla, huevo duro, aceitunas y pasas, se hornean hasta lograr una textura dorada y crujiente. La tradición familiar de preparar empanadas se transmite de generación en generación, siendo especialmente populares durante las celebraciones patrias y reuniones familiares."
+        },
+        {
+          "id": "cazuela_cordero",
+          "title": "Cazuela de Cordero",
+          "description": "La cazuela de cordero es un plato tradicional que refleja la influencia ganadera de la región de Ñuble. Preparada con carne tierna de cordero, papas, zapallo, choclo, porotos verdes y condimentada con merkén y hierbas locales, esta sopa sustanciosa es perfecta para los días fríos. Su preparación lenta permite que los sabores se integren completamente, creando un plato nutritivo y reconfortante que representa la cocina campesina tradicional."
+        },
+        {
+          "id": "sopaipillas",
+          "title": "Sopaipillas",
+          "description": "Las sopaipillas son un clásico de la gastronomía popular chilena, especialmente apreciadas en Ñuble durante los días lluviosos de invierno. Hechas con masa de zapallo, harina y manteca, se fríen hasta obtener una textura dorada y esponjosa. Se sirven tradicionalmente con pebre picante o chancaca (miel de piloncillo), creando un contraste perfecto entre lo salado y lo dulce. Son el acompañamiento ideal para el té de la tarde."
+        },
+        {
+          "id": "chicha_uva",
+          "title": "Chicha de Uva",
+          "description": "La chicha de uva es una bebida tradicional fermentada que forma parte importante de la cultura vitivinícola de Ñuble. Elaborada durante la época de vendimia con uvas frescas de variedades locales, su proceso de fermentación natural le otorga un sabor único y refrescante. Esta bebida ancestral, consumida desde tiempos precolombinos, se disfruta especialmente durante las celebraciones de la vendimia y fiestas tradicionales, representando la conexión con la tierra y las tradiciones agrícolas."
+        },
+        {
+          "id": "pastel_choclo",
+          "title": "Pastel de Choclo",
+          "description": "El pastel de choclo es un plato emblemático de la cocina chilena que en Ñuble se prepara con especial dedicación durante la temporada de choclos tiernos. Consiste en capas de pino (carne con cebolla), pollo, huevos duros y aceitunas, cubiertas con una pasta cremosa de choclo molido endulzada con azúcar y horneada hasta dorar. Este plato representa la fusión de ingredientes indígenas y españoles, siendo un símbolo de la identidad culinaria nacional."
+        },
+        {
+          "id": "mote_huesillo",
+          "title": "Mote con Huesillo",
+          "description": "El mote con huesillo es una bebida refrescante tradicional perfecta para los calurosos veranos de Ñuble. Preparada con duraznos deshidratados (huesillos) cocidos en agua con azúcar y canela, servida con mote de trigo cocido, esta bebida representa la creatividad culinaria popular. Su sabor dulce y textura única la convierten en la bebida callejera más popular durante las fiestas patrias y eventos al aire libre, siendo parte fundamental del patrimonio gastronómico chileno."
+        }
+      ]
+    },
+    {
+      "id": "naturaleza",
+      "name": "Naturaleza y Paisajes",
+      "description": "Explora los hermosos paisajes naturales y áreas protegidas",
+      "icon": "nature",
+      "color": "green",
+      "cards": [
+        {
+          "id": "cerro_santa_lucia",
+          "title": "Cerro Santa Lucía",
+          "description": "El Cerro Santa Lucía es un promontorio natural que ofrece vistas panorámicas excepcionales de la región de Ñuble. Cubierto de vegetación nativa como quillayes, boldos y espinos, este cerro es hogar de diversas especies de aves como tordos, diucas y cachuditos. Sus senderos naturales permiten caminatas contemplativas mientras se observa la flora y fauna local. Durante la primavera, se cubre de flores silvestres creando un espectáculo natural de colores y aromas únicos."
+        },
+        {
+          "id": "rio_mapocho",
+          "title": "Río Mapocho",
+          "description": "El Río Mapocho atraviesa la región creando un ecosistema ribereño fundamental para la biodiversidad local. Sus aguas cristalinas albergan especies nativas como truchas y bagres, mientras que sus orillas están pobladas de sauces llorones, álamos y totoras. Este curso de agua ha sido históricamente importante para la agricultura local, proporcionando riego para cultivos tradicionales. Sus riberas son ideales para la observación de aves acuáticas y actividades de ecoturismo sostenible."
+        },
+        {
+          "id": "parque_forestal",
+          "title": "Parque Forestal",
+          "description": "El Parque Forestal de Ñuble es un pulmón verde que conserva especies arbóreas nativas y exóticas en perfecta armonía. Con más de 50 especies diferentes incluyendo robles, coigües, peumos y eucaliptos centenarios, este parque ofrece senderos interpretativos y áreas de picnic familiar. Sus espacios verdes son ideales para actividades recreativas, educación ambiental y contemplación de la naturaleza. Durante el otoño, el cambio de colores del follaje crea un espectáculo visual impresionante."
+        },
+        {
+          "id": "cordillera_andes",
+          "title": "Cordillera de los Andes",
+          "description": "La majestuosa Cordillera de los Andes forma el telón de fondo natural de la región de Ñuble, con picos nevados que superan los 3.000 metros de altura. Esta formación montañosa alberga ecosistemas únicos desde bosques de araucarias hasta vegas altoandinas. Sus glaciares y nieves eternas alimentan los ríos que irrigan los valles, mientras que sus laderas ofrecen hábitat para especies como cóndores, pumas y guanacos. Es un destino ideal para montañismo, trekking y turismo de aventura."
+        },
+        {
+          "id": "valle_central",
+          "title": "Valle Central",
+          "description": "El Valle Central de Ñuble es una extensa planicie fértil caracterizada por suelos de origen volcánico ideales para la agricultura. Este paisaje ondulado está salpicado de viñedos, campos de cereales, huertos frutales y praderas ganaderas que crean un mosaico rural pintoresco. Sus suaves colinas y extensas llanuras ofrecen vistas panorámicas hacia la cordillera, mientras que sus caminos rurales invitan a recorridos en bicicleta y caminatas contemplativas entre cultivos tradicionales y casas patronales históricas."
+        },
+        {
+          "id": "bosque_nativo",
+          "title": "Bosque Nativo",
+          "description": "Los bosques nativos de Ñuble conservan la vegetación original de la zona central de Chile, con especies endémicas como quillay, litre, boldo y maitén. Estos ecosistemas albergan una rica biodiversidad incluyendo zorros culpeos, pudúes, diversas especies de aves y una gran variedad de insectos polinizadores. Los senderos interpretativos permiten conocer la importancia ecológica de estos bosques, su rol en la conservación del agua y su valor como refugio de vida silvestre en un paisaje cada vez más antropizado."
+        }
+      ]
+    },
+    {
+      "id": "arquitectura",
+      "name": "Arquitectura",
+      "description": "Admira los diferentes estilos arquitectónicos de la región",
+      "icon": "architecture",
+      "color": "blue",
+      "cards": [
+        {
+          "id": "palacio_moneda",
+          "title": "Palacio de La Moneda",
+          "description": "Aunque ubicado en Santiago, el Palacio de La Moneda representa el estilo arquitectónico neoclásico que influyó en muchas construcciones públicas de Ñuble. Su diseño simétrico, columnas dóricas y proporciones armoniosas sirvieron de modelo para edificios gubernamentales y casas patronales de la región. La influencia de este estilo se puede observar en construcciones locales que adoptaron elementos como frontones triangulares, pilastras y la distribución espacial característica de la arquitectura institucional chilena del siglo XIX."
+        },
+        {
+          "id": "catedral_metropolitana",
+          "title": "Catedral Metropolitana",
+          "description": "La Catedral Metropolitana representa el estilo arquitectónico religioso que se replicó en iglesias menores de Ñuble. Su arquitectura neoclásica con elementos barrocos, torres campanario gemelas y fachada de piedra tallada influyó en el diseño de templos rurales de la región. Las técnicas constructivas, el uso de materiales locales como adobe y madera, y la adaptación del estilo europeo al clima mediterráneo se reflejan en numerosas iglesias parroquiales que mantienen esta tradición arquitectónica religiosa."
+        },
+        {
+          "id": "edificio_art_deco",
+          "title": "Edificio Art Déco",
+          "description": "Los edificios Art Déco de principios del siglo XX en Ñuble representan la modernización arquitectónica de la región. Caracterizados por líneas geométricas, ornamentación estilizada, uso de hormigón armado y grandes ventanales, estos edificios reflejan la influencia de las corrientes arquitectónicas internacionales. Sus fachadas con motivos decorativos, escalinatas monumentales y la integración de elementos funcionales y estéticos muestran la transición hacia la arquitectura moderna en el contexto regional."
+        },
+        {
+          "id": "casa_patronal",
+          "title": "Casa Patronal",
+          "description": "Las casas patronales de Ñuble son ejemplos excepcionales de la arquitectura rural chilena del siglo XIX. Construidas con gruesos muros de adobe, techos de teja colonial y amplios corredores perimetrales, estas residencias reflejan la adaptación arquitectónica al clima y la vida rural. Sus patios interiores, salas de recibo con altos techos, bodegas y dependencias para trabajadores muestran la organización social y económica de las haciendas tradicionales, siendo patrimonio arquitectónico y cultural invaluable."
+        },
+        {
+          "id": "estacion_central",
+          "title": "Estación Central",
+          "description": "La arquitectura ferroviaria de Ñuble, representada por estaciones de tren del siglo XIX y XX, muestra la influencia del desarrollo industrial en la región. Estas construcciones combinan funcionalidad y estética con estructuras de acero, ladrillo y madera, techos a dos aguas y amplios andenes cubiertos. Su diseño refleja la importancia del ferrocarril en el desarrollo económico regional, conectando zonas rurales con centros urbanos y facilitando el transporte de productos agrícolas y pasajeros."
+        },
+        {
+          "id": "mercado_central",
+          "title": "Mercado Central",
+          "description": "Los mercados centrales de Ñuble representan la arquitectura comercial tradicional con estructuras de hierro forjado, techos de zinc y amplios espacios cubiertos que facilitan la ventilación natural. Estos edificios, inspirados en los mercados europeos del siglo XIX, combinan funcionalidad comercial con valor arquitectónico. Sus pasillos centrales, puestos organizados simétricamente y la integración de elementos decorativos en hierro forjado crean espacios únicos que son centros de actividad comercial y social comunitaria."
+        }
+      ]
+    },
+    {
+      "id": "artesania",
+      "name": "Artesanía y Arte",
+      "description": "Conoce las tradiciones artesanales y expresiones artísticas locales",
+      "icon": "palette",
+      "color": "pink",
+      "cards": [
+        {
+          "id": "ceramica_pomaire",
+          "title": "Cerámica de Pomaire",
+          "description": "La cerámica de Pomaire, aunque originaria de la Región Metropolitana, ha influenciado significativamente la alfarería tradicional de Ñuble. Los artesanos locales han adoptado técnicas similares para crear piezas utilitarias y decorativas usando arcillas locales. Esta tradición incluye la elaboración de cántaros, ollas, platos y figuras ornamentales cocidas en hornos de barro. El proceso artesanal, que incluye el modelado a mano, el secado natural y la cocción controlada, preserva técnicas ancestrales transmitidas de generación en generación."
+        },
+        {
+          "id": "textiles_mapuche",
+          "title": "Textiles Mapuche",
+          "description": "Los textiles mapuche representan una de las expresiones artísticas más importantes de la región de Ñuble, donde comunidades indígenas mantienen vivas las tradiciones ancestrales. Los telares tradicionales producen ponchos, mantas, fajas y vestimentas ceremoniales con diseños geométricos que narran historias y simbologías sagradas. El uso de lanas naturales teñidas con plantas locales como maqui, michay y relbún, junto con técnicas de hilado y tejido transmitidas oralmente, crean piezas únicas de gran valor cultural y artístico."
+        },
+        {
+          "id": "tallado_madera",
+          "title": "Tallado en Madera",
+          "description": "El tallado en madera es una tradición artesanal profundamente arraigada en Ñuble, aprovechando la abundancia de especies nativas como roble, raulí y coigüe. Los artesanos locales crean desde utensilios domésticos hasta esculturas decorativas, utilizando técnicas tradicionales de tallado, lijado y acabado con aceites naturales. Esta artesanía incluye la elaboración de cucharas de palo, bateas, figuras religiosas y elementos arquitectónicos decorativos que reflejan la habilidad manual y el conocimiento profundo de las propiedades de cada tipo de madera."
+        },
+        {
+          "id": "pintura_mural",
+          "title": "Pintura Mural",
+          "description": "La pintura mural en Ñuble ha evolucionado desde las decoraciones coloniales en iglesias hasta expresiones contemporáneas de arte urbano. Los murales históricos en templos y casas patronales muestran técnicas de fresco y temple con pigmentos naturales, mientras que las obras modernas abordan temáticas sociales, culturales y ambientales. Esta forma de arte público democratiza el acceso a expresiones artísticas, embellece espacios urbanos y rurales, y sirve como medio de comunicación visual que fortalece la identidad comunitaria."
+        },
+        {
+          "id": "orfebreria",
+          "title": "Orfebrería",
+          "description": "La orfebrería en Ñuble combina técnicas tradicionales mapuche con influencias coloniales españolas, creando joyas y objetos decorativos únicos. Los artesanos trabajan principalmente con plata, cobre y bronce, elaborando trapelacuchas (pectorales mapuche), aros, pulseras y objetos ceremoniales. Las técnicas incluyen martillado, repujado, filigrana y soldadura, creando piezas que incorporan símbolos ancestrales y diseños contemporáneos. Esta tradición artesanal mantiene viva la conexión con las culturas originarias mientras se adapta a gustos y necesidades actuales."
+        },
+        {
+          "id": "cesteria",
+          "title": "Cestería",
+          "description": "La cestería tradicional de Ñuble utiliza fibras vegetales locales como mimbre, totora, coirón y fibras de chupón para crear canastos, sombreros, esteras y objetos decorativos. Esta artesanía ancestral requiere conocimiento profundo sobre la recolección estacional de materiales, técnicas de preparación y secado, y diversos métodos de tejido como espiral, entrelazado y cosido. Los artesanos mantienen vivas técnicas precolombinas adaptándolas a usos contemporáneos, creando productos funcionales y estéticamente valiosos que representan la sustentabilidad y el respeto por los recursos naturales."
+        }
+      ]
+    },
+    {
+      "id": "tradiciones",
+      "name": "Tradiciones y Fiestas",
+      "description": "Participa en las celebraciones y tradiciones culturales",
+      "icon": "tour",
+      "color": "teal",
+      "cards": [
+        {
+          "id": "fiestas_patrias",
+          "title": "Fiestas Patrias",
+          "description": "Las Fiestas Patrias en Ñuble se celebran con especial fervor durante septiembre, combinando tradiciones religiosas, gastronómicas y folclóricas. Las ramadas y fondas se llenan de familias disfrutando empanadas, asados, chicha y vino nuevo, mientras suenan cuecas y tonadas tradicionales. Los juegos criollos como la rayuela, el palo ensebado y las carreras a la chilena recrean las tradiciones campesinas. Estas celebraciones fortalecen la identidad nacional y regional, transmitiendo valores culturales a las nuevas generaciones en un ambiente festivo y comunitario."
+        },
+        {
+          "id": "cueca_nacional",
+          "title": "Cueca Nacional",
+          "description": "La cueca, danza nacional de Chile, tiene en Ñuble exponentes destacados que mantienen viva esta tradición folclórica. Esta danza de cortejo representa el galanteo entre el gallo y la gallina, con movimientos elegantes, pañuelos al aire y zapateo característico. Los conjuntos folclóricos locales preservan las variantes regionales de la cueca, incluyendo cueca larga, cueca brava y cueca chora. Durante las celebraciones patrias y festivales culturales, la cueca se convierte en expresión de identidad nacional y orgullo regional."
+        },
+        {
+          "id": "rodeo_chileno",
+          "title": "Rodeo Chileno",
+          "description": "El rodeo chileno es el deporte nacional que en Ñuble tiene profundas raíces en la tradición ganadera regional. Practicado en medialunas tradicionales, consiste en que dos jinetes (collera) atajan un novillo contra los cojinillos, demostrando destreza ecuestre y trabajo en equipo. Los huasos visten atuendos tradicionales con manta, espuelas de plata y sombreros de paño, montando caballos criollos especialmente entrenados. Esta tradición preserva técnicas de trabajo ganadero ancestrales y fortalece la identidad cultural campesina de la región."
+        },
+        {
+          "id": "vendimia",
+          "title": "Fiesta de la Vendimia",
+          "description": "La Fiesta de la Vendimia en Ñuble celebra la cosecha de uvas y la tradición vitivinícola regional durante los meses de marzo y abril. Las viñas familiares y comerciales abren sus puertas para que visitantes participen en la recolección tradicional, el pisado de uvas y la degustación de vinos nuevos. Estas celebraciones incluyen música folclórica, comidas típicas, bendición de los frutos y actividades educativas sobre enología. La vendimia conecta a las comunidades con ciclos naturales, tradiciones agrícolas y el patrimonio vitivinícola que caracteriza la identidad productiva regional."
+        },
+        {
+          "id": "we_tripantu",
+          "title": "We Tripantu",
+          "description": "El We Tripantu o Año Nuevo Mapuche se celebra durante el solsticio de invierno (21 de junio) en las comunidades indígenas de Ñuble, marcando el renacimiento de la naturaleza y el inicio de un nuevo ciclo vital. Esta ceremonia ancestral incluye rituales de purificación con agua corriente, rogativas a los antepasados, compartir alimentos tradicionales como muday y sopaipillas, y danzas ceremoniales alrededor del fuego sagrado. La celebración fortalece la identidad mapuche, transmite conocimientos ancestrales y mantiene viva la conexión espiritual con la naturaleza y los ciclos cósmicos."
+        },
+        {
+          "id": "esquinazo",
+          "title": "Esquinazo",
+          "description": "El esquinazo marca el inicio oficial de las celebraciones de Fiestas Patrias en Ñuble, siendo una tradición que reúne a toda la comunidad en torno a la música, el baile y la gastronomía típica. Esta celebración nocturna incluye presentaciones de conjuntos folclóricos, competencias de cueca, degustación de platos tradicionales y la tradicional quema del muñeco que simboliza el fin del invierno. El esquinazo fortalece los lazos comunitarios, preserva tradiciones culturales y crea un ambiente festivo que anticipa las celebraciones patrias, siendo una expresión auténtica de la chilenidad regional."
+        }
+      ]
+    }
+  ]
+}
