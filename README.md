@@ -52,23 +52,93 @@ Utilizamos Freezed para:
 
 \`\`\`
 lib/
-├── app/                  # Punto de entrada de la aplicación
-├── core/                 # Componentes compartidos
-│   ├── di/               # Inyección de dependencias
-│   ├── router/           # Configuración de rutas
-│   ├── services/         # Servicios core (storage, network, etc.)
-│   ├── theme/            # Temas y estilos
-│   ├── utils/            # Utilidades y helpers
-│   └── widgets/          # Widgets reutilizables
-└── features/             # Módulos funcionales
-├── puzzle/           # Feature de rompecabezas cultural
-│   ├── data/         # Capa de datos
-│   ├── domain/       # Capa de dominio
-│   └── presentation/ # Capa de presentación
-├── map/              # Feature de mapa interactivo
-├── missions/         # Feature de misiones
-├── stories/          # Feature de historias culturales
-└── recommendations/  # Feature de recomendaciones
+├───app
+├───core
+│   ├───data
+│   ├───database
+│   ├───di
+│   ├───providers
+│   ├───router
+│   ├───services
+│   │   ├───analytics
+│   │   ├───auth
+│   │   ├───content
+│   │   ├───i18n
+│   │   ├───location
+│   │   ├───logger
+│   │   ├───network
+│   │   ├───qr
+│   │   ├───storage
+│   │   └───theme
+│   ├───theme
+│   ├───utils
+│   └───widgets
+└───features
+    ├───home
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───map
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───minigames
+    │   ├───data
+    │   │   ├───datasources
+    │   │   └───models
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───missions
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       └───pages
+    ├───nuble_map
+    │   ├───data
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───puzzle
+    │   ├───data
+    │   │   ├───datasources
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───usecases
+    │   └───presentation
+    │       ├───pages
+    │       ├───providers
+    │       ├───state
+    │       └───widgets
+    ├───qr_scanner
+    │   ├───data
+    │   │   ├───datasources
+    │   │   └───models
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───usercases
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───recommendations
+    ├───settings
+    │   └───presentation
+    │       └───pages
+    └───stories
+        ├───domain
+        │   └───entities
+        └───presentation
+            └───pages
 \`\`\`
 
 ## Patrones Implementados
@@ -79,13 +149,6 @@ lib/
 4. **Dependency Injection**: Inversión de control para testing
 5. **Builder Pattern**: Construcción de objetos complejos
 6. **Factory Pattern**: Creación de objetos relacionados
-
-## Seguridad
-
-- **Encriptación AES**: Para datos sensibles almacenados localmente
-- **Certificate Pinning**: Prevención de ataques MITM
-- **Sanitización de Inputs**: Prevención de inyección de código
-- **Validación con Either**: Manejo seguro de errores y validaciones
 
 ## Performance
 
@@ -130,33 +193,9 @@ lib/
    flutter run --flavor dev
    \`\`\`
 
-## CI/CD
-
-El proyecto utiliza GitHub Actions para:
-- Lint y análisis estático
-- Ejecución de tests unitarios e integración
-- Generación de builds para diferentes entornos
-- Despliegue automático a TestFlight/Firebase App Distribution
-
-## Convenciones de Código
-
-- **Naming**: camelCase para variables y funciones, PascalCase para clases
-- **Formatting**: Dart formatter con 80 caracteres por línea
-- **Imports**: Agrupados por tipo (dart, flutter, paquetes, proyecto)
-- **Documentation**: Documentación de Dart para clases y métodos públicos
-
-## Contribución
-
-Ver [CONTRIBUTING.md](CONTRIBUTING.md) para detalles sobre el proceso de contribución al proyecto.
-
-## Licencia
-
-Este proyecto está licenciado bajo [MIT License](LICENSE).
-\`\`\`
-
 ## Wireframes Interactivos
 
-Para los wireframes interactivos, se recomienda utilizar Figma o Adobe XD para crear las siguientes pantallas:
+Para los wireframes interactivos, se recomienda utilizar Figma o para crear las siguientes pantallas:
 
 1. **Pantalla de Onboarding**
     - Introducción a la metáfora del rompecabezas cultural
