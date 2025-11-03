@@ -67,15 +67,26 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
       final l10n = AppLocalizations.of(context);
       final languageCode = l10n?.locale.languageCode ?? 'es';
 
+      print('Loading questions for language: $languageCode');
+
       final questionsDto = await _triviaService.loadTriviaQuestions(languageCode);
+
+      print('Loaded ${questionsDto.length} questions');
 
       if (mounted) {
         setState(() {
           _allQuestions = questionsDto.map((dto) => dto.toDomain()).toList();
           _isLoading = false;
         });
+
+        // Debug: Print first few questions to verify data
+        for (int i = 0; i < _allQuestions.length && i < 3; i++) {
+          print('Question ${i + 1}: ${_allQuestions[i].question}');
+          print('Difficulty: ${_allQuestions[i].difficulty}');
+        }
       }
     } catch (e) {
+      print('Error loading questions: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -96,14 +107,53 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
     }
   }
 
+  // Función mejorada para mapear dificultades
+  List<TriviaQuestion> _filterQuestionsByDifficulty(String selectedDifficulty) {
+    final l10n = AppLocalizations.of(context);
+    final languageCode = l10n?.locale.languageCode ?? 'es';
+
+    // Mapear la dificultad seleccionada a las posibles variantes en el JSON
+    List<String> difficultyVariants = [];
+
+    switch (selectedDifficulty.toLowerCase()) {
+      case 'fácil':
+      case 'easy':
+        difficultyVariants = ['fácil', 'easy', 'facil'];
+        break;
+      case 'medio':
+      case 'medium':
+        difficultyVariants = ['medio', 'medium'];
+        break;
+      case 'difícil':
+      case 'hard':
+        difficultyVariants = ['difícil', 'hard', 'dificil'];
+        break;
+      default:
+        difficultyVariants = [selectedDifficulty.toLowerCase()];
+    }
+
+    final filtered = _allQuestions.where((q) {
+      final questionDifficulty = q.difficulty.toLowerCase();
+      return difficultyVariants.any((variant) => questionDifficulty == variant);
+    }).toList();
+
+    print('Filtering by difficulty: $selectedDifficulty');
+    print('Difficulty variants: $difficultyVariants');
+    print('Found ${filtered.length} questions');
+
+    return filtered;
+  }
+
   void _startGameWithSelectedDifficulty(String difficulty) {
+    final filteredQuestions = _filterQuestionsByDifficulty(difficulty);
+
     setState(() {
-      _questions = _allQuestions
-          .where((q) => q.difficulty.toLowerCase() == difficulty.toLowerCase())
-          .toList();
+      _questions = filteredQuestions;
 
       if (_questions.isEmpty) {
-        _showErrorMessage('No hay preguntas para la dificultad seleccionada');
+        final l10n = AppLocalizations.of(context);
+        _showErrorMessage(l10n?.noQuestionsForDifficulty ??
+            'No hay preguntas para la dificultad seleccionada');
         return;
       }
 
@@ -116,11 +166,15 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
       _showExplanation = false;
       _startTime = DateTime.now();
     });
-    _cardController.forward();
-    _updateProgress();
+
+    if (_questions.isNotEmpty) {
+      _cardController.forward();
+      _updateProgress();
+    }
   }
 
   void _updateProgress() {
+    if (_questions.isEmpty) return;
     final progress = (_currentQuestionIndex + 1) / _questions.length;
     _progressController.animateTo(progress);
   }
@@ -197,7 +251,7 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
           foregroundColor: Colors.white,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.go('/'),
+            onPressed: () => context.go('/minigames'),
           ),
         ),
         body: const Center(
@@ -221,7 +275,7 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
           foregroundColor: Colors.white,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.go('/'),
+            onPressed: () => context.go('/minigames'),
           ),
         ),
         body: Center(
@@ -264,7 +318,8 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.go('/minigames'),
           ),
-          bottom: _selectedDifficulty != null ? PreferredSize(
+          bottom: _selectedDifficulty != null
+              ? PreferredSize(
             preferredSize: const Size.fromHeight(8),
             child: AnimatedBuilder(
               animation: _progressController,
@@ -276,7 +331,8 @@ class _TriviaPageState extends State<TriviaPage> with TickerProviderStateMixin {
                 );
               },
             ),
-          ) : null,
+          )
+              : null,
         ),
         body: _selectedDifficulty == null
             ? _DifficultySelectionScreen(
@@ -308,15 +364,39 @@ class _DifficultySelectionScreen extends StatelessWidget {
     required this.onDifficultySelected,
   });
 
+  int _countQuestionsByDifficulty(String difficulty) {
+    List<String> difficultyVariants = [];
+
+    switch (difficulty.toLowerCase()) {
+      case 'fácil':
+      case 'easy':
+        difficultyVariants = ['fácil', 'easy', 'facil'];
+        break;
+      case 'medio':
+      case 'medium':
+        difficultyVariants = ['medio', 'medium'];
+        break;
+      case 'difícil':
+      case 'hard':
+        difficultyVariants = ['difícil', 'hard', 'dificil'];
+        break;
+    }
+
+    return allQuestions.where((q) {
+      final questionDifficulty = q.difficulty.toLowerCase();
+      return difficultyVariants.any((variant) => questionDifficulty == variant);
+    }).length;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final isLargeScreen = MediaQuery.of(context).size.width > 800;
 
-    // Count questions by difficulty
-    final easyCount = allQuestions.where((q) => q.difficulty.toLowerCase() == 'fácil' || q.difficulty.toLowerCase() == 'easy').length;
-    final mediumCount = allQuestions.where((q) => q.difficulty.toLowerCase() == 'medio' || q.difficulty.toLowerCase() == 'medium').length;
-    final hardCount = allQuestions.where((q) => q.difficulty.toLowerCase() == 'difícil' || q.difficulty.toLowerCase() == 'hard').length;
+    // Count questions by difficulty using the improved method
+    final easyCount = _countQuestionsByDifficulty('fácil');
+    final mediumCount = _countQuestionsByDifficulty('medio');
+    final hardCount = _countQuestionsByDifficulty('difícil');
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(isLargeScreen ? 32 : 16),
@@ -343,7 +423,6 @@ class _DifficultySelectionScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: isLargeScreen ? 40 : 32),
-
               Column(
                 children: [
                   _DifficultyOption(
@@ -773,12 +852,14 @@ class _QuestionCard extends StatelessWidget {
     switch (difficulty.toLowerCase()) {
       case 'fácil':
       case 'easy':
+      case 'facil':
         return Colors.green;
       case 'medio':
       case 'medium':
         return Colors.orange;
       case 'difícil':
       case 'hard':
+      case 'dificil':
         return Colors.red;
       default:
         return Colors.grey;

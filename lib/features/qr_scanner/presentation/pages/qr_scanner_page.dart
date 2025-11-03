@@ -1,46 +1,324 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tesoro_regional/core/utils/qr_validator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/qr_validator.dart';
+import '../../../../core/services/storage/unified_pieces_storage.dart';
+import '../../domain/entities/qr_piece.dart';
+import '../../../puzzle/presentation/providers/puzzle_providers.dart';
+import 'package:go_router/go_router.dart';
 
-class QRScannerPage extends StatefulWidget {
-  final Function(String) onQRScanned;
+class QRScannerPage extends ConsumerStatefulWidget {
+  final Function(QRPiece?)? onPieceScanned;
 
-  const QRScannerPage({
-    super.key,
-    required this.onQRScanned,
-  });
+  const QRScannerPage({super.key, this.onPieceScanned});
 
   @override
-  State<QRScannerPage> createState() => _QRScannerPageState();
+  ConsumerState<QRScannerPage> createState() => _QRScannerPageState();
 }
 
-class _QRScannerPageState extends State<QRScannerPage> {
-  late MobileScannerController controller;
+class _QRScannerPageState extends ConsumerState<QRScannerPage>
+    with WidgetsBindingObserver {
+  MobileScannerController controller = MobileScannerController();
+  bool _isProcessing = false;
   bool _hasPermission = false;
-  bool _isScanning = true;
-  String? _lastScannedCode;
-  bool _flashOn = false;
+  bool _isFlashOn = false;
+  bool _isFrontCamera = false;
+  QRPiece? _currentScannedPiece;
+  final UnifiedPiecesStorage _storage = UnifiedPiecesStorage.instance;
 
   @override
   void initState() {
     super.initState();
-    controller = MobileScannerController();
-    _checkCameraPermission();
+    WidgetsBinding.instance.addObserver(this);
+    _checkPermissions();
   }
 
-  Future<void> _checkCameraPermission() async {
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        return;
+      case AppLifecycleState.resumed:
+        controller.start();
+        return;
+      case AppLifecycleState.inactive:
+        controller.stop();
+        return;
+    }
+  }
+
+  Future<void> _checkPermissions() async {
     final status = await Permission.camera.status;
-    if (status.isGranted) {
-      setState(() {
-        _hasPermission = true;
-      });
-    } else {
+    if (status.isDenied) {
       final result = await Permission.camera.request();
       setState(() {
         _hasPermission = result.isGranted;
       });
+    } else {
+      setState(() {
+        _hasPermission = status.isGranted;
+      });
     }
+  }
+
+  void _onDetect(BarcodeCapture capture) async {
+    if (_isProcessing) return;
+
+    final List<Barcode> barcodes = capture.barcodes;
+    if (barcodes.isEmpty) return;
+
+    final barcode = barcodes.first;
+    final String? code = barcode.rawValue;
+
+    if (code == null || code.isEmpty) return;
+
+    setState(() {
+      _isProcessing = true;
+    });
+
+    try {
+      // Vibración de feedback
+      HapticFeedback.mediumImpact();
+
+      print('🔍 QR Code detected (content hidden for security)');
+
+      // Validar el QR code
+      final validationResult = QRValidator.validateQRCode(code);
+
+      if (validationResult.isValid && validationResult.pieceData != null) {
+        final pieceData = validationResult.pieceData!;
+
+        print('✅ Valid QR for province: ${pieceData.province}');
+
+        // Crear QRPiece con los parámetros correctos
+        final qrPiece = QRPiece(
+          id: '${pieceData.province}_${pieceData.code}',
+          province: pieceData.province,
+          title: pieceData.title,
+          code: pieceData.code,
+          collectedAt: DateTime.now(),
+          isCollected: true,
+        );
+
+        _currentScannedPiece = qrPiece;
+
+        // Guardar la pieza usando el almacenamiento unificado
+        try {
+          final saved = await _storage.saveQRPiece(qrPiece);
+
+          if (saved) {
+            print('✅ Piece saved successfully to unified storage: ${qrPiece.id}');
+
+            // Refresh puzzle data
+            ref.read(puzzleStateProvider.notifier).refreshAfterQRScan();
+
+            // Mostrar diálogo de éxito
+            await _showSuccessDialog();
+
+            // Notificar al callback si existe
+            if (widget.onPieceScanned != null) {
+              widget.onPieceScanned!(qrPiece);
+            }
+          } else {
+            print('⚠️ Piece already exists: ${qrPiece.id}');
+            await _showErrorDialog(
+              'Pieza Ya Coleccionada',
+              'Ya tienes esta pieza en tu colección.',
+            );
+          }
+        } catch (storageError) {
+          print('❌ Error saving piece: $storageError');
+          await _showErrorDialog(
+            'Error al Guardar Pieza',
+            'No se pudo guardar la pieza. Inténtalo de nuevo.',
+          );
+        }
+      } else {
+        print('❌ Invalid QR: ${validationResult.message}');
+        await _showErrorDialog(
+          'Código QR Inválido',
+          validationResult.message,
+        );
+      }
+    } catch (e) {
+      print('❌ Error processing QR: $e');
+      await _showErrorDialog(
+        'Error al Procesar QR',
+        'Ocurrió un error al procesar el código QR. Inténtalo de nuevo.',
+      );
+    } finally {
+      setState(() {
+        _isProcessing = false;
+      });
+    }
+  }
+
+  Future<void> _showSuccessDialog() async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.green.shade100,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.check,
+                color: Colors.green.shade700,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(child: Text('¡Pieza Coleccionada!')),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Has coleccionado exitosamente una pieza de la provincia de ${_currentScannedPiece!.province.toUpperCase()}',
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.blue.shade200),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.location_on,
+                    color: Colors.blue.shade700,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _currentScannedPiece!.title,
+                      style: TextStyle(
+                        color: Colors.blue.shade700,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.amber.shade50,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.amber.shade200),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.star,
+                    color: Colors.amber.shade700,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      'Ve a "Ver Piezas Colectadas" para ver tu progreso',
+                      style: TextStyle(
+                        color: Colors.amber,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Cierra el diálogo
+              // Usar context.go en lugar de Navigator.pop + context.push
+              context.go('/collected-pieces');
+            },
+            child: const Text('Ver Progreso'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Continuar Escaneando'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showErrorDialog(String title, String message) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.red.shade100,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.error_outline,
+                color: Colors.red.shade700,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(title)),
+          ],
+        ),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Entendido'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _toggleFlash() {
+    controller.toggleTorch();
+    setState(() {
+      _isFlashOn = !_isFlashOn;
+    });
+  }
+
+  void _switchCamera() {
+    controller.switchCamera();
+    setState(() {
+      _isFrontCamera = !_isFrontCamera;
+    });
   }
 
   @override
@@ -54,46 +332,42 @@ class _QRScannerPageState extends State<QRScannerPage> {
         ),
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.camera_alt_outlined,
                   size: 80,
-                  color: Colors.grey,
+                  color: Colors.grey.shade400,
                 ),
                 const SizedBox(height: 24),
                 const Text(
-                  'Permiso de cámara requerido',
+                  'Permiso de Cámara Requerido',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 const Text(
-                  'Para escanear códigos QR y descubrir piezas culturales, necesitamos acceso a tu cámara.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
+                  'Para escanear códigos QR necesitamos acceso a tu cámara.',
+                  style: TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 32),
-                ElevatedButton.icon(
-                  onPressed: _checkCameraPermission,
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text('Permitir acceso a cámara'),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _checkPermissions,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
+                      horizontal: 32,
                       vertical: 12,
                     ),
                   ),
+                  child: const Text('Conceder Permiso'),
                 ),
               ],
             ),
@@ -107,21 +381,41 @@ class _QRScannerPageState extends State<QRScannerPage> {
         title: const Text('Escáner QR'),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            onPressed: _toggleFlash,
+            icon: Icon(_isFlashOn ? Icons.flash_on : Icons.flash_off),
+          ),
+          IconButton(
+            onPressed: _switchCamera,
+            icon: Icon(_isFrontCamera ? Icons.camera_front : Icons.camera_rear),
+          ),
+        ],
       ),
       body: Stack(
         children: [
-          // QR Scanner View
+          // Scanner
           MobileScanner(
             controller: controller,
-            onDetect: _onQRDetected,
+            onDetect: _onDetect,
           ),
 
-          // Overlay with scanning frame
-          _buildScannerOverlay(),
+          // Overlay
+          Container(
+            decoration: ShapeDecoration(
+              shape: QrScannerOverlayShape(
+                borderColor: Theme.of(context).primaryColor,
+                borderRadius: 16,
+                borderLength: 40,
+                borderWidth: 4,
+                cutOutSize: 280,
+              ),
+            ),
+          ),
 
-          // Instructions overlay
+          // Instructions
           Positioned(
-            top: 50,
+            top: 60,
             left: 20,
             right: 20,
             child: Container(
@@ -132,24 +426,18 @@ class _QRScannerPageState extends State<QRScannerPage> {
               ),
               child: const Column(
                 children: [
-                  Icon(
-                    Icons.qr_code_scanner,
-                    color: Colors.white,
-                    size: 32,
-                  ),
-                  SizedBox(height: 8),
                   Text(
-                    'Apunta la cámara hacia un código QR',
+                    'Escanea un código QR',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 4),
+                  SizedBox(height: 8),
                   Text(
-                    'Busca códigos que comiencen con "Ñuble-"',
+                    'Coloca el código QR dentro del marco para escanearlo',
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 14,
@@ -161,161 +449,30 @@ class _QRScannerPageState extends State<QRScannerPage> {
             ),
           ),
 
-          // Bottom info panel
-          Positioned(
-            bottom: 50,
-            left: 20,
-            right: 20,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _ActionButton(
-                        icon: _flashOn ? Icons.flash_on : Icons.flash_off,
-                        label: 'Flash',
-                        onPressed: _toggleFlash,
-                      ),
-                      _ActionButton(
-                        icon: Icons.flip_camera_ios,
-                        label: 'Voltear',
-                        onPressed: _switchCamera,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScannerOverlay() {
-    return Container(
-      decoration: ShapeDecoration(
-        shape: QrScannerOverlayShape(
-          borderColor: Theme.of(context).primaryColor,
-          borderRadius: 16,
-          borderLength: 30,
-          borderWidth: 8,
-          cutOutSize: 250,
-        ),
-      ),
-    );
-  }
-
-  void _onQRDetected(BarcodeCapture capture) {
-    if (!_isScanning) return;
-
-    final List<Barcode> barcodes = capture.barcodes;
-    if (barcodes.isNotEmpty) {
-      final String? code = barcodes.first.rawValue;
-      if (code != null) {
-        setState(() {
-          _lastScannedCode = code;
-          _isScanning = false;
-        });
-
-        // Validate QR code format
-        if (_isValidQrCode(code)) {
-          widget.onQRScanned(code);
-          Navigator.of(context).pop();
-        } else {
-          _showInvalidQRDialog(code);
-        }
-      }
-    }
-  }
-
-  bool _isValidQrCode(String qrCode) {
-    return QRValidator.isValidTesoroRegionalCode(qrCode);
-  }
-
-  void _toggleScanning() {
-    setState(() {
-      _isScanning = !_isScanning;
-    });
-  }
-
-  void _toggleFlash() {
-    setState(() {
-      _flashOn = !_flashOn;
-    });
-    controller.toggleTorch();
-  }
-
-  void _switchCamera() {
-    controller.switchCamera();
-  }
-
-  void _showInvalidQRDialog(String qrCode) {
-    final errorMessage = QRValidator.getValidationErrorMessage(qrCode);
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Código QR Inválido'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
-            const SizedBox(height: 16),
-            Text('Código escaneado:'),
-            const SizedBox(height: 8),
+          // Processing indicator
+          if (_isProcessing)
             Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                qrCode.length > 100 ? '${qrCode.substring(0, 100)}...' : qrCode,
-                style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(color: Colors.white),
+                    SizedBox(height: 16),
+                    Text(
+                      'Procesando código QR...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 12),
-            Text(
-              errorMessage,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.red),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _isScanning = true;
-              });
-            },
-            child: const Text('Continuar escaneando'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cerrar'),
-          ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }
 
@@ -348,7 +505,7 @@ class QrScannerOverlayShape extends ShapeBorder {
 
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    Path _getLeftTopPath(Rect rect) {
+    Path getLeftTopPath(Rect rect) {
       return Path()
         ..moveTo(rect.left, rect.bottom)
         ..lineTo(rect.left, rect.top + borderRadius)
@@ -356,7 +513,7 @@ class QrScannerOverlayShape extends ShapeBorder {
         ..lineTo(rect.right, rect.top);
     }
 
-    return _getLeftTopPath(rect)
+    return getLeftTopPath(rect)
       ..lineTo(rect.right, rect.bottom)
       ..lineTo(rect.left, rect.bottom)
       ..lineTo(rect.left, rect.top);
@@ -367,53 +524,110 @@ class QrScannerOverlayShape extends ShapeBorder {
     final width = rect.width;
     final borderWidthSize = width / 2;
     final height = rect.height;
-    final borderOffset = borderWidth / 2;
-    final _cutOutSize = cutOutSize < width && cutOutSize < height
-        ? cutOutSize
-        : (width < height ? width : height) - borderOffset * 2;
-    final _cutOutRect = Rect.fromLTWH(
-      rect.left + width / 2 - _cutOutSize / 2 + borderOffset,
-      rect.top + height / 2 - _cutOutSize / 2 + borderOffset,
-      _cutOutSize - borderOffset * 2,
-      _cutOutSize - borderOffset * 2,
-    );
+    final borderHeightSize = height / 2;
+    final cutOutWidth = cutOutSize < width ? cutOutSize : width - borderWidth;
+    final cutOutHeight = cutOutSize < height ? cutOutSize : height - borderWidth;
 
     final backgroundPaint = Paint()
       ..color = overlayColor
       ..style = PaintingStyle.fill;
 
-    final backgroundPath = Path()
-      ..addRect(rect)
-      ..addRRect(RRect.fromRectAndRadius(_cutOutRect, Radius.circular(borderRadius)))
-      ..fillType = PathFillType.evenOdd;
-
-    canvas.drawPath(backgroundPath, backgroundPaint);
-
-    // Draw the border
-    final borderPaint = Paint()
+    final boxPaint = Paint()
       ..color = borderColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = borderWidth;
 
-    final path = Path()
-      ..moveTo(_cutOutRect.left, _cutOutRect.top + borderLength)
-      ..lineTo(_cutOutRect.left, _cutOutRect.top + borderRadius)
-      ..quadraticBezierTo(_cutOutRect.left, _cutOutRect.top, _cutOutRect.left + borderRadius, _cutOutRect.top)
-      ..lineTo(_cutOutRect.left + borderLength, _cutOutRect.top)
-      ..moveTo(_cutOutRect.right - borderLength, _cutOutRect.top)
-      ..lineTo(_cutOutRect.right - borderRadius, _cutOutRect.top)
-      ..quadraticBezierTo(_cutOutRect.right, _cutOutRect.top, _cutOutRect.right, _cutOutRect.top + borderRadius)
-      ..lineTo(_cutOutRect.right, _cutOutRect.top + borderLength)
-      ..moveTo(_cutOutRect.right, _cutOutRect.bottom - borderLength)
-      ..lineTo(_cutOutRect.right, _cutOutRect.bottom - borderRadius)
-      ..quadraticBezierTo(_cutOutRect.right, _cutOutRect.bottom, _cutOutRect.right - borderRadius, _cutOutRect.bottom)
-      ..lineTo(_cutOutRect.right - borderLength, _cutOutRect.bottom)
-      ..moveTo(_cutOutRect.left + borderLength, _cutOutRect.bottom)
-      ..lineTo(_cutOutRect.left + borderRadius, _cutOutRect.bottom)
-      ..quadraticBezierTo(_cutOutRect.left, _cutOutRect.bottom, _cutOutRect.left, _cutOutRect.bottom - borderRadius)
-      ..lineTo(_cutOutRect.left, _cutOutRect.bottom - borderLength);
+    final cutOutRect = Rect.fromLTWH(
+      borderWidthSize - cutOutWidth / 2,
+      borderHeightSize - cutOutHeight / 2,
+      cutOutWidth,
+      cutOutHeight,
+    );
 
-    canvas.drawPath(path, borderPaint);
+    canvas
+      ..saveLayer(
+        rect,
+        backgroundPaint,
+      )
+      ..drawRect(rect, backgroundPaint)
+      ..drawRRect(
+        RRect.fromRectAndRadius(
+          cutOutRect,
+          Radius.circular(borderRadius),
+        ),
+        backgroundPaint..blendMode = BlendMode.clear,
+      )
+      ..restore();
+
+    final borderRect = RRect.fromRectAndRadius(
+      cutOutRect,
+      Radius.circular(borderRadius),
+    );
+
+    final path = Path()
+      ..addRRect(borderRect);
+
+    canvas.drawPath(path, boxPaint);
+
+    // Draw corner brackets
+    final bracketPaint = Paint()
+      ..color = borderColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = borderWidth
+      ..strokeCap = StrokeCap.round;
+
+    final left = cutOutRect.left;
+    final top = cutOutRect.top;
+    final right = cutOutRect.right;
+    final bottom = cutOutRect.bottom;
+
+    // Top-left corner
+    canvas.drawLine(
+      Offset(left, top + borderLength),
+      Offset(left, top + borderRadius),
+      bracketPaint,
+    );
+    canvas.drawLine(
+      Offset(left + borderRadius, top),
+      Offset(left + borderLength, top),
+      bracketPaint,
+    );
+
+    // Top-right corner
+    canvas.drawLine(
+      Offset(right - borderLength, top),
+      Offset(right - borderRadius, top),
+      bracketPaint,
+    );
+    canvas.drawLine(
+      Offset(right, top + borderRadius),
+      Offset(right, top + borderLength),
+      bracketPaint,
+    );
+
+    // Bottom-left corner
+    canvas.drawLine(
+      Offset(left, bottom - borderLength),
+      Offset(left, bottom - borderRadius),
+      bracketPaint,
+    );
+    canvas.drawLine(
+      Offset(left + borderRadius, bottom),
+      Offset(left + borderLength, bottom),
+      bracketPaint,
+    );
+
+    // Bottom-right corner
+    canvas.drawLine(
+      Offset(right - borderLength, bottom),
+      Offset(right - borderRadius, bottom),
+      bracketPaint,
+    );
+    canvas.drawLine(
+      Offset(right, bottom - borderRadius),
+      Offset(right, bottom - borderLength),
+      bracketPaint,
+    );
   }
 
   @override
@@ -422,42 +636,6 @@ class QrScannerOverlayShape extends ShapeBorder {
       borderColor: borderColor,
       borderWidth: borderWidth,
       overlayColor: overlayColor,
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onPressed;
-
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          onPressed: onPressed,
-          icon: Icon(icon, color: Colors.white),
-          style: IconButton.styleFrom(
-            backgroundColor: Colors.white.withOpacity(0.2),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 12,
-          ),
-        ),
-      ],
     );
   }
 }

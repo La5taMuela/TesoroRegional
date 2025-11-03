@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 import 'package:tesoro_regional/core/services/storage/storage_service.dart';
 import 'package:tesoro_regional/features/puzzle/data/models/cultural_piece_dto.dart';
 import 'package:tesoro_regional/features/puzzle/data/models/piece_category_dto.dart';
@@ -17,8 +18,22 @@ abstract class PuzzleLocalDataSource {
 
 class PuzzleLocalDataSourceImpl implements PuzzleLocalDataSource {
   final StorageService _storageService;
+  late final Box<CulturalPieceDto> _piecesBox;
+  bool _isInitialized = false;
 
   PuzzleLocalDataSourceImpl(this._storageService);
+
+  Future<void> _init() async {
+    if (!_isInitialized) {
+      try {
+        _piecesBox = await Hive.openBox<CulturalPieceDto>('cultural_pieces');
+        _isInitialized = true;
+      } catch (e) {
+        print('Error initializing puzzle local data source: $e');
+        throw Exception('Failed to initialize storage: $e');
+      }
+    }
+  }
 
   static const String _piecesKey = 'collected_pieces';
   static const String _categoriesKey = 'categories';
@@ -35,7 +50,19 @@ class PuzzleLocalDataSourceImpl implements PuzzleLocalDataSource {
   @override
   Future<List<PieceCategoryDto>> getCategories() async {
     final categoriesJson = await _storageService.getString(_categoriesKey);
-    if (categoriesJson == null) return [];
+    if (categoriesJson == null) {
+      // Return default categories
+      return [
+        const PieceCategoryDto(
+          id: 'provincias',
+          name: 'Provincias',
+          description: 'Provincias de la Región de Ñuble',
+          iconPath: '',
+          totalPieces: 3, // Total provinces in Ñuble
+          collectedPieces: 0,
+        ),
+      ];
+    }
 
     final List<dynamic> decoded = jsonDecode(categoriesJson);
     return decoded.map((json) => PieceCategoryDto.fromJson(json)).toList();

@@ -1,20 +1,6 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="/">
 
   <meta charset="UTF-8">
@@ -24,11 +10,9 @@
   <!-- Viewport meta tag -->
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 
-  <!-- Permissions Policy for camera access -->
-  <meta http-equiv="Permissions-Policy" content="camera=*, microphone=*">
-
-  <!-- Feature Policy (fallback for older browsers) -->
-  <meta http-equiv="Feature-Policy" content="camera 'self'; microphone 'self'">
+  <!-- Camera permissions for web -->
+  <meta name="camera" content="camera">
+  <meta name="microphone" content="microphone">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -42,6 +26,12 @@
 
   <title>Tesoro Regional</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Permissions Policy for camera access -->
+  <meta http-equiv="Permissions-Policy" content="camera=*, microphone=*">
+
+  <!-- Feature Policy (legacy support) -->
+  <meta http-equiv="Feature-Policy" content="camera 'self'; microphone 'self'">
 
   <!-- Vercel Analytics -->
   <script>
@@ -114,45 +104,49 @@
       document.getElementById("splash-branding")?.remove();
       document.body.style.background = "transparent";
     }
+
+    // Camera permission helper
+    async function requestCameraPermission() {
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: 'environment',
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          });
+          // Stop the stream immediately, we just wanted to request permission
+          stream.getTracks().forEach(track => track.stop());
+          return true;
+        }
+      } catch (error) {
+        console.error('Camera permission error:', error);
+        return false;
+      }
+      return false;
+    }
+
+    // Check if HTTPS is being used
+    function checkHTTPS() {
+      return location.protocol === 'https:' || location.hostname === 'localhost';
+    }
+
+    // Initialize camera checks when page loads
+    window.addEventListener('load', function() {
+      if (!checkHTTPS() && location.hostname !== 'localhost') {
+        console.warn('HTTPS required for camera access');
+      }
+    });
   </script>
 
-  <!-- Camera permissions and Vercel Analytics initialization -->
+  <!-- Vercel Analytics initialization -->
   <script>
     // Vercel Analytics tracking function
     function trackEvent(eventName, properties = {}) {
       if (window.va) {
         window.va('track', eventName, properties);
       }
-    }
-
-    // Request camera permissions early and track the result
-    if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-      // Check if we're in a secure context (HTTPS or localhost)
-      if (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'environment',
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
-        })
-          .then(function(stream) {
-            // Permission granted, stop the stream
-            stream.getTracks().forEach(track => track.stop());
-            console.log('Camera permission granted');
-            trackEvent('camera_permission_granted');
-          })
-          .catch(function(err) {
-            console.warn('Camera permission denied or error:', err);
-            trackEvent('camera_permission_denied', { error: err.name });
-          });
-      } else {
-        console.warn('Camera access requires HTTPS or localhost');
-        trackEvent('camera_insecure_context');
-      }
-    } else {
-      console.warn('getUserMedia not supported');
-      trackEvent('camera_not_supported');
     }
 
     // Track page views when Flutter app loads
@@ -164,7 +158,7 @@
 <body>
 <picture id="splash">
   <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
-  <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
+  <source srcset="splash/img/dark-1x.png 2x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
   <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
 </picture>
 

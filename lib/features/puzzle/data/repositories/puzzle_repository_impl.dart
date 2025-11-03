@@ -3,37 +3,33 @@ import 'package:tesoro_regional/core/utils/failures.dart';
 import 'package:tesoro_regional/core/utils/typedefs.dart';
 import 'package:tesoro_regional/features/puzzle/domain/entities/cultural_piece.dart';
 import 'package:tesoro_regional/features/puzzle/domain/entities/piece_category.dart';
-import 'package:tesoro_regional/features/puzzle/domain/entities/geo_position.dart';
+import 'package:tesoro_regional/features/puzzle/domain/entities/language_localized.dart';
 import 'package:tesoro_regional/features/puzzle/domain/repositories/puzzle_repository.dart';
 import 'package:tesoro_regional/features/puzzle/data/datasources/puzzle_local_data_source.dart';
-import 'package:tesoro_regional/features/puzzle/data/datasources/puzzle_remote_data_source.dart';
 import 'package:tesoro_regional/features/puzzle/data/models/cultural_piece_dto.dart';
-import 'package:tesoro_regional/core/utils/qr_validator.dart';
+import 'package:tesoro_regional/features/qr_scanner/domain/repositories/qr_repository.dart';
+import 'package:tesoro_regional/features/qr_scanner/domain/entities/qr_piece.dart';
+import 'package:tesoro_regional/core/services/qr/qr_scanner_service.dart';
 
 class PuzzleRepositoryImpl implements PuzzleRepository {
   final PuzzleLocalDataSource _localDataSource;
-  final PuzzleRemoteDataSource _remoteDataSource;
+  final QRRepository _qrRepository;
+  final QRScannerService _qrScannerService;
 
   PuzzleRepositoryImpl({
     required PuzzleLocalDataSource localDataSource,
-    required PuzzleRemoteDataSource remoteDataSource,
+    required QRRepository qrRepository,
+    required QRScannerService qrScannerService,
   })  : _localDataSource = localDataSource,
-        _remoteDataSource = remoteDataSource;
+        _qrRepository = qrRepository,
+        _qrScannerService = qrScannerService;
 
   @override
   Future<Either<Failure, List<PieceCategory>>> getCategories() async {
     try {
-      // Try to get from local first
-      List<PieceCategory> categories = (await _localDataSource.getCategories())
+      final categories = (await _localDataSource.getCategories())
           .map((dto) => dto.toDomain())
           .toList();
-
-      // If empty, fetch from remote
-      if (categories.isEmpty) {
-        final remoteCategoriesDto = await _remoteDataSource.getCategories();
-        await _localDataSource.saveCategories(remoteCategoriesDto);
-        categories = remoteCategoriesDto.map((dto) => dto.toDomain()).toList();
-      }
 
       return Right(categories);
     } catch (e) {
@@ -44,14 +40,6 @@ class PuzzleRepositoryImpl implements PuzzleRepository {
   @override
   Future<Either<Failure, List<CulturalPiece>>> getCollectedPieces() async {
     try {
-      final localCategories = (await _localDataSource.getCategories())
-          .map((dto) => dto.toDomain())
-          .toList();
-
-      if (localCategories.isEmpty) {
-        return const Right([]);
-      }
-
       final pieces = (await _localDataSource.getCollectedPieces())
           .map((dto) => dto.toDomain())
           .toList();
@@ -76,113 +64,47 @@ class PuzzleRepositoryImpl implements PuzzleRepository {
   }
 
   @override
-  Future<Either<Failure, CulturalPiece>> getPieceById(UniqueId id) async {
+  Future<Either<Failure, CulturalPiece?>> getPieceById(String id) async {
     try {
-      final pieceDto = await _localDataSource.getPieceById(id.value);
+      final pieceDto = await _localDataSource.getPieceById(id);
       if (pieceDto != null) {
         return Right(pieceDto.toDomain());
       }
-      return Left(NotFound('Pieza con ID ${id.value} no encontrada'));
+      return Left(NotFound('Pieza con ID $id no encontrada'));
     } catch (e) {
       return const Left(CacheError());
     }
   }
 
   @override
-  Future<Either<Failure, CulturalPiece>> collectPieceByQr(String qrCode) async {
+  Future<Either<Failure, CulturalPiece?>> collectPieceByQr(String qrCode) async {
     try {
-      // Verificar si el QR tiene el formato estructurado nuevo
-      if (QRValidator.isStructuredFormat(qrCode)) {
-        // Extraer el título del QR estructurado
-        final keyword = QRValidator.extractKeyword(qrCode);
+      // Use the new QR scanner service to process the QR code
+      final scanResult = await _qrScannerService.scanAndProcessQR(qrCode);
 
-        if (keyword != null) {
-          // Buscar una pieza basada en la palabra clave extraída
-          final pieceDto = await _remoteDataSource.getPieceByKeyword(keyword);
-          if (pieceDto != null) {
-            // Guardar la pieza localmente
-            final unlockablePiece = pieceDto.copyWith(
-                isUnlocked: true,
-                discoveredAt: DateTime.now()
-            );
-            await _localDataSource.savePiece(unlockablePiece);
-            return Right(unlockablePiece.toDomain());
-          }
-        }
-        return Left(InvalidInput('Código QR estructurado no reconocido o pieza no encontrada'));
+      if (!scanResult.success || scanResult.piece == null) {
+        return Left(InvalidInput(scanResult.errorMessage ?? 'Código QR inválido'));
       }
 
-      // Verificar el formato tradicional "Ñuble-<identifier>"
-      if (!QRValidator.isValidTesoroRegionalCode(qrCode)) {
-        return Left(InvalidInput('Código QR inválido. ${QRValidator.getValidationErrorMessage(qrCode)}'));
+      final qrPiece = scanResult.piece!;
+
+      // Check if we already have this piece
+      final existingQrPiece = await _qrRepository.getPieceById(qrPiece.id);
+      if (existingQrPiece != null) {
+        // Convert existing QR piece to Cultural piece
+        final culturalPiece = _convertQrPieceToCulturalPiece(existingQrPiece);
+        return Right(culturalPiece);
       }
 
-      // Procesar formato tradicional
-      final pieceDto = await _remoteDataSource.getPieceByQrCode(qrCode);
-      if (pieceDto != null) {
-        // Guardar la pieza localmente
-        final unlockablePiece = pieceDto.copyWith(
-            isUnlocked: true,
-            discoveredAt: DateTime.now()
-        );
-        await _localDataSource.savePiece(unlockablePiece);
-        return Right(unlockablePiece.toDomain());
-      }
-      return Left(NotFound('No se encontró ninguna pieza con este código QR'));
-    } catch (e) {
-      return Left(NetworkError());
-    }
-  }
+      // Save the QR piece
+      await _qrRepository.savePiece(qrPiece);
 
-  @override
-  Future<Either<Failure, CulturalPiece>> collectPieceByLocation(GeoPosition position) async {
-    try {
-      final pieceDto = await _remoteDataSource.getPieceByLocation(position.latitude, position.longitude);
-      if (pieceDto != null) {
-        // Save the piece locally
-        final unlockablePiece = pieceDto.copyWith(isUnlocked: true, discoveredAt: DateTime.now());
-        await _localDataSource.savePiece(unlockablePiece);
-        return Right(unlockablePiece.toDomain());
-      }
-      return Left(NotFound('No se encontró ninguna pieza en esta ubicación'));
-    } catch (e) {
-      return Left(NetworkError());
-    }
-  }
+      // Convert to cultural piece and save locally
+      final culturalPiece = _convertQrPieceToCulturalPiece(qrPiece);
+      final culturalPieceDto = CulturalPieceDto.fromDomain(culturalPiece);
+      await _localDataSource.savePiece(culturalPieceDto);
 
-  @override
-  Future<Either<Failure, List<CulturalPiece>>> getPiecesByLocation(
-      double latitude, double longitude, double radiusInMeters) async {
-    try {
-      final piecesDto = await _remoteDataSource.getNearbyPieces(latitude, longitude, radiusInMeters);
-      final pieces = piecesDto.map((dto) => dto.toDomain()).toList();
-      return Right(pieces);
-    } catch (e) {
-      return const Left(NetworkError());
-    }
-  }
-
-  @override
-  Future<Either<Failure, CulturalPiece?>> getPieceByLocation(double latitude, double longitude) async {
-    try {
-      final pieceDto = await _remoteDataSource.getPieceByLocation(latitude, longitude);
-      if (pieceDto != null) {
-        return Right(pieceDto.toDomain());
-      }
-      return const Left(NotFound('No se encontró ninguna pieza en esta ubicación'));
-    } catch (e) {
-      return const Left(NetworkError());
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<CulturalPiece>>> getNearbyPieces(
-      GeoPosition position, double radiusInMeters) async {
-    try {
-      final piecesDto = await _remoteDataSource.getNearbyPieces(
-          position.latitude, position.longitude, radiusInMeters);
-      final pieces = piecesDto.map((dto) => dto.toDomain()).toList();
-      return Right(pieces);
+      return Right(culturalPiece);
     } catch (e) {
       return const Left(NetworkError());
     }
@@ -199,16 +121,15 @@ class PuzzleRepositoryImpl implements PuzzleRepository {
   }
 
   @override
-  Future<Either<Failure, CulturalPiece>> unlockPiece(UniqueId id) async {
+  Future<Either<Failure, CulturalPiece>> unlockPiece(String pieceId) async {
     try {
-      await _localDataSource.unlockPiece(id.value);
-      await _remoteDataSource.unlockPiece(id.value);
+      await _localDataSource.unlockPiece(pieceId);
 
-      final pieceDto = await _localDataSource.getPieceById(id.value);
+      final pieceDto = await _localDataSource.getPieceById(pieceId);
       if (pieceDto != null) {
         return Right(pieceDto.toDomain());
       }
-      return Left(NotFound('Pieza con ID ${id.value} no encontrada'));
+      return Left(NotFound('Pieza con ID $pieceId no encontrada'));
     } catch (e) {
       return Left(ServerError(e.toString()));
     }
@@ -223,5 +144,61 @@ class PuzzleRepositoryImpl implements PuzzleRepository {
     } catch (e) {
       return const Left(CacheError());
     }
+  }
+
+  // Helper method to convert QRPiece to CulturalPiece
+  CulturalPiece _convertQrPieceToCulturalPiece(QRPiece qrPiece) {
+    return CulturalPiece(
+      id: UniqueId.fromString(qrPiece.id),
+      province: qrPiece.province,
+      title: qrPiece.title,
+      qrCode: qrPiece.code,
+      category: _getDefaultCategory(qrPiece.province),
+      descriptions: _getDefaultDescriptions(qrPiece.province, qrPiece.title),
+      discoveredAt: qrPiece.collectedAt,
+      isUnlocked: qrPiece.isCollected,
+      imageUrl: _getProvinceImageUrl(qrPiece.province),
+    );
+  }
+
+  // Helper methods for default data
+  PieceCategory _getDefaultCategory(String province) {
+    return const PieceCategory(
+      id: 'provincias',
+      name: 'Provincias',
+      description: 'Provincias de la Región de Ñuble',
+      iconPath: '',
+      totalPieces: 3,
+      collectedPieces: 0,
+    );
+  }
+
+  List<LanguageLocalized> _getDefaultDescriptions(String province, String title) {
+    final descriptions = {
+      'itata': 'Provincia de Itata, conocida por sus viñedos y tradición vitivinícola.',
+      'diguillin': 'Provincia de Diguillín, corazón administrativo de la región.',
+      'punilla': 'Provincia de Punilla, tierra de montañas y tradiciones.',
+    };
+
+    return [
+      LanguageLocalized(
+        languageCode: 'es',
+        text: descriptions[province.toLowerCase()] ?? 'Provincia de $province, Región de Ñuble.',
+      ),
+      LanguageLocalized(
+        languageCode: 'en',
+        text: '$province Province, Ñuble Region.',
+      ),
+    ];
+  }
+
+  String? _getProvinceImageUrl(String province) {
+    final images = {
+      'itata': '/placeholder.svg?height=200&width=300&text=Itata',
+      'diguillin': '/placeholder.svg?height=200&width=300&text=Diguillín',
+      'punilla': '/placeholder.svg?height=200&width=300&text=Punilla',
+    };
+
+    return images[province.toLowerCase()];
   }
 }

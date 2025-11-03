@@ -14,7 +14,7 @@ class PuzzleSliderPage extends StatefulWidget {
 
 class _PuzzleSliderPageState extends State<PuzzleSliderPage> {
   List<int> _tiles = [];
-  int _gridSize = 3; // 3x3 grid
+  final int _gridSize = 3; // 3x3 grid
   int _emptyIndex = 8; // Posición del espacio vacío
   int _moves = 0;
   bool _isCompleted = false;

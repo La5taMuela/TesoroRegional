@@ -10,7 +10,7 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  String _version = 'Unknown';
+  final String _version = 'Unknown';
 
   @override
   void initState() {
@@ -59,15 +59,9 @@ class _AboutPageState extends State<AboutPage> {
             const SizedBox(height: 16),
             _buildSection(
               'Desarrollado por',
-              'Equipo de desarrollo Universidad del Bío-Bío',
+              'Equipo de desarrollo Instituto Profesional (IP) INACAP',
             ),
             const SizedBox(height: 16),
-            _buildSection(
-              '${l10n.version}',
-              'Versión: $_version',
-            ),
-            const SizedBox(height: 24),
-            _buildContactSection(context),
           ],
         ),
       ),
@@ -169,7 +163,7 @@ class _AboutPageState extends State<AboutPage> {
               context,
               Icons.location_on,
               'Dirección',
-              'Universidad del Bío-Bío, Chillán',
+              'Universidad INACAP, Chillán',
             ),
           ],
         ),

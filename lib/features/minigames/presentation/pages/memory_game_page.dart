@@ -16,11 +16,11 @@ class MemoryGamePage extends StatefulWidget {
 
 class _MemoryGamePageState extends State<MemoryGamePage> with TickerProviderStateMixin {
   final memory_service.MemoryCardsService _memoryCardsService = memory_service.MemoryCardsService();
-  bool _hasInitialized = false;
+  final bool _hasInitialized = false;
 
   // Game state
   List<MemoryCard> _cards = [];
-  List<int> _flippedIndices = [];
+  final List<int> _flippedIndices = [];
   int _matches = 0;
   int _moves = 0;
   bool _isProcessing = false;
@@ -1119,7 +1119,7 @@ class _CategoryCard extends StatelessWidget {
                   if (isCompleted)
                     Container(
                       padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.green,
                         shape: BoxShape.circle,
                       ),

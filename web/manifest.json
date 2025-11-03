@@ -1,6 +1,6 @@
 {
-    "name": "tesoro_regional",
-    "short_name": "tesoro_regional",
+    "name": "Tesoro Regional",
+    "short_name": "Tesoro Regional",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#4CAF50",
@@ -8,6 +8,16 @@
     "description": "Tesoro Regional es una aplicación móvil que permite a los usuarios descubrir el patrimonio cultural de la región de Ñuble, Chile, a través de una experiencia gamificada basada en la metáfora de un rompecabezas cultural.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "scope": "/",
+    "lang": "es",
+    "categories": [
+        "games",
+        "education",
+        "travel"
+    ],
+    "permissions": [
+        "camera"
+    ],
     "icons": [
         {
             "src": "icons/Icon-192.png",

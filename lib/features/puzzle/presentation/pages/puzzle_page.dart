@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tesoro_regional/features/puzzle/presentation/providers/puzzle_providers.dart';
 import 'package:tesoro_regional/features/puzzle/presentation/state/puzzle_state.dart';
-import 'package:tesoro_regional/features/qr_scanner/presentation/widgets/qr_scanner_widget.dart';
 import 'package:tesoro_regional/core/widgets/error_view.dart';
 import 'package:tesoro_regional/core/widgets/loading_view.dart';
-import 'package:tesoro_regional/features/qr_scanner/presentation/pages/qr_scanner_page.dart';
-import 'package:tesoro_regional/core/utils/qr_validator.dart';
+import 'package:tesoro_regional/features/qr_scanner/presentation/widgets/qr_scanner_view.dart';
+import 'package:tesoro_regional/features/qr_scanner/domain/entities/qr_piece.dart';
+import 'package:tesoro_regional/core/services/storage/pieces_storage_service.dart';
 
 class PuzzlePage extends ConsumerStatefulWidget {
   const PuzzlePage({super.key});
@@ -17,13 +17,42 @@ class PuzzlePage extends ConsumerStatefulWidget {
 }
 
 class _PuzzlePageState extends ConsumerState<PuzzlePage> {
+  // Helper method to format titles properly
+  String _formatTitle(String title) {
+    // Convert titles like "provincia-vinicola" to "Provincia Vinicola"
+    return title
+        .split('-')
+        .map((word) => word[0].toUpperCase() + word.substring(1).toLowerCase())
+        .join(' ');
+  }
+
+  // Helper method to normalize text for comparison (remove accents)
+  String _normalizeText(String text) {
+    return text
+        .toLowerCase()
+        .replaceAll('á', 'a')
+        .replaceAll('é', 'e')
+        .replaceAll('í', 'i')
+        .replaceAll('ó', 'o')
+        .replaceAll('ú', 'u')
+        .replaceAll('ñ', 'n')
+        .replaceAll('ü', 'u');
+  }
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() => ref.read(puzzleStateProvider.notifier).loadPuzzleData());
   }
 
-  Future<void> _handleQRScanned(String qrCode) async {
+  void _handleQRPieceScanned(QRPiece? qrPiece) async {
+    Navigator.of(context).pop(); // Close scanner
+
+    if (qrPiece == null) {
+      _showErrorDialog('No se pudo procesar el código QR');
+      return;
+    }
+
     try {
       // Show loading dialog
       showDialog(
@@ -35,130 +64,132 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
             children: [
               CircularProgressIndicator(),
               SizedBox(width: 16),
-              Text('Verificando código QR...'),
+              Text('Actualizando progreso...'),
             ],
           ),
         ),
       );
 
-      // Try to collect the piece
-      final result = await ref.read(puzzleStateProvider.notifier).collectPieceByQr(qrCode);
+      // Refresh puzzle data to show the new piece
+      await ref.read(puzzleStateProvider.notifier).refreshAfterQRScan();
 
       if (mounted) {
         Navigator.of(context).pop(); // Close loading dialog
 
-        if (result != null) {
-          // Success - show success dialog
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('¡Pieza Descubierta!'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.celebration, size: 64, color: Colors.green),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Has descubierto: ${result.getLocalizedDescription('es').split('.').first}',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Categoría: ${result.category.name}',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
+        // Show success dialog with image
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('¡Pieza Descubierta!'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Mostrar imagen si está disponible
+                if (qrPiece.imageUrl != null)
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    height: 120,
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      QRValidator.isStructuredFormat(qrCode)
-                          ? 'QR Estructurado Reconocido'
-                          : 'QR Tradicional Reconocido',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
+                      image: DecorationImage(
+                        image: AssetImage(qrPiece.imageUrl!),
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('¡Genial!'),
-                ),
-              ],
-            ),
-          );
-        } else {
-          // Failed - show error dialog with more details
-          final isStructured = QRValidator.isStructuredFormat(qrCode);
-          final keyword = QRValidator.extractKeyword(qrCode);
+                  )
+                else
+                  const Icon(Icons.celebration, size: 64, color: Colors.green),
 
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Código QR No Reconocido'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.warning, size: 48, color: Colors.orange),
-                  const SizedBox(height: 16),
-                  Text('Tipo de QR: ${isStructured ? 'Estructurado' : 'Tradicional'}'),
-                  if (keyword != null) ...[
-                    const SizedBox(height: 8),
-                    Text('Palabra clave detectada: $keyword'),
-                  ],
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Este código QR es válido pero no se encontró una pieza cultural correspondiente en la base de datos.',
-                    style: TextStyle(fontSize: 14),
+                const SizedBox(height: 16),
+                Text(
+                  'Has descubierto: ${qrPiece.title}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Provincia: ${qrPiece.province}',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Verifica que el QR corresponda a una ubicación cultural de Ñuble.',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Entendido'),
+                  child: const Text(
+                    'Pieza agregada a tu colección',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),
-          );
-        }
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.push('/collected-pieces');
+                },
+                child: const Text('Ver Colección'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('¡Genial!'),
+              ),
+            ],
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
         Navigator.of(context).pop(); // Close loading dialog if open
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error al procesar QR: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        _showErrorDialog('Error al actualizar progreso: $e');
       }
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error, size: 48, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(message),
+            const SizedBox(height: 12),
+            const Text(
+              'Verifica que el QR corresponda a una provincia de Ñuble válida.',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Entendido'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _openQRScanner() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => QRScannerPage(
-          onQRScanned: _handleQRScanned,
+        builder: (context) => QRScannerView(
+          onPieceScanned: _handleQRPieceScanned,
         ),
       ),
     );
@@ -176,7 +207,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Puzzle Cultural'),
+          title: const Text('Puzzle Cultural - Provincias QR'),
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Colors.white,
           automaticallyImplyLeading: false,
@@ -184,13 +215,6 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.go('/'),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.qr_code_scanner),
-              onPressed: () => _openQRScanner(),
-              tooltip: 'Escanear QR',
-            ),
-          ],
         ),
         body: _buildBody(puzzleState),
       ),
@@ -201,9 +225,23 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
     if (state is PuzzleInitial || state is PuzzleLoading) {
       return const LoadingView(message: 'Cargando puzzle...');
     } else if (state is PuzzleLoaded) {
+      // Filtrar solo las piezas QR (no las del mapa)
+      final qrPieces = state.collectedPieces.where((piece) {
+        // Verificar si la pieza es de tipo QR basándose en el ID o propiedades
+        return !_isMapPiece(piece.id.toString());
+      }).toList();
+
+      // Calcular estadísticas solo para piezas QR
+      final totalQRPieces = PiecesStorageService.allPieces
+          .where((piece) => piece['type'] == 'qr')
+          .length;
+      final qrCompletionPercentage = totalQRPieces > 0
+          ? (qrPieces.length / totalQRPieces * 100)
+          : 0.0;
+
       return Column(
         children: [
-          // Progress bar
+          // Progress bar - solo para piezas QR
           Container(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -211,15 +249,15 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.extension, size: 20),
+                    const Icon(Icons.qr_code, size: 20),
                     const SizedBox(width: 8),
                     const Text(
-                      'Progreso del Puzzle',
+                      'Progreso de Provincias QR',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
                     Text(
-                      '${state.collectedPieces.length} piezas',
+                      '${qrPieces.length} provincias',
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 14,
@@ -231,7 +269,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
-                    value: state.completionPercentage / 100,
+                    value: qrCompletionPercentage / 100,
                     minHeight: 8,
                     backgroundColor: Colors.grey[200],
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -241,7 +279,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${state.completionPercentage.toStringAsFixed(1)}% completado',
+                  '${qrCompletionPercentage.toStringAsFixed(1)}% de provincias completadas',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 12,
@@ -251,67 +289,86 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
             ),
           ),
 
-          // Categories
-          if (state.categories.isNotEmpty)
-            Container(
-              height: 100,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: state.categories.length,
-                itemBuilder: (context, index) {
-                  final category = state.categories[index];
-                  final isSelected = category.id == state.selectedCategoryId;
-
-                  return Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: Card(
-                      elevation: isSelected ? 8 : 2,
-                      color: isSelected
-                          ? Theme.of(context).primaryColor.withOpacity(0.1)
-                          : null,
-                      child: InkWell(
-                        onTap: () => ref.read(puzzleStateProvider.notifier).selectCategory(category.id),
-                        borderRadius: BorderRadius.circular(12),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                _getCategoryIcon(category.name),
-                                color: isSelected
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.grey[600],
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                category.name,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                  color: isSelected
-                                      ? Theme.of(context).primaryColor
-                                      : null,
-                                ),
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+          // Quick action buttons
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: _openQRScanner,
+                    icon: const Icon(Icons.qr_code_scanner),
+                    label: const Text('Escanear QR'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white,
                     ),
-                  );
-                },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => context.push('/collected-pieces'),
+                    icon: const Icon(Icons.collections_bookmark),
+                    label: const Text('Ver Colección'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Info card about QR pieces
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.blue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.blue.withOpacity(0.3),
+                width: 1,
               ),
             ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.info_outline,
+                  color: Colors.blue,
+                  size: 24,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Provincias de Ñuble',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: Colors.blue.shade700,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Escanea códigos QR para descubrir las provincias de la región de Ñuble',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.blue.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
 
-          // Pieces grid
+          const SizedBox(height: 16),
+
+          // Pieces grid or empty state - solo piezas QR
           Expanded(
-            child: state.collectedPieces.isEmpty
+            child: qrPieces.isEmpty
                 ? Center(
               child: Padding(
                 padding: const EdgeInsets.all(32),
@@ -321,12 +378,12 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                     const Icon(Icons.qr_code_scanner, size: 64, color: Colors.grey),
                     const SizedBox(height: 16),
                     const Text(
-                      'No has descubierto piezas aún',
+                      'No has descubierto provincias aún',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Escanea códigos QR que comiencen con "Ñuble-" para descubrir piezas culturales.',
+                      'Escanea códigos QR de las provincias de Ñuble para comenzar tu colección.',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.grey),
                     ),
@@ -335,6 +392,10 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                       onPressed: _openQRScanner,
                       icon: const Icon(Icons.qr_code_scanner),
                       label: const Text('Escanear QR'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        foregroundColor: Colors.white,
+                      ),
                     ),
                   ],
                 ),
@@ -348,9 +409,9 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
-              itemCount: state.collectedPieces.length,
+              itemCount: qrPieces.length,
               itemBuilder: (context, index) {
-                final piece = state.collectedPieces[index];
+                final piece = qrPieces[index];
                 return Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
@@ -363,24 +424,24 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                         flex: 3,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: Colors.purple.withOpacity(0.1),
                             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                           ),
                           child: piece.imageUrl != null
                               ? ClipRRect(
                             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                            child: Image.network(
+                            child: Image.asset(
                               piece.imageUrl!,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
-                                  child: Icon(Icons.image, size: 50, color: Colors.grey),
+                                  child: Icon(Icons.landscape, size: 50, color: Colors.purple),
                                 );
                               },
                             ),
                           )
                               : const Center(
-                            child: Icon(Icons.image, size: 50, color: Colors.grey),
+                            child: Icon(Icons.landscape, size: 50, color: Colors.purple),
                           ),
                         ),
                       ),
@@ -392,7 +453,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                piece.getLocalizedDescription('es').split('.').first,
+                                _formatTitle(piece.title),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
@@ -402,7 +463,7 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                piece.category.name,
+                                'Provincia ${_formatTitle(piece.province)}',
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: 10,
@@ -411,17 +472,18 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
                               const Spacer(),
                               Row(
                                 children: [
-                                  Icon(
-                                    piece.isUnlocked ? Icons.lock_open : Icons.lock,
+                                  const Icon(
+                                    Icons.landscape,
                                     size: 14,
-                                    color: piece.isUnlocked ? Colors.green : Colors.grey,
+                                    color: Colors.purple,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    piece.isUnlocked ? 'Desbloqueado' : 'Bloqueado',
+                                    'Provincia de Ñuble',
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: piece.isUnlocked ? Colors.green : Colors.grey,
+                                      color: Colors.purple.shade600,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
@@ -448,20 +510,9 @@ class _PuzzlePageState extends ConsumerState<PuzzlePage> {
     return const SizedBox.shrink();
   }
 
-  IconData _getCategoryIcon(String categoryName) {
-    switch (categoryName.toLowerCase()) {
-      case 'monumentos':
-        return Icons.account_balance;
-      case 'gastronomía':
-        return Icons.restaurant;
-      case 'historia':
-        return Icons.history_edu;
-      case 'artesanía':
-        return Icons.palette;
-      case 'tradiciones':
-        return Icons.celebration;
-      default:
-        return Icons.category;
-    }
+  // Helper method to identify if a piece is from the map
+  bool _isMapPiece(String pieceId) {
+    // Las piezas del mapa tienen IDs que empiezan con 'map_'
+    return pieceId.startsWith('map_');
   }
 }

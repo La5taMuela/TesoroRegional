@@ -7,30 +7,22 @@ class TriviaService {
   factory TriviaService() => _instance;
   TriviaService._internal();
 
-  Map<String, List<TriviaQuestionDto>> _cache = {};
-  Map<String, List<String>> _categoriesCache = {};
+  final Map<String, List<TriviaQuestionDto>> _cache = {};
+  final Map<String, List<String>> _categoriesCache = {};
 
   Future<List<TriviaQuestionDto>> loadTriviaQuestions(String languageCode) async {
-    final cacheKey = 'trivia_$languageCode';
-
-    if (_cache.containsKey(cacheKey)) {
-      return _cache[cacheKey]!;
-    }
-
     try {
-      final String jsonString = await rootBundle.loadString(
-          'assets/initial_content/trivia/$languageCode.json'
-      );
+      // Normalizar el código de idioma
+      final normalizedLang = languageCode.toLowerCase() == 'es' ? 'es' : 'en';
+      final path = 'assets/initial_content/trivia/$normalizedLang.json';
 
+      final String jsonString = await rootBundle.loadString(path);
       final Map<String, dynamic> jsonData = json.decode(jsonString);
-      final List<dynamic> questionsJson = jsonData['questions'] as List<dynamic>;
 
-      final List<TriviaQuestionDto> questions = questionsJson
-          .map((json) => TriviaQuestionDto.fromJson(json as Map<String, dynamic>))
+      final List<dynamic> questionsJson = jsonData['questions'];
+      return questionsJson
+          .map((q) => TriviaQuestionDto.fromJson(q))
           .toList();
-
-      _cache[cacheKey] = questions;
-      return questions;
     } catch (e) {
       print('Error loading trivia questions for $languageCode: $e');
       return [];

@@ -65,3 +65,18 @@ class PermissionDenied extends Failure {
 class Unexpected extends Failure {
   const Unexpected([String? message]) : super(message ?? 'Unexpected error occurred');
 }
+// Error del servidor o de red
+class ServerFailure extends Failure {
+  const ServerFailure({required String message}) : super(message);
+}
+
+// Error de caché local
+class CacheFailure extends Failure {
+  const CacheFailure({required String message}) : super(message);
+}
+
+// Error de validación
+class ValidationFailure extends Failure {
+  const ValidationFailure({required String message}) : super(message);
+}
+

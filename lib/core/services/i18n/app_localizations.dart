@@ -238,6 +238,26 @@ class AppLocalizations {
   String get easyDescription => translate('easy_description');
   String get mediumDescription => translate('medium_description');
   String get hardDescription => translate('hard_description');
+  String get noQuestionsForDifficulty => translate('noQuestionsForDifficulty');
+
+  // Nuble Map specific
+  String get error => translate('error');
+  String get noDataFound => translate('noDataFound');
+  String get capital => translate('capital');
+  String get provinces => translate('provinces');
+  String get culturalSites => translate('culturalSites');
+  String get completedPieces => translate('completedPieces');
+  String get nubleMap => translate('nubleMap');
+  String get nubleRegion => translate('nubleRegion');
+  String get selectProvince => translate('selectProvince');
+  String get exploreProvince => translate('exploreProvince');
+  String get cities => translate('cities');
+  String get discoverCities => translate('discoverCities');
+  String get explore => translate('explore');
+
+  String get development => 'null';
+
+  get qrGeneratorDescription => 'null';
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

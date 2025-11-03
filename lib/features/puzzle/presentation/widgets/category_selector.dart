@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tesoro_regional/features/puzzle/domain/entities/piece_category.dart';
-import 'package:tesoro_regional/core/services/i18n/app_localizations.dart';
 
 class CategorySelector extends StatelessWidget {
   final List<PieceCategory> categories;

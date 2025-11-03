@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "678593423541",
+    "project_id": "tesororegional-d4fe7",
+    "storage_bucket": "tesororegional-d4fe7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678593423541:android:06b2594b49f0c08820f6fc",
+        "android_client_info": {
+          "package_name": "com.tesororegional.tesoro_regional"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678593423541-qmfp0ube79149vf469qhh50drgvebbuv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tesororegional.tesoro_regional",
+            "certificate_hash": "8d2f0e36236d08e9f97830ebe6fffd4c08a6b150"
+          }
+        },
+        {
+          "client_id": "678593423541-97oghd57klvut329lkkv1gut4c8nf6he.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkmo3RNsH1SAzOzWxUWfoZq4ghHSbPmC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678593423541-97oghd57klvut329lkkv1gut4c8nf6he.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "678593423541-uc2fo2d87srlhb2gk2294g4chkd79vic.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tesororegional.tesororegional.tesoroRegional"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

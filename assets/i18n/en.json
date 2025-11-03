@@ -189,5 +189,22 @@
   "easy_description": "Basic questions about Ñuble",
   "medium_description": "Intermediate questions about Ñuble",
   "hard_description": "Challenging questions about Ñuble",
-  "no_questions_available": "No questions available"
+  "no_questions_available": "No questions available",
+  "triviaGame": "Trivia",
+  "memoryGame": "Memory",
+  "puzzleSlider": "Sliding Puzzle",
+  "error": "Error",
+  "noDataFound": "No data found",
+  "capital": "Capital",
+  "provinces": "Provinces",
+  "culturalSites": "Cultural Sites",
+  "completedPieces": "Completed",
+  "nubleMap": "Ñuble Map",
+  "nubleRegion": "Ñuble Region",
+  "selectProvince": "Select a province to explore its cities and cultural sites",
+  "exploreProvince": "Explore",
+  "cities": "Cities",
+  "discoverCities": "Discover Cities",
+  "explore": "Explore",
+  "noQuestionsForDifficulty": "No questions available for the selected difficulty"
 }

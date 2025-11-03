@@ -46,9 +46,7 @@ class QRGenerator {
       await file.writeAsString(entry, mode: FileMode.append);
     } else {
       await file.writeAsString(
-          'FECHA | CÓDIGO | PALABRA CLAVE\n' +
-              '--------------------------------\n' +
-              entry
+          'FECHA | CÓDIGO | PALABRA CLAVE\n--------------------------------\n$entry'
       );
     }
 

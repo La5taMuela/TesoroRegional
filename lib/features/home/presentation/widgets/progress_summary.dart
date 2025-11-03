@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tesoro_regional/core/services/storage/pieces_storage_service.dart';
+import 'package:tesoro_regional/core/services/storage/unified_pieces_storage.dart';
 
-class ProgressSummary extends StatelessWidget {
+class ProgressSummary extends StatefulWidget {
   final double completionPercentage;
   final int collectedPieces;
   final int totalPieces;
@@ -11,6 +14,59 @@ class ProgressSummary extends StatelessWidget {
     required this.collectedPieces,
     required this.totalPieces,
   });
+
+  @override
+  State<ProgressSummary> createState() => _ProgressSummaryState();
+}
+
+class _ProgressSummaryState extends State<ProgressSummary> {
+  final PiecesStorageService _piecesService = PiecesStorageService();
+  final UnifiedPiecesStorage _unifiedStorage = UnifiedPiecesStorage.instance;
+  Map<String, dynamic> _piecesStats = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPiecesData();
+  }
+
+  Future<void> _loadPiecesData() async {
+    try {
+      print('🔄 Loading pieces data for progress summary...');
+      final stats = await _piecesService.getPiecesStats();
+      print('📊 Progress stats loaded: $stats');
+
+      if (mounted) {
+        setState(() {
+          _piecesStats = stats;
+        });
+      }
+    } catch (e) {
+      print('❌ Error loading pieces data: $e');
+      if (mounted) {
+        setState(() {
+          _piecesStats = {
+            'total': 0,
+            'mapPieces': 0,
+            'qrPieces': 0,
+            'percentage': 0,
+          };
+        });
+      }
+    }
+  }
+
+  // Add a method to refresh data when needed
+  Future<void> refreshData() async {
+    await _loadPiecesData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Refresh data when dependencies change (e.g., when returning from map)
+    _loadPiecesData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +124,7 @@ class ProgressSummary extends StatelessWidget {
                           ),
                           SizedBox(height: isLargeScreen ? 6 : 4),
                           Text(
-                            '${completionPercentage.toStringAsFixed(1)}% completado',
+                            '${_piecesStats['total'] ?? 0}/6 piezas colectadas',
                             style: TextStyle(
                               fontSize: isLargeScreen ? 16 : 14,
                               color: Colors.grey[600],
@@ -79,46 +135,36 @@ class ProgressSummary extends StatelessWidget {
                     ),
                   ],
                 ),
+
                 SizedBox(height: isLargeScreen ? 20 : 16),
 
-                // Progress bar
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Piezas Culturales',
-                          style: TextStyle(
-                            fontSize: isLargeScreen ? 16 : 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[700],
-                          ),
-                        ),
-                        Text(
-                          '$collectedPieces/$totalPieces',
-                          style: TextStyle(
-                            fontSize: isLargeScreen ? 16 : 14,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: isLargeScreen ? 12 : 8),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: LinearProgressIndicator(
-                        value: completionPercentage / 100,
-                        backgroundColor: Colors.grey[200],
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Theme.of(context).primaryColor,
-                        ),
-                        minHeight: isLargeScreen ? 10 : 8,
+                // Progress bars separadas para Mapa y QR
+                _buildProgressSection('Mapa', _piecesStats['mapPieces'] ?? 0, 3, Colors.green, isLargeScreen),
+                SizedBox(height: isLargeScreen ? 12 : 8),
+                _buildProgressSection('QR Provincias', _piecesStats['qrPieces'] ?? 0, 3, Colors.purple, isLargeScreen),
+
+                SizedBox(height: isLargeScreen ? 20 : 16),
+
+                // Botón para ver piezas colectadas
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      context.push('/collected-pieces');
+                    },
+                    icon: const Icon(Icons.collections),
+                    label: const Text('Ver Piezas Colectadas'),
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        vertical: isLargeScreen ? 16 : 12,
+                        horizontal: isLargeScreen ? 24 : 16,
                       ),
+                      side: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      foregroundColor: Theme.of(context).primaryColor,
                     ),
-                  ],
+                  ),
                 ),
 
                 SizedBox(height: isLargeScreen ? 16 : 12),
@@ -131,15 +177,15 @@ class ProgressSummary extends StatelessWidget {
                         context,
                         Icons.explore,
                         'Explorador',
-                        collectedPieces >= 5,
+                        (_piecesStats['mapPieces'] ?? 0) >= 2,
                         isLargeScreen,
                       ),
                       const SizedBox(width: 12),
                       _buildAchievementBadge(
                         context,
-                        Icons.star,
-                        'Coleccionista',
-                        collectedPieces >= 10,
+                        Icons.qr_code,
+                        'Cazador QR',
+                        (_piecesStats['qrPieces'] ?? 0) >= 2,
                         isLargeScreen,
                       ),
                       const SizedBox(width: 12),
@@ -147,7 +193,7 @@ class ProgressSummary extends StatelessWidget {
                         context,
                         Icons.emoji_events,
                         'Maestro',
-                        collectedPieces >= 20,
+                        (_piecesStats['total'] ?? 0) >= 6,
                         isLargeScreen,
                       ),
                     ],
@@ -161,21 +207,21 @@ class ProgressSummary extends StatelessWidget {
                         context,
                         Icons.explore,
                         'Explorador',
-                        collectedPieces >= 5,
+                        (_piecesStats['mapPieces'] ?? 0) >= 2,
                         isLargeScreen,
                       ),
                       _buildAchievementBadge(
                         context,
-                        Icons.star,
-                        'Coleccionista',
-                        collectedPieces >= 10,
+                        Icons.qr_code,
+                        'Cazador QR',
+                        (_piecesStats['qrPieces'] ?? 0) >= 2,
                         isLargeScreen,
                       ),
                       _buildAchievementBadge(
                         context,
                         Icons.emoji_events,
                         'Maestro',
-                        collectedPieces >= 20,
+                        (_piecesStats['total'] ?? 0) >= 6,
                         isLargeScreen,
                       ),
                     ],
@@ -185,6 +231,58 @@ class ProgressSummary extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildProgressSection(String title, int current, int total, Color color, bool isLargeScreen) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: isLargeScreen ? 16 : 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey[700],
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              '$current/$total',
+              style: TextStyle(
+                fontSize: isLargeScreen ? 16 : 14,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: isLargeScreen ? 8 : 6),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: LinearProgressIndicator(
+            value: current / total,
+            backgroundColor: Colors.grey[200],
+            valueColor: AlwaysStoppedAnimation<Color>(color),
+            minHeight: isLargeScreen ? 8 : 6,
+          ),
+        ),
+      ],
     );
   }
 

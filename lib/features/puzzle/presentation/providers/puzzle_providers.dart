@@ -1,7 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tesoro_regional/features/puzzle/presentation/state/puzzle_notifier.dart';
-import 'package:tesoro_regional/features/puzzle/presentation/state/puzzle_state.dart';
+
+
+import '../state/puzzle_notifier.dart';
+import '../state/puzzle_state.dart';
 
 final puzzleStateProvider = StateNotifierProvider<PuzzleNotifier, PuzzleState>((ref) {
-  return PuzzleNotifier();
+  try {
+    print('✅ PuzzleProvider: Creating notifier with unified storage');
+    return PuzzleNotifier(); // No parameters needed
+  } catch (e, stackTrace) {
+    print('❌ PuzzleProvider: Failed to create notifier: $e');
+    print('Stack trace: $stackTrace');
+    rethrow;
+  }
 });

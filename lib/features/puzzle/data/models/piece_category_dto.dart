@@ -1,11 +1,20 @@
 import 'package:tesoro_regional/features/puzzle/domain/entities/piece_category.dart';
+import 'package:hive/hive.dart';
 
+part 'piece_category_dto.g.dart';
+@HiveType(typeId: 2)
 class PieceCategoryDto {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String description;
+  @HiveField(3)
   final String iconPath;
+  @HiveField(4)
   final int totalPieces;
+  @HiveField(5)
   final int collectedPieces;
 
   const PieceCategoryDto({

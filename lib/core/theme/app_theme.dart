@@ -27,6 +27,7 @@ class AppTheme {
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       ),
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: kBrownColor,

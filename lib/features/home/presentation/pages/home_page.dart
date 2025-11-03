@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tesoro_regional/features/home/presentation/widgets/module_grid.dart';
 import 'package:tesoro_regional/features/home/presentation/widgets/progress_summary.dart';
 import 'package:tesoro_regional/core/services/i18n/app_localizations.dart';
-
+import 'package:tesoro_regional/core/widgets/custom_bottom_nav_bar.dart';
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
@@ -142,7 +142,7 @@ class HomePage extends ConsumerWidget {
                                   SizedBox(height: isLargeScreen ? 32 : 24),
                                   ElevatedButton(
                                     onPressed: () {
-                                      context.go('/puzzle');
+                                      context.go('/nuble-map');
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.white,
@@ -157,7 +157,7 @@ class HomePage extends ConsumerWidget {
                                       elevation: 2,
                                     ),
                                     child: Text(
-                                      l10n.startButton,
+                                      'Ver Puzzle',
                                       style: TextStyle(
                                         fontSize: isLargeScreen ? 20 : 18,
                                         fontWeight: FontWeight.bold,
@@ -219,6 +219,7 @@ class HomePage extends ConsumerWidget {
             ),
           ),
         ),
+        bottomNavigationBar: const CustomBottomNavBar(currentIndex: 0),
       ),
     );
   }
