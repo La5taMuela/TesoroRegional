@@ -52,23 +52,93 @@ Utilizamos Freezed para:
 
 \`\`\`
 lib/
-├── app/                  # Punto de entrada de la aplicación
-├── core/                 # Componentes compartidos
-│   ├── di/               # Inyección de dependencias
-│   ├── router/           # Configuración de rutas
-│   ├── services/         # Servicios core (storage, network, etc.)
-│   ├── theme/            # Temas y estilos
-│   ├── utils/            # Utilidades y helpers
-│   └── widgets/          # Widgets reutilizables
-└── features/             # Módulos funcionales
-├── puzzle/           # Feature de rompecabezas cultural
-│   ├── data/         # Capa de datos
-│   ├── domain/       # Capa de dominio
-│   └── presentation/ # Capa de presentación
-├── map/              # Feature de mapa interactivo
-├── missions/         # Feature de misiones
-├── stories/          # Feature de historias culturales
-└── recommendations/  # Feature de recomendaciones
+├───app
+├───core
+│   ├───data
+│   ├───database
+│   ├───di
+│   ├───providers
+│   ├───router
+│   ├───services
+│   │   ├───analytics
+│   │   ├───auth
+│   │   ├───content
+│   │   ├───i18n
+│   │   ├───location
+│   │   ├───logger
+│   │   ├───network
+│   │   ├───qr
+│   │   ├───storage
+│   │   └───theme
+│   ├───theme
+│   ├───utils
+│   └───widgets
+└───features
+├───home
+│   └───presentation
+│       ├───pages
+│       └───widgets
+├───map
+│   ├───domain
+│   │   └───entities
+│   └───presentation
+│       ├───pages
+│       └───widgets
+├───minigames
+│   ├───data
+│   │   ├───datasources
+│   │   └───models
+│   ├───domain
+│   │   └───entities
+│   └───presentation
+│       ├───pages
+│       └───widgets
+├───missions
+│   ├───domain
+│   │   └───entities
+│   └───presentation
+│       └───pages
+├───nuble_map
+│   ├───data
+│   ├───domain
+│   │   └───entities
+│   └───presentation
+│       ├───pages
+│       └───widgets
+├───puzzle
+│   ├───data
+│   │   ├───datasources
+│   │   ├───models
+│   │   └───repositories
+│   ├───domain
+│   │   ├───entities
+│   │   ├───repositories
+│   │   └───usecases
+│   └───presentation
+│       ├───pages
+│       ├───providers
+│       ├───state
+│       └───widgets
+├───qr_scanner
+│   ├───data
+│   │   ├───datasources
+│   │   └───models
+│   ├───domain
+│   │   ├───entities
+│   │   ├───repositories
+│   │   └───usercases
+│   └───presentation
+│       ├───pages
+│       └───widgets
+├───recommendations
+├───settings
+│   └───presentation
+│       └───pages
+└───stories
+├───domain
+│   └───entities
+└───presentation
+└───pages
 \`\`\`
 
 ## Patrones Implementados
@@ -79,13 +149,6 @@ lib/
 4. **Dependency Injection**: Inversión de control para testing
 5. **Builder Pattern**: Construcción de objetos complejos
 6. **Factory Pattern**: Creación de objetos relacionados
-
-## Seguridad
-
-- **Encriptación AES**: Para datos sensibles almacenados localmente
-- **Certificate Pinning**: Prevención de ataques MITM
-- **Sanitización de Inputs**: Prevención de inyección de código
-- **Validación con Either**: Manejo seguro de errores y validaciones
 
 ## Performance
 
@@ -122,76 +185,52 @@ lib/
    \`\`\`
 
 4. Configurar variables de entorno:
-    - Crear archivo `.env` en la raíz del proyecto
-    - Añadir las claves necesarias (ver `.env.example`)
+   - Crear archivo `.env` en la raíz del proyecto
+   - Añadir las claves necesarias (ver `.env.example`)
 
 5. Ejecutar la aplicación:
    \`\`\`bash
    flutter run --flavor dev
    \`\`\`
 
-## CI/CD
-
-El proyecto utiliza GitHub Actions para:
-- Lint y análisis estático
-- Ejecución de tests unitarios e integración
-- Generación de builds para diferentes entornos
-- Despliegue automático a TestFlight/Firebase App Distribution
-
-## Convenciones de Código
-
-- **Naming**: camelCase para variables y funciones, PascalCase para clases
-- **Formatting**: Dart formatter con 80 caracteres por línea
-- **Imports**: Agrupados por tipo (dart, flutter, paquetes, proyecto)
-- **Documentation**: Documentación de Dart para clases y métodos públicos
-
-## Contribución
-
-Ver [CONTRIBUTING.md](CONTRIBUTING.md) para detalles sobre el proceso de contribución al proyecto.
-
-## Licencia
-
-Este proyecto está licenciado bajo [MIT License](LICENSE).
-\`\`\`
-
 ## Wireframes Interactivos
 
-Para los wireframes interactivos, se recomienda utilizar Figma o Adobe XD para crear las siguientes pantallas:
+Para los wireframes interactivos, se recomienda utilizar Figma o para crear las siguientes pantallas:
 
 1. **Pantalla de Onboarding**
-    - Introducción a la metáfora del rompecabezas cultural
-    - Explicación de cómo descubrir piezas
-    - Configuración inicial de preferencias
+   - Introducción a la metáfora del rompecabezas cultural
+   - Explicación de cómo descubrir piezas
+   - Configuración inicial de preferencias
 
 2. **Pantalla Principal (Home)**
-    - Grid de iconos para acceder a los módulos
-    - Barra de progreso visual del puzzle general
-    - Resumen de estadísticas (piezas descubiertas, categorías)
+   - Grid de iconos para acceder a los módulos
+   - Barra de progreso visual del puzzle general
+   - Resumen de estadísticas (piezas descubiertas, categorías)
 
 3. **Pantalla de Puzzle**
-    - Visualización isométrica de piezas colectadas
-    - Selector de categorías
-    - Detalles de piezas al seleccionarlas
+   - Visualización isométrica de piezas colectadas
+   - Selector de categorías
+   - Detalles de piezas al seleccionarlas
 
 4. **Pantalla de Mapa**
-    - Mapa interactivo con capas temáticas
-    - Marcadores de piezas por descubrir
-    - Panel de información al seleccionar un punto
+   - Mapa interactivo con capas temáticas
+   - Marcadores de piezas por descubrir
+   - Panel de información al seleccionar un punto
 
 5. **Pantalla de Misiones**
-    - Listado de misiones disponibles
-    - Filtros por ubicación, dificultad y recompensa
-    - Detalles de misión al seleccionarla
+   - Listado de misiones disponibles
+   - Filtros por ubicación, dificultad y recompensa
+   - Detalles de misión al seleccionarla
 
 6. **Pantalla de Historias**
-    - Lector de tarjetas culturales
-    - Modo noche para lectura
-    - Navegación entre tarjetas relacionadas
+   - Lector de tarjetas culturales
+   - Modo noche para lectura
+   - Navegación entre tarjetas relacionadas
 
 7. **Pantalla de Recomendaciones**
-    - Quiz inicial para personalización
-    - Listado de recomendaciones basadas en preferencias
-    - Detalles de cada recomendación
+   - Quiz inicial para personalización
+   - Listado de recomendaciones basadas en preferencias
+   - Detalles de cada recomendación
 
 ## Conclusión
 
@@ -200,4 +239,3 @@ La aplicación TesoroRegional implementa una arquitectura limpia y modular que f
 La estructura feature-first permite que el equipo trabaje de manera más eficiente, centrándose en funcionalidades completas en lugar de capas tecnológicas. Además, las prácticas de seguridad y rendimiento implementadas garantizan una experiencia de usuario fluida y segura.
 
 El proyecto está configurado para facilitar la contribución de nuevos desarrolladores y para mantener un alto estándar de calidad a través de CI/CD y análisis estático de código.
-
