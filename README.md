@@ -74,6 +74,7 @@ lib/
 │   ├───utils
 │   └───widgets
 └───features
+<<<<<<< HEAD
 ├───home
 │   └───presentation
 │       ├───pages
@@ -139,6 +140,73 @@ lib/
 │   └───entities
 └───presentation
 └───pages
+=======
+    ├───home
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───map
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───minigames
+    │   ├───data
+    │   │   ├───datasources
+    │   │   └───models
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───missions
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       └───pages
+    ├───nuble_map
+    │   ├───data
+    │   ├───domain
+    │   │   └───entities
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───puzzle
+    │   ├───data
+    │   │   ├───datasources
+    │   │   ├───models
+    │   │   └───repositories
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───usecases
+    │   └───presentation
+    │       ├───pages
+    │       ├───providers
+    │       ├───state
+    │       └───widgets
+    ├───qr_scanner
+    │   ├───data
+    │   │   ├───datasources
+    │   │   └───models
+    │   ├───domain
+    │   │   ├───entities
+    │   │   ├───repositories
+    │   │   └───usercases
+    │   └───presentation
+    │       ├───pages
+    │       └───widgets
+    ├───recommendations
+    ├───settings
+    │   └───presentation
+    │       └───pages
+    └───stories
+        ├───domain
+        │   └───entities
+        └───presentation
+            └───pages
+>>>>>>> d871e15d48387321b2c9de8b49240996c85f97e1
 \`\`\`
 
 ## Patrones Implementados
