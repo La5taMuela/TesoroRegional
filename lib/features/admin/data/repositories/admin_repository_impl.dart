@@ -1,62 +1,56 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../core/services/firestore_service.dart';
 import '../../domain/entities/admin_stats.dart';
+import '../../../../core/database/firestore_config.dart';
+import '../../../../core/services/firestore_service.dart'; // Nuevo import
 
 class AdminRepositoryImpl {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   Future<AdminStats> getAdminStats() async {
     try {
-      // Get total users
-      final usersSnapshot = await _firestore.collection('users').get();
-      final totalUsers = usersSnapshot.docs.length;
+      print('[AdminRepository] Iniciando obtención de estadísticas...');
 
-      print('[v0] AdminRepository - Total usuarios: $totalUsers');
+      // Get total users from all collections usando el servicio centralizado
+      final usersFuture = FirestoreService.users.get();
+      final adminsFuture = FirestoreService.admins.get();
+      final pymesFuture = FirestoreService.pymes.get();
+      final empresasFuture = FirestoreService.empresas.get();
+      final postsFuture = FirestoreService.posts.get();
 
-      // Get total admins
-      final adminsSnapshot = await _firestore.collection('admins').get();
-      final totalAdmins = adminsSnapshot.docs.length;
+      // Wait for all queries to complete
+      final results = await Future.wait([
+        usersFuture,
+        adminsFuture,
+        pymesFuture,
+        empresasFuture,
+        postsFuture,
+      ]);
 
-      // Get all pieces
-      final piecesSnapshot = await _firestore.collection('pieces').get();
-      final totalPieces = piecesSnapshot.docs.length;
+      final usersSnapshot = results[0];
+      final adminsSnapshot = results[1];
+      final pymesSnapshot = results[2];
+      final empresasSnapshot = results[3];
+      final postsSnapshot = results[4];
 
-      // Get completed pieces (mapPieces + qrPieces)
-      int completedPieces = 0;
-      for (var doc in piecesSnapshot.docs) {
-        final data = doc.data();
-        if (data['mapPieces'] == true || data['qrPieces'] == true) {
-          completedPieces++;
-        }
-      }
+      final totalUsers = usersSnapshot.docs.length +
+          adminsSnapshot.docs.length +
+          pymesSnapshot.docs.length +
+          empresasSnapshot.docs.length;
 
-      // Calculate percentage
-      final completionPercentage = totalPieces > 0
-          ? (completedPieces / totalPieces) * 100
-          : 0.0;
+      final totalPosts = postsSnapshot.docs.length;
 
-      // Get pending content count
-      final pendingSnapshot = await _firestore
-          .collection('content')
-          .where('status', isEqualTo: 'pending')
-          .get();
-      final pendingContent = pendingSnapshot.docs.length;
+      print('[AdminRepository] Estadísticas obtenidas:');
+      print('- Usuarios: $totalUsers');
+      print('- Posts: $totalPosts');
 
       return AdminStats(
-        totalUsers: totalUsers + totalAdmins,
-        activeUsers: totalUsers,
-        totalPosts: 0, // Will be fetched separately by postsCountProvider
-        pendingModeration: 0,
-        engagementRate: 0.0,
+        totalUsers: totalUsers,
+        totalPosts: totalPosts,
         lastUpdated: DateTime.now(),
       );
     } catch (e) {
-      print('Error fetching admin stats: $e');
+      print('[AdminRepository] ERROR obteniendo estadísticas: $e');
       return AdminStats(
         totalUsers: 0,
-        activeUsers: 0,
         totalPosts: 0,
-        pendingModeration: 0,
-        engagementRate: 0.0,
         lastUpdated: DateTime.now(),
       );
     }

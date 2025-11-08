@@ -10,7 +10,7 @@ final firebaseAuthServiceProvider = Provider<FirebaseAuthService>((ref) {
 
 final authStateProvider = StreamProvider<User?>((ref) {
   final authService = ref.watch(firebaseAuthServiceProvider);
-  print('[v0] authStateProvider - Escuchando cambios de autenticación');
+  print('[v1] authStateProvider - Escuchando cambios de autenticación');
   return authService.authStateChanges;
 });
 
@@ -32,77 +32,72 @@ final currentUserProvider = Provider<User?>((ref) {
   );
 });
 
-final isAdminProvider = FutureProvider<bool>((ref) async {
-  print('[v0] isAdminProvider - Verificando si el usuario es admin');
-  final user = ref.watch(currentUserProvider);
+// Provider más eficiente que verifica el rol una sola vez por usuario
+final userRoleProvider = FutureProvider<String?>((ref) async {
+  print('[v1] userRoleProvider - Iniciando verificación de rol');
 
-  if (user == null || user.email == null) {
-    print('[v0] isAdminProvider - No hay usuario autenticado o sin email');
-    return false;
-  }
+  final authState = ref.watch(authStateProvider);
 
-  try {
-    final firestore = FirebaseFirestore.instanceFor(
-      app: FirebaseFirestore.instance.app,
-      databaseId: 'tesororegional',
-    );
+  // Esperar a que el estado de auth esté disponible usando when()
+  return authState.when(
+    data: (user) async {
+      if (user == null || user.email == null) {
+        print('[v1] userRoleProvider - No hay usuario autenticado');
+        return null;
+      }
 
-    final adminQuery = await firestore
-        .collection('admins')
-        .where('email', isEqualTo: user.email)
-        .limit(1)
-        .get();
+      print('[v1] userRoleProvider - Usuario autenticado: ${user.email}');
 
-    final isAdmin = adminQuery.docs.isNotEmpty;
-    print('[v0] isAdminProvider - Usuario ${user.email} es admin: $isAdmin');
+      try {
+        final firestore = FirebaseFirestore.instanceFor(
+          app: FirebaseFirestore.instance.app,
+          databaseId: 'tesororegional',
+        );
 
-    return isAdmin;
-  } catch (e) {
-    print('[v0] isAdminProvider - Error al verificar admin: $e');
-    return false;
-  }
+        // Verificar si es admin primero (más rápido)
+        print('[v1] userRoleProvider - Verificando si es admin...');
+        final adminDoc = await firestore
+            .collection('admins')
+            .doc(user.uid)
+            .get();
+
+        if (adminDoc.exists) {
+          print('[v1] userRoleProvider - ✅ Usuario es ADMIN');
+          return 'admin';
+        }
+
+        // Si no es admin, verificar si es usuario normal
+        print('[v1] userRoleProvider - Verificando si es usuario normal...');
+        final userDoc = await firestore
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+        if (userDoc.exists) {
+          print('[v1] userRoleProvider - ✅ Usuario es USER');
+          return 'user';
+        }
+
+        print('[v1] userRoleProvider - ⚠️ Usuario sin rol definido');
+        return 'user'; // Por defecto, tratar como usuario normal
+      } catch (e) {
+        print('[v1] userRoleProvider - ❌ Error al obtener rol: $e');
+        return 'user'; // En caso de error, tratar como usuario normal
+      }
+    },
+    loading: () {
+      print('[v1] userRoleProvider - Auth state aún cargando');
+      return null;
+    },
+    error: (error, stackTrace) {
+      print('[v1] userRoleProvider - ❌ Error en auth state: $error');
+      return 'user'; // En caso de error, tratar como usuario normal
+    },
+  );
 });
 
-final userRoleProvider = FutureProvider<String?>((ref) async {
-  print('[v0] userRoleProvider - Obteniendo rol del usuario');
-  final user = ref.watch(currentUserProvider);
-
-  if (user == null || user.email == null) {
-    return null;
-  }
-
-  try {
-    final firestore = FirebaseFirestore.instanceFor(
-      app: FirebaseFirestore.instance.app,
-      databaseId: 'tesororegional',
-    );
-
-    final adminQuery = await firestore
-        .collection('admins')
-        .where('email', isEqualTo: user.email)
-        .limit(1)
-        .get();
-
-    if (adminQuery.docs.isNotEmpty) {
-      print('[v0] userRoleProvider - Rol: admin');
-      return 'admin';
-    }
-
-    final userQuery = await firestore
-        .collection('users')
-        .where('email', isEqualTo: user.email)
-        .limit(1)
-        .get();
-
-    if (userQuery.docs.isNotEmpty) {
-      print('[v0] userRoleProvider - Rol: user');
-      return 'user';
-    }
-
-    print('[v0] userRoleProvider - Rol: no encontrado');
-    return null;
-  } catch (e) {
-    print('[v0] userRoleProvider - Error al obtener rol: $e');
-    return null;
-  }
+// Provider auxiliar para verificación rápida de admin (compatible con código existente)
+final isAdminProvider = FutureProvider<bool>((ref) async {
+  final role = await ref.watch(userRoleProvider.future);
+  return role == 'admin';
 });

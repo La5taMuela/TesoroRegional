@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tesoro_regional/features/home/presentation/pages/home_page.dart';
@@ -31,20 +32,30 @@ final routerProvider = Provider<GoRouter>((ref) {
   final userRole = ref.watch(userRoleProvider);
 
   return userRole.when(
-    // Si el usuario es admin, muestra solo rutas de admin
     data: (role) {
       if (role == 'admin') {
         return _createAdminRouter();
       }
-      // Si es usuario normal o no tiene rol, muestra rutas normales
       return _createUserRouter();
     },
-    // Mientras carga, muestra rutas normales
-    loading: () => _createUserRouter(),
-    // Si hay error, muestra rutas normales
+    // Mostrar pantalla de carga mientras se determina el rol
+    loading: () => _createLoadingRouter(),
     error: (_, __) => _createUserRouter(),
   );
 });
+
+// Router temporal mientras se carga el rol del usuario
+GoRouter _createLoadingRouter() {
+  return GoRouter(
+    initialLocation: '/loading',
+    routes: [
+      GoRoute(
+        path: '/loading',
+        builder: (context, state) => const LoadingScreen(),
+      ),
+    ],
+  );
+}
 
 GoRouter _createAdminRouter() {
   return GoRouter(
@@ -76,6 +87,12 @@ GoRouter _createAdminRouter() {
         path: '/admin/create-user',
         name: 'admin_create_user',
         builder: (context, state) => const AdminCreateUserPage(),
+      ),
+      // Ruta para ver publicaciones (sin navbar)
+      GoRoute(
+        path: '/admin/posts',
+        name: 'admin_posts',
+        builder: (context, state) => const SearchPage(showBottomNav: false),
       ),
     ],
   );
@@ -175,4 +192,55 @@ GoRouter _createUserRouter() {
       ),
     ],
   );
+}
+
+// Pantalla de carga mientras se determina el rol
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFAF8F3),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.explore,
+                size: 50,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              'Tesoro Regional',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const CircularProgressIndicator(),
+            const SizedBox(height: 16),
+            Text(
+              'Cargando...',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

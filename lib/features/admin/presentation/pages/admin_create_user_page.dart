@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../../core/database/firestore_config.dart';
+import '../../../../core/services/firestore_service.dart';
 
 class AdminCreateUserPage extends ConsumerStatefulWidget {
   const AdminCreateUserPage({Key? key}) : super(key: key);
@@ -52,14 +54,14 @@ class _AdminCreateUserPageState extends ConsumerState<AdminCreateUserPage> {
       );
 
       // Save to correct collection based on role
-      final firestore = FirebaseFirestore.instance;
+      final firestore = FirestoreService.instance;
       final collection = _getCollectionByRole(_selectedRole);
 
-      await firestore.collection(collection).add({
+      await FirestoreService.collection(collection).add({
         'email': _emailController.text,
         'name': _nameController.text,
         'uid': userCredential.user?.uid,
-        'createdAt': FieldValue.serverTimestamp(),
+        FirestoreConfig.createdAtField: FieldValue.serverTimestamp(),
         'role': _selectedRole,
       });
 
@@ -83,13 +85,13 @@ class _AdminCreateUserPageState extends ConsumerState<AdminCreateUserPage> {
   String _getCollectionByRole(String role) {
     switch (role) {
       case 'admin':
-        return 'admins';
+        return FirestoreConfig.adminsCollection;
       case 'pyme':
-        return 'pymes';
+        return FirestoreConfig.pymesCollection;
       case 'empresa':
-        return 'empresas';
+        return FirestoreConfig.empresasCollection;
       default:
-        return 'users';
+        return FirestoreConfig.usersCollection;
     }
   }
 

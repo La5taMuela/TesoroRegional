@@ -10,7 +10,12 @@ import 'package:tesoro_regional/core/widgets/custom_bottom_nav_bar.dart';
 import 'package:video_player/video_player.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  final bool showBottomNav;
+
+  const SearchPage({
+    Key? key,
+    this.showBottomNav = true,
+  }) : super(key: key);
 
   @override
   ConsumerState<SearchPage> createState() => _SearchPageState();
@@ -52,7 +57,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         appBar: AppBar(
           title: const Text('Explorar Publicaciones'),
           elevation: 0,
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: !widget.showBottomNav, // Mostrar back button solo si no hay navbar
         ),
         body: Column(
           children: [
@@ -459,7 +464,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
             ),
           ],
         ),
-        bottomNavigationBar: const CustomBottomNavBar(currentIndex: 1),
+        bottomNavigationBar: widget.showBottomNav
+            ? const CustomBottomNavBar(currentIndex: 1)
+            : null,
       ),
     );
   }

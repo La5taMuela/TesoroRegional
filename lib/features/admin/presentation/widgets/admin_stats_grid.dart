@@ -9,59 +9,35 @@ class AdminStatsGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const brownColor = Color(0xFF8B4513);
     const lightBrown = Color(0xFFD2B48C);
-    const darkBrown = Color(0xFF654321);
 
     final statsAsync = ref.watch(adminStatsProvider);
-    final postsCountAsync = ref.watch(postsCountProvider);
 
-    return Column(
+    return GridView.count(
+      crossAxisCount: 2,
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 16,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: [
-        statsAsync.when(
-          data: (stats) {
-            return GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _StatCard(
-                  title: 'Usuarios Totales',
-                  value: stats.totalUsers.toString(),
-                  icon: Icons.people,
-                  color: brownColor,
-                ),
-                postsCountAsync.when(
-                  data: (postsCount) {
-                    return _StatCard(
-                      title: 'Posts Totales',
-                      value: postsCount.toString(),
-                      icon: Icons.article,
-                      color: lightBrown,
-                    );
-                  },
-                  loading: () => _StatCard(
-                    title: 'Posts Totales',
-                    value: '...',
-                    icon: Icons.article,
-                    color: lightBrown,
-                  ),
-                  error: (err, stack) => _StatCard(
-                    title: 'Posts Totales',
-                    value: '0',
-                    icon: Icons.article,
-                    color: lightBrown,
-                  ),
-                ),
-              ],
-            );
-          },
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
+        _StatCard(
+          title: 'Usuarios Totales',
+          value: statsAsync.maybeWhen(
+            data: (stats) => stats.totalUsers.toString(),
+            orElse: () => '0',
           ),
-          error: (err, stack) => Center(
-            child: Text('Error: $err'),
+          icon: Icons.people,
+          color: brownColor,
+          isLoading: statsAsync.isLoading,
+        ),
+        _StatCard(
+          title: 'Posts Totales',
+          value: statsAsync.maybeWhen(
+            data: (stats) => stats.totalPosts.toString(),
+            orElse: () => '0',
           ),
+          icon: Icons.article,
+          color: brownColor,
+          isLoading: statsAsync.isLoading,
         ),
       ],
     );
@@ -73,12 +49,14 @@ class _StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final bool isLoading;
 
   const _StatCard({
     required this.title,
     required this.value,
     required this.icon,
     required this.color,
+    required this.isLoading,
   });
 
   @override
@@ -103,7 +81,16 @@ class _StatCard extends StatelessWidget {
           children: [
             Icon(icon, color: color, size: 32),
             const SizedBox(height: 12),
-            Text(
+            isLoading
+                ? SizedBox(
+              height: 24,
+              width: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(color),
+              ),
+            )
+                : Text(
               value,
               style: TextStyle(
                 fontSize: 24,
@@ -115,9 +102,9 @@ class _StatCard extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
-                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
