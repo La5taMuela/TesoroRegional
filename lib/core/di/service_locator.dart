@@ -20,66 +20,16 @@ import 'package:tesoro_regional/features/profile/data/datasources/profile_remote
 import 'package:tesoro_regional/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:tesoro_regional/features/profile/domain/repositories/profile_repository.dart';
 import 'package:tesoro_regional/core/services/auth/firebase_auth_service.dart';
+import '../../features/admin/data/repositories/admin_repository_impl.dart';
 
 final getIt = GetIt.instance;
 
 class ServiceLocator {
   static Future<void> init() async {
     try {
-      // Initialize Hive first
       await Hive.initFlutter();
-
-      // Initialize SharedPreferences FIRST and register as singleton
       final sharedPreferences = await SharedPreferences.getInstance();
       getIt.registerSingleton<SharedPreferences>(sharedPreferences);
-
-      // Core services - register in dependency order
-      getIt.registerLazySingleton<LoggerService>(() => LoggerService());
-      getIt.registerLazySingleton<StorageService>(() => StorageServiceImpl());
-
-      // Network service needs logger
-      getIt.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(
-        logger: getIt<LoggerService>(),
-      ));
-
-      // Location service - register BEFORE using it
-      getIt.registerLazySingleton<LocationService>(() => LocationServiceImpl());
-
-      // Analytics service needs storage and network
-      getIt.registerLazySingleton<AnalyticsService>(() => AnalyticsServiceImpl(
-        storage: getIt<StorageService>(),
-        network: getIt<NetworkService>(),
-      ));
-
-      // Auth service needs storage and network
-      getIt.registerLazySingleton<AuthService>(() => AuthServiceImpl(
-        storage: getIt<StorageService>(),
-        network: getIt<NetworkService>(),
-      ));
-
-      // Content service
-      getIt.registerLazySingleton<ContentService>(() => ContentService());
-
-      // QR Scanner service
-      getIt.registerLazySingleton<QRScannerService>(() => QRScannerService());
-
-      // Initialize QR data source and register it
-      final qrDataSource = QRLocalDataSource();
-      await qrDataSource.init();
-      getIt.registerSingleton<QRLocalDataSource>(qrDataSource);
-
-      // QR Repository
-      getIt.registerLazySingleton<QRRepository>(() => QRLocalRepository(getIt<QRLocalDataSource>()));
-
-      // Puzzle Data sources
-      getIt.registerLazySingleton<PuzzleLocalDataSource>(() => PuzzleLocalDataSourceImpl(getIt<StorageService>()));
-
-      // Puzzle Repository
-      getIt.registerLazySingleton<PuzzleRepository>(() => PuzzleRepositoryImpl(
-        localDataSource: getIt<PuzzleLocalDataSource>(),
-        qrRepository: getIt<QRRepository>(),
-        qrScannerService: getIt<QRScannerService>(),
-      ));
 
       final firestore = FirebaseFirestore.instanceFor(
         app: Firebase.app(),
@@ -87,18 +37,50 @@ class ServiceLocator {
       );
       getIt.registerSingleton<FirebaseFirestore>(firestore);
 
+      final adminRepository = AdminRepositoryImpl();
+      getIt.registerSingleton<AdminRepositoryImpl>(adminRepository);
+
+      print('✅ ServiceLocator: Core services registered (priority path)');
+
+      getIt.registerLazySingleton<LoggerService>(() => LoggerService());
+      getIt.registerLazySingleton<StorageService>(() => StorageServiceImpl());
+      getIt.registerLazySingleton<NetworkService>(() => NetworkServiceImpl(
+        logger: getIt<LoggerService>(),
+      ));
+      getIt.registerLazySingleton<LocationService>(() => LocationServiceImpl());
+      getIt.registerLazySingleton<AnalyticsService>(() => AnalyticsServiceImpl(
+        storage: getIt<StorageService>(),
+        network: getIt<NetworkService>(),
+      ));
+      getIt.registerLazySingleton<AuthService>(() => AuthServiceImpl(
+        storage: getIt<StorageService>(),
+        network: getIt<NetworkService>(),
+      ));
+      getIt.registerLazySingleton<ContentService>(() => ContentService());
+      getIt.registerLazySingleton<QRScannerService>(() => QRScannerService());
+
+      final qrDataSource = QRLocalDataSource();
+      await qrDataSource.init();
+      getIt.registerSingleton<QRLocalDataSource>(qrDataSource);
+      getIt.registerLazySingleton<QRRepository>(() => QRLocalRepository(getIt<QRLocalDataSource>()));
+
+      getIt.registerLazySingleton<PuzzleLocalDataSource>(() => PuzzleLocalDataSourceImpl(getIt<StorageService>()));
+      getIt.registerLazySingleton<PuzzleRepository>(() => PuzzleRepositoryImpl(
+        localDataSource: getIt<PuzzleLocalDataSource>(),
+        qrRepository: getIt<QRRepository>(),
+        qrScannerService: getIt<QRScannerService>(),
+      ));
+
       getIt.registerLazySingleton<FirebaseAuthService>(
             () => FirebaseAuthServiceImpl(firestore: firestore),
       );
 
-      // Profile Data Source
       getIt.registerLazySingleton<ProfileRemoteDataSource>(
             () => ProfileRemoteDataSourceImpl(
           firestore: getIt<FirebaseFirestore>(),
         ),
       );
 
-      // Profile Repository
       getIt.registerLazySingleton<ProfileRepository>(
             () => ProfileRepositoryImpl(
           remoteDataSource: getIt<ProfileRemoteDataSource>(),

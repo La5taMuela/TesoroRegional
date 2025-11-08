@@ -15,7 +15,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final FirebaseAuthService _authService = getIt<FirebaseAuthService>();
   bool _isLoading = false;
-  bool _isLoginMode = true; // true = login, false = registro
+  bool _isLoginMode = true;
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -138,7 +138,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         await Future.delayed(const Duration(milliseconds: 300));
 
         if (mounted) {
-          context.go('/profile');
+          try {
+            final isAdmin = await ref.read(isAdminProvider.future);
+            if (mounted) {
+              if (isAdmin) {
+                context.go('/admin');
+              } else {
+                context.go('/');
+              }
+            }
+          } catch (e) {
+            if (mounted) {
+              context.go('/');
+            }
+          }
         }
       }
     } catch (e) {
@@ -177,8 +190,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ],
             ),
           );
-        }
-        else if (errorMessage == 'INVALID_CREDENTIALS') {
+        } else if (errorMessage == 'INVALID_CREDENTIALS') {
           await showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -208,8 +220,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ],
             ),
           );
-        }
-        else {
+        } else {
           await showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -302,7 +313,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 FilledButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    context.go('/profile');
+                    _navigateBasedOnRole();
                   },
                   child: const Text('Entendido'),
                 ),
@@ -454,6 +465,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
+  Future<void> _navigateBasedOnRole() async {
+    try {
+      final isAdmin = await ref.read(isAdminProvider.future);
+      if (mounted) {
+        if (isAdmin) {
+          context.go('/admin');
+        } else {
+          context.go('/');
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        context.go('/');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -526,6 +554,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
                     ),
+                    textAlign: TextAlign.center,
                   ),
 
                   const SizedBox(height: 8),
@@ -712,7 +741,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               setState(() {
                                 _isLoginMode = !_isLoginMode;
                                 _formKey.currentState?.reset();
-                                // Limpiar errores
                                 _emailError = null;
                                 _passwordError = null;
                                 _confirmPasswordError = null;

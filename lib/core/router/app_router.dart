@@ -1,4 +1,3 @@
-// core/router/app_router.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tesoro_regional/features/home/presentation/pages/home_page.dart';
@@ -16,25 +15,85 @@ import 'package:tesoro_regional/features/minigames/presentation/pages/puzzle_sli
 import 'package:tesoro_regional/features/nuble_map/presentation/pages/nuble_map_page.dart';
 import 'package:tesoro_regional/features/nuble_map/presentation/pages/province_detail_page.dart';
 import 'package:tesoro_regional/features/nuble_map/presentation/pages/city_detail_page.dart';
-
+import '../../features/admin/presentation/pages/admin_create_user_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/posts/presentation/pages/create_post_page.dart';
-import '../../features/profile/presentation/widgets/profile_guard.dart'; // <-- CAMBIO
+import '../../features/profile/presentation/widgets/profile_guard.dart';
 import '../../features/search/presentation/pages/search_page.dart';
+import '../../features/admin/presentation/pages/admin_dashboard_page.dart';
+import '../../features/admin/presentation/pages/admin_stats_page.dart';
+import '../../features/admin/presentation/pages/admin_users_page.dart';
+import '../../features/admin/presentation/pages/admin_settings_page.dart';
+import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/auth/presentation/providers/auth_providers.dart';
 
-// Provider para el router
 final routerProvider = Provider<GoRouter>((ref) {
-  return AppRouter.router;
+  final userRole = ref.watch(userRoleProvider);
+
+  return userRole.when(
+    // Si el usuario es admin, muestra solo rutas de admin
+    data: (role) {
+      if (role == 'admin') {
+        return _createAdminRouter();
+      }
+      // Si es usuario normal o no tiene rol, muestra rutas normales
+      return _createUserRouter();
+    },
+    // Mientras carga, muestra rutas normales
+    loading: () => _createUserRouter(),
+    // Si hay error, muestra rutas normales
+    error: (_, __) => _createUserRouter(),
+  );
 });
 
-class AppRouter {
-  static final GoRouter router = GoRouter(
+GoRouter _createAdminRouter() {
+  return GoRouter(
+    initialLocation: '/admin',
+    routes: [
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: '/admin',
+        name: 'admin',
+        builder: (context, state) => const AdminDashboardPage(),
+      ),
+      GoRoute(
+        path: '/admin/stats',
+        builder: (context, state) => const AdminStatsPage(),
+      ),
+      GoRoute(
+        path: '/admin/users',
+        builder: (context, state) => const AdminUsersPage(),
+      ),
+      GoRoute(
+        path: '/admin/settings',
+        builder: (context, state) => const AdminSettingsPage(),
+      ),
+      GoRoute(
+        path: '/admin/create-user',
+        name: 'admin_create_user',
+        builder: (context, state) => const AdminCreateUserPage(),
+      ),
+    ],
+  );
+}
+
+GoRouter _createUserRouter() {
+  return GoRouter(
     initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
         name: 'home',
         builder: (context, state) => const HomePage(),
+      ),
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginPage(),
       ),
       GoRoute(
         path: '/puzzle',
@@ -106,7 +165,6 @@ class AppRouter {
         path: '/create-post',
         builder: (context, state) => const CreatePostPage(),
       ),
-      // <-- CAMBIO IMPORTANTE: Usar ProfileGuard
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfileGuard(),
