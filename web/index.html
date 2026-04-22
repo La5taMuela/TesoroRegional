@@ -1,186 +1,435 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <base href="$FLUTTER_BASE_HREF">
-
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Tesoro Regional es una aplicación móvil que permite a los usuarios descubrir el patrimonio cultural de la región de Ñuble, Chile, a través de una experiencia gamificada basada en la metáfora de un rompecabezas cultural.">
-
-  <!-- Viewport meta tag -->
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-
-  <!-- Camera permissions for web -->
-  <meta name="camera" content="camera">
-  <meta name="microphone" content="microphone">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Tesoro Regional">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
-
-  <title>Tesoro Regional</title>
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Permissions Policy for camera access -->
-  <meta http-equiv="Permissions-Policy" content="camera=*, microphone=*">
-
-  <!-- Feature Policy (legacy support) -->
-  <meta http-equiv="Feature-Policy" content="camera 'self'; microphone 'self'">
-
-  <!-- Vercel Analytics -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
-  <script defer src="/_vercel/insights/script.js"></script>
-
-  <style id="splash-screen-style">
-    html {
-      height: 100%
-    }
-
-    body {
-      margin: 0;
-      min-height: 100%;
-      background-color: #8B4513;
-      background-size: 100% 100%;
-    }
-
-    .center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-    }
-
-    .contain {
-      display:block;
-      width:100%; height:100%;
-      object-fit: contain;
-    }
-
-    .stretch {
-      display:block;
-      width:100%; height:100%;
-    }
-
-    .cover {
-      display:block;
-      width:100%; height:100%;
-      object-fit: cover;
-    }
-
-    .bottom {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      -ms-transform: translate(-50%, 0);
-      transform: translate(-50%, 0);
-    }
-
-    .bottomLeft {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-
-    .bottomRight {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-    }
-  </style>
-
-  <script id="splash-screen-script">
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.getElementById("splash-branding")?.remove();
-      document.body.style.background = "transparent";
-    }
-
-    // Camera permission helper
-    async function requestCameraPermission() {
-      try {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode: 'environment',
-              width: { ideal: 1280 },
-              height: { ideal: 720 }
-            }
-          });
-          // Stop the stream immediately, we just wanted to request permission
-          stream.getTracks().forEach(track => track.stop());
-          return true;
-        }
-      } catch (error) {
-        console.error('Camera permission error:', error);
-        return false;
-      }
-      return false;
-    }
-
-    // Check if HTTPS is being used
-    function checkHTTPS() {
-      return location.protocol === 'https:' || location.hostname === 'localhost';
-    }
-
-    // Initialize camera checks when page loads
-    window.addEventListener('load', function() {
-      if (!checkHTTPS() && location.hostname !== 'localhost') {
-        console.warn('HTTPS required for camera access');
-      }
-    });
-  </script>
-
-  <!-- Vercel Analytics initialization -->
-  <script>
-    // Vercel Analytics tracking function
-    function trackEvent(eventName, properties = {}) {
-      if (window.va) {
-        window.va('track', eventName, properties);
-      }
-    }
-
-    // Track page views when Flutter app loads
-    window.addEventListener('load', function() {
-      trackEvent('app_loaded');
-    });
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tesoro Regional – Descubre una nueva Región</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<picture id="splash">
-  <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
-  <source srcset="splash/img/dark-1x.png 2x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
-  <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
-</picture>
 
-<script src="flutter_bootstrap.js" async=""></script>
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav__logo">
+      <span class="nav__logo-icon">◈</span>
+      <span>Tesoro Regional</span>
+    </div>
+    <ul class="nav__links">
+      <li><a href="#features" >Descubrir</a></li>
+      <li><a href="#how">Cómo funciona</a></li>
+      <li><a href="#missions">Misiones</a></li>
+      <li><a href="#download" class="nav__cta">Descargar App</a></li>
+    </ul>
+    <button class="nav__hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <div class="hero__grain"></div>
+      <div class="hero__orb hero__orb--1"></div>
+      <div class="hero__orb hero__orb--2"></div>
+      <div class="hero__orb hero__orb--3"></div>
+    </div>
+    <div class="hero__content">
+      <div class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        Regiónes, Chile
+      </div>
+      <h1 class="hero__title">
+        <span class="hero__title-line">Descubre el</span>
+        <span class="hero__title-line hero__title-line--accent">Tesoro</span>
+        <span class="hero__title-line">de tu Región</span>
+      </h1>
+      <p class="hero__subtitle">
+        Una plataforma gamificada que transforma cada rincón de Chile en una aventura.
+        Explora rutas, escanea QR, colecciona insignias y conecta con la cultura local.
+      </p>
+      <div class="hero__actions">
+        <a href="#download" class="btn btn--primary">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.42.07 2.41.74 3.24.8 1.23-.24 2.41-.93 3.73-.84 1.58.13 2.77.75 3.55 1.93-3.27 1.95-2.73 6.22.47 7.34-.52 1.24-1.2 2.46-3 3.63zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          App Store
+        </a>
+        <a href="#download" class="btn btn--secondary">
+          <span class="btn-icon" style="background-image: url('img/888857.png');"></span>
+          Google Play
+        </a>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat">
+          <span class="hero__stat-num">+50</span>
+          <span class="hero__stat-label">Puntos QR</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">30</span>
+          <span class="hero__stat-label">Misiones</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+          <span class="hero__stat-num">+300</span>
+          <span class="hero__stat-label">Exploradores</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero__phone">
+      <div class="hero__phone-frame">
+        <div class="hero__phone-screen">
+          <div class="hero__app-ui">
+            <div class="hero__app-header">
+              <span>◈ Tesoro Regional</span>
+              <span class="hero__app-pts">1,240 pts</span>
+            </div>
+            <div class="hero__app-map">
+              <div class="hero__map-grid"></div>
+              <div class="hero__map-pin hero__map-pin--1" style="top:30%;left:40%">
+                <span class="pin-icon">⬡</span>
+              </div>
+              <div class="hero__map-pin hero__map-pin--2" style="top:55%;left:60%">
+                <span class="pin-icon">⬡</span>
+              </div>
+              <div class="hero__map-pin hero__map-pin--3 active" style="top:45%;left:25%">
+                <span class="pin-icon">★</span>
+              </div>
+              <div class="hero__map-label" style="top:20%;left:50%">Chillán</div>
+            </div>
+            <div class="hero__app-missions">
+              <div class="hero__app-mission">
+                <span class="mission-badge">🏔</span>
+                <div>
+                  <div class="mission-name">Ruta Volcánica</div>
+                  <div class="mission-prog">
+                    <div class="mission-prog-bar" style="width:70%"></div>
+                  </div>
+                </div>
+                <span class="mission-pct">70%</span>
+              </div>
+              <div class="hero__app-mission">
+                <span class="mission-badge">🍷</span>
+                <div>
+                  <div class="mission-name">Valle Vinícola</div>
+                  <div class="mission-prog">
+                    <div class="mission-prog-bar" style="width:40%"></div>
+                  </div>
+                </div>
+                <span class="mission-pct">40%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero__phone-notch"></div>
+      </div>
+    </div>
+    <div class="hero__scroll">
+      <span>Descubrir más</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Características</div>
+        <h2 class="section-title">Todo lo que necesitas para <em>explorar</em></h2>
+        <p class="section-desc">Desde misiones gamificadas hasta un mapa colaborativo, Tesoro Regional reúne todo para que tu visita a una Región sea inolvidable.</p>
+      </div>
+      <div class="features__grid">
+        <div class="feature-card feature-card--large">
+          <div class="feature-card__icon">🗺</div>
+          <h3>Mapa Interactivo</h3>
+          <p>Navega por cada Región con un mapa colaborativo en tiempo real. Descubre puntos de interés, rutas culturales y tesoros ocultos geolocalizados.</p>
+          <div class="feature-card__tag">Exploración</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">📱</div>
+          <h3>Códigos QR</h3>
+          <p>Escanea los QR distribuidos en toda la región para desbloquear historias, datos y recompensas de cada punto.</p>
+          <div class="feature-card__tag">Descubrimiento</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">🏅</div>
+          <h3>Insignias y Logros</h3>
+          <p>Colecciona insignias únicas al completar misiones y hitos. Construye tu álbum digital de la región.</p>
+          <div class="feature-card__tag">Gamificación</div>
+        </div>
+        <div class="feature-card feature-card">
+          <div class="feature-card__icon">🧩</div>
+          <h3>Puzzle Regional</h3>
+          <p>Cada lugar visitado completa una pieza del rompecabezas visual de una Región. ¿Podrás completarlo todo?</p>
+          <div class="feature-card__tag">Colección</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">🤝</div>
+          <h3>Pymes Locales</h3>
+          <p>Conecta directamente con artesanos, restaurantes y emprendedores de la región. Economía circular real.</p>
+          <div class="feature-card__tag">Comunidad</div>
+        </div>
+        <div class="feature-card feature-card--large feature-card">
+          <div class="feature-card__icon">🎯</div>
+          <h3>Misiones & Rutas</h3>
+          <p>Participa en rutas temáticas diseñadas por la gente: gastronómica, cultural, naturaleza, historia y más. Cada ruta es una aventura curada.</p>
+          <div class="feature-card__tag">Aventura</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Proceso</div>
+        <h2 class="section-title">Tan simple como <em>explorar</em></h2>
+      </div>
+      <div class="how__steps">
+        <div class="how__step">
+          <div class="how__step-num">01</div>
+          <div class="how__step-content">
+            <h3>Descarga la App</h3>
+            <p>Disponible para iOS y Android. Regístrate en segundos como turista o actor local.</p>
+          </div>
+          <div class="how__step-img">📲</div>
+        </div>
+        <div class="how__connector"></div>
+        <div class="how__step">
+          <div class="how__step-num">02</div>
+          <div class="how__step-content">
+            <h3>Elige una Misión</h3>
+            <p>Selecciona una ruta temática según tus intereses. Cultura, naturaleza, gastronomía o historia.</p>
+          </div>
+          <div class="how__step-img">🎯</div>
+        </div>
+        <div class="how__connector"></div>
+        <div class="how__step">
+          <div class="how__step-num">03</div>
+          <div class="how__step-content">
+            <h3>Explora y Escanea</h3>
+            <p>Visita los puntos en el mapa y escanea los códigos QR para registrar tus descubrimientos.</p>
+          </div>
+          <div class="how__step-img">🔍</div>
+        </div>
+        <div class="how__connector"></div>
+        <div class="how__step">
+          <div class="how__step-num">04</div>
+          <div class="how__step-content">
+            <h3>Gana Recompensas</h3>
+            <p>Acumula puntos, desbloquea insignias y completa el puzzle de una Región. ¡Comparte tus logros!</p>
+          </div>
+          <div class="how__step-img">🏆</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSIONS PREVIEW -->
+  <section class="missions" id="missions">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Misiones</div>
+        <h2 class="section-title">Rutas que <em>inspiran</em></h2>
+        <p class="section-desc">Cada misión es una experiencia curada para que descubras lo mejor de cada Región.</p>
+      </div>
+      <div class="missions__grid">
+        <div class="mission-card" style="--clr: #E8A44A">
+          <div class="mission-card__top">
+            <span class="mission-card__icon">🌋</span>
+            <span class="mission-card__diff">Aventura</span>
+          </div>
+          <h3>Ruta Volcánica</h3>
+          <p>Recorre los paisajes volcánicos de las Termas de Chillán y el Parque Nacional Laguna del Laja.</p>
+          <div class="mission-card__meta">
+            <span>🗺 8 puntos QR</span>
+            <span>⭐ 500 pts</span>
+          </div>
+          <div class="mission-card__bar">
+            <div class="mission-card__bar-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="mission-card" style="--clr: #6B9E6B">
+          <div class="mission-card__top">
+            <span class="mission-card__icon">🍷</span>
+            <span class="mission-card__diff">Cultural</span>
+          </div>
+          <h3>Valle Vinícola</h3>
+          <p>Explora las viñas del Itata, cepajes patrimoniales y la tradición vitivinícola de la región.</p>
+          <div class="mission-card__meta">
+            <span>🗺 6 puntos QR</span>
+            <span>⭐ 350 pts</span>
+          </div>
+          <div class="mission-card__bar">
+            <div class="mission-card__bar-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="mission-card" style="--clr: #C27070">
+          <div class="mission-card__top">
+            <span class="mission-card__icon">🏛</span>
+            <span class="mission-card__diff">Historia</span>
+          </div>
+          <h3>Herencia Chillán</h3>
+          <p>Descubre la historia de Chillán, cuna de Bernardo O'Higgins, sus murales y patrimonio arquitectónico.</p>
+          <div class="mission-card__meta">
+            <span>🗺 10 puntos QR</span>
+            <span>⭐ 600 pts</span>
+          </div>
+          <div class="mission-card__bar">
+            <div class="mission-card__bar-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="mission-card" style="--clr: #7B9EC9">
+          <div class="mission-card__top">
+            <span class="mission-card__icon">🎨</span>
+            <span class="mission-card__diff">Artesanía</span>
+          </div>
+          <h3>Manos Locales</h3>
+          <p>Conoce artesanos y pymes de la región. Cerámica, tejidos, gastronomía y saberes ancestrales.</p>
+          <div class="mission-card__meta">
+            <span>🗺 7 puntos QR</span>
+            <span>⭐ 420 pts</span>
+          </div>
+          <div class="mission-card__bar">
+            <div class="mission-card__bar-fill" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Comunidad</div>
+        <h2 class="section-title">Lo que dicen los <em>exploradores</em></h2>
+      </div>
+      <div class="testimonials__grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p>"Descubrí lugares de Ñuble que jamás habría encontrado solo. Las misiones hacen que el viaje sea una verdadera aventura."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">MR</div>
+            <div>
+              <strong>Marcela Rojas</strong>
+              <span>Turista de Santiago</span>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p>"Como artesana local, la app me conectó con cientos de visitantes que jamás habrían llegado a mi taller. El impacto en mis ventas fue inmediato."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">LP</div>
+            <div>
+              <strong>Luisa Pereira</strong>
+              <span>Artesana, San Carlos</span>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p>"Mis hijos no querían salir del celular, ¡y con Tesoro Regional los tengo explorando ríos y ruinas! La gamificación es brillante."</p>
+          <div class="testi-author">
+            <div class="testi-avatar">JC</div>
+            <div>
+              <strong>Jorge Contreras</strong>
+              <span>Familia de Concepción</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section class="download" id="download">
+    <div class="download__bg">
+      <div class="download__orb"></div>
+    </div>
+    <div class="container">
+      <div class="download__inner">
+        <div class="download__content">
+          <div class="section-tag">Descargar</div>
+          <h2>Comienza tu aventura <em>ahora</em></h2>
+          <p>Descarga la app gratis y empieza a descubrir el tesoro que una Región guarda para ti. Compatible con iOS 14+ y Android 8+.</p>
+          <div class="download__btns">
+            <a href="#" class="download__btn">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.42c1.42.07 2.41.74 3.24.8 1.23-.24 2.41-.93 3.73-.84 1.58.13 2.77.75 3.55 1.93-3.27 1.95-2.73 6.22.47 7.34-.52 1.24-1.2 2.46-3 3.63zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+              <div>
+                <span>Descargar en</span>
+                <strong>App Store</strong>
+              </div>
+            </a>
+            <a href="#" class="download__btn">
+              <span class="btn-icon" style="background-image: url('img/888857.png');"></span>
+              <div>
+                <span>Descargar en</span>
+                <strong>Google Play</strong>
+              </div>
+            </a>
+          </div>
+
+        </div>
+        <div class="download__visual">
+          <div class="qr-mockup">
+            <div class="qr-mockup__inner">
+              <div class="qr-grid">
+                <div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div>
+                <div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div>
+                <div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div>
+                <div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div>
+                <div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div>
+                <div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div>
+                <div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--light"></div><div class="qr-cell qr--dark"></div><div class="qr-cell qr--dark"></div>
+              </div>
+              <p class="qr-label">Escanea para descargar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <span class="footer__logo">◈ Tesoro Regional</span>
+          <p>Descubre una Región de Chile a través de la tecnología, la cultura y la aventura.</p>
+          <p class="footer__credit">Desarrollado por estudiantes de Ingeniería en Informática, INACAP Chillán.</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>App</h4>
+            <a href="#">Descargar iOS</a>
+            <a href="#">Descargar Android</a>
+            <a href="#">Novedades</a>
+          </div>
+          <div class="footer__col">
+            <h4>Explorar</h4>
+            <a href="#">Misiones</a>
+            <a href="#">Mapa</a>
+            <a href="#">Insignias</a>
+          </div>
+          <div class="footer__col">
+            <h4>Proyecto</h4>
+            <a href="#">Sobre nosotros</a>
+            <a href="#">Contacto</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2025 Tesoro Regional · INACAP</span>
+        <span>Región de Ñuble, Chile</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
 </body>
-<!-- Default Statcounter code for TesoroRegional
-https://tesororegional.vercel.app/ -->
-<script type="text/javascript">
-  var sc_project=13144540;
-  var sc_invisible=1;
-  var sc_security="eadb3d60";
-</script>
-<script type="text/javascript"
-        src="https://www.statcounter.com/counter/counter.js" async></script>
-<noscript><div class="statcounter"><a title="Web Analytics Made Easy -
-Statcounter" href="https://statcounter.com/" target="_blank"><img
-        class="statcounter" src="https://c.statcounter.com/13144540/0/eadb3d60/1/"
-        alt="Web Analytics Made Easy - Statcounter"
-        referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
-<!-- End of Statcounter Code -->
 </html>
