@@ -11,6 +11,7 @@
   --earth:      #2C1F0E;
   --earth-mid:  #4A3520;
   --cream:      #F5EDD8;
+  --cream-light:#e0d9c5;
   --cream-dark: #EAD9B5;
   --green:      #3D6B4A;
   --green-light:#5A8C65;
@@ -55,6 +56,7 @@ a { text-decoration: none; color: inherit; }
   
 }
 .nav.scrolled {
+
   background: rgba(253,250,243,0.95);
   backdrop-filter: blur(12px);
   box-shadow: 0 2px 20px rgba(44,31,14,0.1);
@@ -68,17 +70,19 @@ a { text-decoration: none; color: inherit; }
 .nav__links {
   display: flex; align-items: center; gap: 2rem;
   list-style: none;
-  
+
 }
 .nav__links a {
   font-size: .95rem;
   font-weight: 500;
-  color: var(--cream);
+  color: var(--gold);
   transition: all var(--transition);
   position: relative;
   padding: 0.5rem 0;
+  
 }
 .nav__links a::after {
+  
   content: '';
   position: absolute;
   bottom: 0;
@@ -88,18 +92,21 @@ a { text-decoration: none; color: inherit; }
   background: var(--gold);
   transition: all var(--transition);
   transform: translateX(-50%);
+  
 }
 .nav__links a:hover {
-  color: var(--gold-light);
+  color: var(--gold-dark);
 }
 
 .nav__links a:hover::after {
   width: 100%;
+  
 }
 
 /* Efecto de escala sutil */
 .nav__links a:hover {
   transform: translateY(-1px);
+
 }
 
 /* Para el botón CTA, mantener su estilo pero mejorar */
@@ -110,6 +117,7 @@ a { text-decoration: none; color: inherit; }
   border-radius: 50px;
   font-weight: 600 !important;
   transition: all var(--transition) !important;
+  
 }
 
 .nav__cta::after {
@@ -120,6 +128,7 @@ a { text-decoration: none; color: inherit; }
   background: var(--gold-dark) !important;
   transform: translateY(-2px) !important;
   box-shadow: var(--shadow) !important;
+
 }
 .nav__hamburger {
   display: none; flex-direction: column; gap: 5px;
@@ -340,7 +349,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ===== FEATURES ===== */
-.features { padding: 8rem 0; background: var(--bg); }
+.features { padding: 8rem 0; background: var(--cream-light); }
 .features__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -392,7 +401,7 @@ a { text-decoration: none; color: inherit; }
 /* ===== HOW IT WORKS ===== */
 .how {
   padding: 8rem 0;
-  background: linear-gradient(180deg, var(--cream) 0%, var(--bg) 100%);
+  background: linear-gradient(180deg, var(--cream-light) 80%, var(--bg) 100%);
 }
 .how__steps {
   display: flex; align-items: flex-start;
